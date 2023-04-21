@@ -1,61 +1,54 @@
-Give this simple `global.d.ts`
-
 ```tsx
-type Route = [pattern: string, init: RequestInit, response: Response];
-
-declare global {
-  function fetch<T extends Route>(url: T[0], init: T[1]): Promise<T[2]>;
+declare interface Api {
+  definitions: GoogleApi & RandomDataApi;
 }
 
-export {};
-```
-
-We can type our fetches
-
-```tsx
 const main = async () => {
-  const r1 = await fetch<RandomDataApi["users"]>(
-    "https://random-data-api.com/api/v2/users",
-    {
-      method: "GET",
-    }
-  );
+  const r1 = await fetch("http://www.google.com", {
+    method: "GET",
+    //       ^ This is defined as optional, but can't is typed as strictly GET
+  });
 
-  const v1 = await r1.json();
-  //    ^ type RandomUser
+  const v1 = await r1.text();
   console.log(v1);
 
-  const r2 = await fetch<RandomDataApi["addresses"]>(
-    "https://random-data-api.com/api/v2/addresses",
-    {
-      method: "GET",
-    }
-  );
+  const r2 = await fetch("https://random-data-api.com/api/v2/addresses");
 
   const v2 = await r2.json();
   //    ^ type RandomAddress
   console.log(v2);
+
+  const r3 = await fetch("https://random-data-api.com/api/v2/users");
+
+  const v3 = await r3.json();
+  //    ^ type RandomUser
+  console.log(v3);
 };
 
 main();
 
-type RandomDataApi = {
-  users: [
-    pattern: "https://random-data-api.com/api/v2/users",
-    init: RequestInit & {
-      method?: "GET";
-    },
-    response: Omit<Response, "json"> & { json: () => Promise<RandomUser> }
-  ];
+type GoogleApi = ApiDefinition<{
+  "http://www.google.com": {
+    response: Response;
+    init?: RequestInit & { method?: "GET" };
+  };
+}>;
 
-  addresses: [
-    pattern: "https://random-data-api.com/api/v2/addresses",
-    init: RequestInit & {
+type RandomDataApi = ApiDefinition<{
+  "https://random-data-api.com/api/v2/users": {
+    response: Omit<Response, "json"> & { json: () => Promise<RandomUser> };
+    init?: RequestInit & {
       method?: "GET";
-    },
-    response: Omit<Response, "json"> & { json: () => Promise<RandomAddress> }
-  ];
-};
+    };
+  };
+
+  "https://random-data-api.com/api/v2/addresses": {
+    response: Omit<Response, "json"> & { json: () => Promise<RandomAddress> };
+    init?: RequestInit & {
+      method?: "GET";
+    };
+  };
+}>;
 
 type RandomUser = {
   id: number;

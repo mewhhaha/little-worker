@@ -1,7 +1,18 @@
-type Route = [pattern: string, init: RequestInit, response: Response];
-
 declare global {
-  function fetch<T extends Route>(url: T[0], init: T[1]): Promise<T[2]>;
+  function fetch<T extends keyof Api["definitions"]>(
+    url: T,
+    ...init: undefined extends Api["definitions"][T]["init"]
+      ? [init?: Api["definitions"][T]["init"]]
+      : [init: Api["definitions"][T]["init"]]
+  ): Promise<Api["definitions"][T]["response"]>;
+
+  interface Api {
+    definitions: any;
+  }
+
+  type ApiDefinition<
+    T extends Record<string, { response: Response; init?: RequestInit }>
+  > = T;
 }
 
 export {};
