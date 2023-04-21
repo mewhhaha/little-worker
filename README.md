@@ -1,3 +1,18 @@
+Give this simple `global.d.ts`
+
+```tsx
+type Route = [pattern: string, init: RequestInit, response: Response];
+
+declare global {
+  function fetch<T extends Route>(url: T[0], init: T[1]): Promise<T[2]>;
+}
+
+export {};
+```
+
+We can type our fetches
+
+```tsx
 const main = async () => {
   const r1 = await fetch<RandomDataApi["users"]>(
     "https://random-data-api.com/api/v2/users",
@@ -7,6 +22,7 @@ const main = async () => {
   );
 
   const v1 = await r1.json();
+  //    ^ type RandomUser
   console.log(v1);
 
   const r2 = await fetch<RandomDataApi["addresses"]>(
@@ -17,6 +33,7 @@ const main = async () => {
   );
 
   const v2 = await r2.json();
+  //    ^ type RandomAddress
   console.log(v2);
 };
 
@@ -115,3 +132,4 @@ type RandomAddress = {
   longitude: number;
   full_address: string;
 };
+```
