@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsc --project tsconfig.json && node dist/main.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "turbo build",
+    "test": "turbo test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "turbo": "^1.9.3",
     "typescript": "^5.0.4"
   }
 }

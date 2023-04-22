@@ -1,0 +1,25 @@
+{
+  "name": "@mewhhaha/little-router",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@mewhhaha/generics-stringify": "workspace:^",
+    "@mewhhaha/typed-request": "workspace:^",
+    "@mewhhaha/typed-response": "workspace:^",
+    "@mewhhaha/typed-response-fns": "workspace:^",
+    "typescript": "^5.0.4",
+    "vitest": "^0.30.1"
+  },
+  "sideEffects": false
+}

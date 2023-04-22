@@ -1,0 +1,20 @@
+{
+  "name": "@mewhhaha/little-fetcher",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json"
+  },
+  "devDependencies": {
+    "@mewhhaha/typed-request": "workspace:^",
+    "typescript": "^5.0.4"
+  },
+  "sideEffects": false
+}
