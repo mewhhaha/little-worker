@@ -9,7 +9,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@mewhhaha/little-fetcher": "workspace:^",
     "@mewhhaha/little-router": "workspace:^",

@@ -1,55 +1,37 @@
 import { RequestMethod } from "@mewhhaha/typed-request";
+import { JSONString } from "@mewhhaha/generics-stringify";
 
 type FetcherOptions = {
   base?: string;
 };
 
-export const fetcher = <ROUTES extends Record<string, never>>(
-  f: { fetch: (url: string, init?: RequestInit) => Promise<Response> },
+type RouteDefinition = {
+  pattern: string;
+  json?: JSONString<any>;
+  response: any;
+};
+
+type Method = Lowercase<RequestMethod>;
+
+export const fetcher = <ROUTES extends Record<string, RouteDefinition>>(
+  f: {
+    fetch: (url: string, init?: RequestInit) => Promise<Response> | Response;
+  },
   { base = "http://from.fetcher" }: FetcherOptions = {}
-): FetcherRouter<ROUTES> => {
+): FetcherOf<ROUTES> => {
   const fetchGeneric = (path: `/${string}`, init: RequestInit) => {
     return f.fetch(`${base}${path}`, init);
   };
 
-  const handler: ProxyHandler<FetcherRouter<ROUTES>> = {
-    get: <METHOD extends RequestMethod>(
-      _: unknown,
-      method: METHOD | "fetch"
-    ) => {
+  const handler: ProxyHandler<FetcherOf<ROUTES>> = {
+    get: <METHOD extends Method>(_: unknown, method: METHOD | "fetch") => {
       if (method === "fetch") {
         return fetchGeneric;
       }
 
-      const fetch_ = (
-        path: `/${string}`,
-        {
-          params,
-          value,
-          ...init
-        }: Omit<RequestInit, "method"> & {
-          params?: Record<string, string>;
-          value?: unknown;
-        } = {}
-      ) => {
-        const segments = path.split("/");
-        const replacedPath = segments
-          .map((segment) => {
-            if (!segment.startsWith(":")) return segment;
-            const v = params?.[segment.slice(1)];
-            if (v === undefined) {
-              throw new Error("Missing parameter " + segment);
-            }
-            return v;
-          })
-          .join("/");
-
-        return f.fetch(`${base}${replacedPath}`, {
+      const fetch_ = (path: `/${string}`, init: RequestInit) => {
+        return f.fetch(`${base}${path}`, {
           method,
-          body: value ? JSON.stringify(value) : undefined,
-          headers: value
-            ? { ...init.headers, "Content-Type": "application/json" }
-            : init.headers,
           ...init,
         });
       };
@@ -58,23 +40,35 @@ export const fetcher = <ROUTES extends Record<string, never>>(
     },
   };
 
-  return new Proxy({} as FetcherRouter<ROUTES>, handler);
+  return new Proxy({} as any, handler);
 };
 
-type FetcherGeneric = (
+type FetcherFunctionAny = (
   url: `/${string}`,
   init?: RequestInit
-) => Promise<Response> | Response;
+) => Promise<Response>;
 
-type FetcherRouter<ROUTES> = ROUTES & { fetch: FetcherGeneric };
+type FetcherFunction<ROUTE extends RouteDefinition> = (
+  url: ROUTE["pattern"] | URLPattern<ROUTE["pattern"]>,
+  init?: RequestInit & { body?: ROUTE["json"] }
+) => Promise<ROUTE["response"]>;
 
-// type X =  (
-//   url: NonOverlappingPattern<
-//     METHOD,
-//     PATTERN,
-//     ROUTES
-//   > extends typeof NEW_PATTERN
-//     ? StringifyPattern<PATTERN, string>
-//     : never,
-//   init?: RequestInit
-// ): RouteBuilder<REST_ARGS, ROUTES | Record<METHOD, { pattern: PATTERN }>>;
+type FetcherOf<ROUTES extends Record<string, RouteDefinition>> = {
+  [KEY in keyof ROUTES]: UnionToIntersection<
+    ROUTES[KEY] extends any ? FetcherFunction<ROUTES[KEY]> : never
+  >;
+} & {
+  fetch: FetcherFunctionAny;
+};
+
+type URLPattern<T> = T extends `${infer PRE}:${string}/${infer POST}`
+  ? `${PRE}${string}/${URLPattern<POST>}`
+  : T extends `${infer PRE}:${string}`
+  ? `${PRE}${string}`
+  : T;
+
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
+  k: infer I
+) => void
+  ? I
+  : never;

@@ -7,9 +7,15 @@
   "main": "dist/index.js",
   "module": "dist/index.js",
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Jacob Torrång",
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "license": "MIT",
   "scripts": {
+    "prepublish": "pnpm -w build",
     "build": "tsc --project tsconfig.json"
   },
   "devDependencies": {

@@ -7,14 +7,25 @@
   "main": "dist/index.js",
   "module": "dist/index.js",
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Jacob Torrång",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
   "scripts": {
+    "prepublish": "pnpm -w build",
     "build": "tsc --project tsconfig.build.json"
   },
   "devDependencies": {
+    "@mewhhaha/generics-stringify": "workspace:^",
+    "@mewhhaha/little-router": "workspace:^",
     "@mewhhaha/typed-request": "workspace:^",
-    "typescript": "^5.0.4"
+    "@mewhhaha/typed-response": "workspace:^",
+    "@mewhhaha/typed-response-fns": "workspace:^",
+    "typescript": "^5.0.4",
+    "vitest": "^0.30.1"
   },
   "sideEffects": false
 }

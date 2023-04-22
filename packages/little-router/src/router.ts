@@ -8,7 +8,7 @@ import { body } from "@mewhhaha/typed-response-fns";
 import { match } from "./match";
 import { HasOverlap } from "./overlap";
 
-export const Router = <REST_ARGS extends unknown[]>(): RouteBuilder<
+export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
   REST_ARGS,
   never
 > => {
@@ -68,18 +68,25 @@ export const Router = <REST_ARGS extends unknown[]>(): RouteBuilder<
   return new Proxy({} as any, handler);
 };
 
+export type RoutesOf<T> = T extends RouteBuilder<any, infer ROUTES>
+  ? ROUTES
+  : never;
+
 type RouteProxy<
   METHOD extends Method,
   ROUTES extends RouteStore,
   REST_ARGS extends unknown[]
-> = <PATTERN extends string>(
+> = <PATTERN extends string, RESPONSE extends AnyResponse>(
   pattern: ROUTES[METHOD]["pattern"] extends never
     ? PATTERN
     : HasOverlap<PATTERN, ROUTES[METHOD]["pattern"]> extends false
     ? PATTERN
     : ValidationError<"Overlapping route pattern">,
-  h: RouteHandler<PATTERN, REST_ARGS>
-) => RouteBuilder<REST_ARGS, ROUTES | Record<METHOD, { pattern: PATTERN }>>;
+  h: RouteHandler<PATTERN, REST_ARGS, RESPONSE>
+) => RouteBuilder<
+  REST_ARGS,
+  ROUTES | Record<METHOD, { pattern: PATTERN; response: RESPONSE }>
+>;
 
 type RouteHandlerContext<PATTERN extends string> = {
   request: Request;
@@ -92,10 +99,14 @@ type AnyResponse =
   | JSONResponse<any, any>
   | Response;
 
-type RouteHandler<PATTERN extends string, REST_ARGS extends unknown[]> = (
+type RouteHandler<
+  PATTERN extends string,
+  REST_ARGS extends unknown[],
+  RESPONSE extends AnyResponse = Response
+> = (
   { request, params }: RouteHandlerContext<PATTERN>,
   ...rest: REST_ARGS
-) => Promise<AnyResponse> | AnyResponse;
+) => Promise<RESPONSE>;
 
 type Method = Lowercase<RequestMethod> | "all";
 
@@ -105,7 +116,7 @@ type Route<REST_ARGS extends unknown[]> = (
   rest: REST_ARGS
 ) => Promise<Response | null>;
 
-type RouteStore = Record<string, { pattern: string }>;
+type RouteStore = Record<string, { pattern: string; response: AnyResponse }>;
 
 type RouteBuilder<REST_ARGS extends unknown[], ROUTES extends RouteStore> = {
   [METHOD in Exclude<Method, "all">]: RouteProxy<METHOD, ROUTES, REST_ARGS>;
@@ -121,6 +132,8 @@ type PatternParams<PATTERN> =
     ? PARAM | PatternParams<REST>
     : PATTERN extends `${string}:${infer PARAM}`
     ? PARAM
+    : PATTERN extends `${string}*`
+    ? "*"
     : never;
 
 type PatternParamsObject<PATTERN extends string> = {
