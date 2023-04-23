@@ -1,5 +1,4 @@
 import { RequestMethod } from "@mewhhaha/typed-request";
-import { JSONResponse } from "@mewhhaha/typed-response";
 
 type FetcherOptions = {
   base?: string;

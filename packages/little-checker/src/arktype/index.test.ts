@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { check } from "./";
+import { check } from "./index.js";
 import { type } from "arktype";
 
 describe("check", () => {

@@ -4,8 +4,8 @@ import {
   BodyResponse,
 } from "@mewhhaha/typed-response";
 import { JSONOf, JSONString } from "@mewhhaha/json-string";
-import { match } from "./match";
-import { HasOverlap } from "./overlap";
+import { match } from "./match.js";
+import { HasOverlap } from "./overlap.js";
 
 export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
   REST_ARGS,

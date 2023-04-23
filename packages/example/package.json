@@ -2,6 +2,7 @@
   "name": "example",
   "private": true,
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "scripts": {
     "dev": "tsc --project tsconfig.build.json && node dist/main.js",

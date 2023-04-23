@@ -1,5 +1,5 @@
 import { assertType, describe, expect, it } from "vitest";
-import { fetcher } from "./fetcher";
+import { fetcher } from "./fetcher.js";
 import { Router, RoutesOf } from "@mewhhaha/little-router";
 import { text } from "@mewhhaha/typed-response";
 
@@ -25,8 +25,8 @@ describe("fetcher", () => {
     const response = await f.get("/users/1");
     const t = await response.text();
     assertType<`User: ${string}`>(t);
-
-    expect(response.status).toBe(`User: 1`);
+    expect(response.status).toBe(200);
+    expect(t).toBe(`User: 1`);
   });
 
   it("should fetch a route with two params", async () => {
@@ -39,8 +39,8 @@ describe("fetcher", () => {
     const response = await f.get(`/users/1/cats/2`);
     const t = await response.text();
     assertType<`User: ${string}, Cat: ${string}`>(t);
-
-    expect(response.status).toBe(`User: 1, Cat: 2`);
+    expect(response.status).toBe(200);
+    expect(t).toBe(`User: 1, Cat: 2`);
   });
 
   it("should fetch a route with two routes", async () => {
@@ -57,7 +57,7 @@ describe("fetcher", () => {
     const response = await f.get(`/users/1/cats/2`);
     const t = await response.text();
     assertType<`User: ${string}, Cat: ${string}`>(t);
-
-    expect(response.status).toBe(`User: 1, Cat: 2`);
+    expect(response.status).toBe(200);
+    expect(t).toBe(`User: 1, Cat: 2`);
   });
 });

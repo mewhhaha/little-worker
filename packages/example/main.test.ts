@@ -8,7 +8,7 @@ import {
 } from "vitest";
 import { UnstableDevWorker, unstable_dev } from "wrangler";
 import { fetcher } from "@mewhhaha/little-fetcher";
-import { Routes } from "./main";
+import { Routes } from "./main.js";
 
 describe("example", () => {
   let worker: UnstableDevWorker;

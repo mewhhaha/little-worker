@@ -1,5 +1,5 @@
 import { expect, describe, it } from "vitest";
-import { Router } from "./router";
+import { Router } from "./router.js";
 
 describe("Router", () => {
   it("should match fixed paths", async () => {

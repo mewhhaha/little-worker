@@ -1,5 +1,5 @@
 import { describe, it, assertType } from "vitest";
-import { HasOverlap } from "./overlap";
+import { HasOverlap } from "./overlap.js";
 
 describe("HasOverlap", () => {
   it("should overlap", () => {

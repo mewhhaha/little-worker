@@ -7,9 +7,6 @@ importers:
       turbo:
         specifier: ^1.9.3
         version: 1.9.3
-      typescript:
-        specifier: ^5.0.4
-        version: 5.0.4
 
   packages/example:
     dependencies:
@@ -113,9 +110,6 @@ importers:
 
   packages/typed-request:
     devDependencies:
-      '@mewhhaha/json-string':
-        specifier: workspace:^
-        version: link:../json-string
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
