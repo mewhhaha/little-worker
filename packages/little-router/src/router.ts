@@ -21,9 +21,8 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
     for (const route of routes) {
       try {
         const response = await route(segments, request, rest);
-        if (response !== null) {
-          return response;
-        }
+        if (response == null) break;
+        return response;
       } catch (err) {
         if (err instanceof Response) return err;
         if (err instanceof Error)
@@ -53,12 +52,12 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
         const patternSegments = pattern.split("/");
 
         const route: Route<REST_ARGS> = async (segments, request, rest) => {
-          if (property !== "all" && request.method.toLowerCase() !== property) {
+          if (property != "all" && request.method.toLowerCase() != property) {
             return null;
           }
 
           const params = match(segments, patternSegments);
-          if (params === null) {
+          if (params == null) {
             return null;
           }
 
