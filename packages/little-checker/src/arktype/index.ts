@@ -1,34 +1,46 @@
-import { AcceptJSON } from "@mewhhaha/little-router";
-import { error } from "@mewhhaha/typed-response";
+import { JSONResponse, error } from "@mewhhaha/typed-response";
+import { JSONThrowableRequest } from "@mewhhaha/little-router";
 import { Type } from "arktype";
 
-export const check = <T, F extends AcceptJSON<T>>(parser: Type<T>, f: F): F => {
-  const g = async (
-    { request, ...context }: Parameters<F>[0],
-    ...rest: unknown[]
-  ) => {
+type Throw = JSONResponse<422, string | null> | JSONResponse<400, null>;
+
+export function check<T>(
+  parser: Type<T>,
+  request: JSONThrowableRequest<T, Throw>
+): Promise<T>;
+
+export function check<T>(
+  parser: Type<T>,
+  request?: undefined
+): (request: JSONThrowableRequest<T, Throw>) => Promise<T>;
+
+export function check<T>(
+  ...args:
+    | [parser: Type<T>, request: JSONThrowableRequest<T, Throw>]
+    | [parser: Type<T>, request?: undefined]
+): Promise<T> | ((request: JSONThrowableRequest<T, Throw>) => Promise<T>) {
+  const f = async (request: JSONThrowableRequest<T, Throw>) => {
     try {
-      const t = await request.text();
-      const r = parser(JSON.parse(t));
+      const r = args[0](await request.json());
       if (r.problems) {
-        return error(422, r.problems);
+        throw error(422, r.problems.summary);
       }
 
-      // TODO: Is this okay to mutate?
-      request.text = async () => t;
-      request.json = async () => r.data as T;
-
-      return f(
-        {
-          ...context,
-          request,
-        },
-        ...rest
-      );
+      return r.data as T;
     } catch (err) {
-      return error(400);
+      if (err instanceof Error) {
+        throw error(400, err.message);
+      }
+      throw error(400, null);
     }
   };
+  if (args[1] === undefined) {
+    return f;
+  }
 
-  return g as F;
-};
+  return f(args[1]);
+}
+
+export type RequestOf<T> = T extends (request: infer I) => Promise<any>
+  ? I
+  : never;

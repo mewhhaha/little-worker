@@ -32,10 +32,9 @@ describe("example", () => {
     expect(value).toBe("Hello fetch!");
   });
 
-  test("example-post", async () => {
-    const response = await f.get("/example-post/:id", {
-      body: JSON.stringify({ value: "world" }),
-      method: "POST",
+  test("example-post/:id", async () => {
+    const response = await f.post("/example-post/234", {
+      body: JSON.stringify({ hello: "wrld" }),
       headers: {
         "Content-Type": "application/json",
       },

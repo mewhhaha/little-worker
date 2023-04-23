@@ -3,7 +3,7 @@ import {
   JSONResponse,
   BodyResponse,
 } from "@mewhhaha/typed-response";
-import { JSONOf, JSONString } from "@mewhhaha/json-string";
+import { JSONString } from "@mewhhaha/json-string";
 import { match } from "./match.js";
 import { HasOverlap } from "./overlap.js";
 
@@ -26,6 +26,7 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
           return response;
         }
       } catch (err) {
+        if (err instanceof Response) return err;
         if (err instanceof Error)
           return new Response(err.message, { status: 500 });
         return new Response(null, { status: 500 });
@@ -57,7 +58,7 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
             return null;
           }
 
-          return h({ request, params, url: new URL(request.url) }, ...rest);
+          return h({ params, url: new URL(request.url) }, request, ...rest);
         };
         routes.push(route);
         return proxy;
@@ -68,42 +69,40 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
   return new Proxy({} as any, handler);
 };
 
-export type Accept<TEXT extends string> = RouteHandler<
-  any,
-  TextRequest<TEXT>,
-  any,
-  any
->;
-
-export type AcceptJSON<OBJ> = RouteHandler<
-  any,
-  JSONRequest<JSONString<OBJ>>,
-  any,
-  any
->;
-
 export type RoutesOf<T> = T extends RouteBuilder<any, infer ROUTES>
   ? ROUTES
   : never;
 
-interface TextRequest<TEXT extends string> extends Request {
+export interface FormRequest extends Request {
+  formData(): Promise<FormData>;
+  text(): Promise<string>;
+  json(): Promise<never>;
+}
+
+export interface TextRequest<TEXT extends string> extends Request {
   text(): Promise<TEXT>;
   json(): Promise<unknown>;
 }
 
-interface JSONRequest<TEXT extends JSONString<any>> extends Request {
-  text(): Promise<TEXT>;
-  json(): Promise<JSONOf<TEXT>>;
+export interface JSONRequest<OBJ> extends Request {
+  headers: Headers & { "Content-Type": "application/json" };
+  text(): Promise<JSONString<OBJ>>;
+  json(): Promise<unknown>;
+}
+
+export interface JSONThrowableRequest<OBJ, RESPONSES extends Response>
+  extends JSONRequest<OBJ> {
+  readonly __throwable: RESPONSES;
 }
 
 type RouteProxy<
   METHOD extends Method,
-  ROUTES extends RouteStore,
+  ROUTES extends RouteDefinition,
   REST_ARGS extends unknown[]
 > = <
-  PATTERN extends string,
-  RESPONSE extends AnyResponse,
-  TEXT extends string = never
+  const REQUEST extends Request,
+  const PATTERN extends string,
+  const RESPONSE extends AnyResponse
 >(
   pattern: Extract<ROUTES, { method: METHOD }> extends never
     ? PATTERN
@@ -113,27 +112,21 @@ type RouteProxy<
       > extends false
     ? PATTERN
     : ValidationError<"Overlapping route pattern">,
-  h: RouteHandler<
-    PATTERN,
-    METHOD extends "get"
-      ? Request
-      : TEXT extends never
-      ? Request
-      : TEXT extends JSONString<any>
-      ? JSONRequest<TEXT>
-      : TextRequest<TEXT>,
-    REST_ARGS,
-    RESPONSE
-  >
+  h: RouteHandler<PATTERN, REQUEST, REST_ARGS, RESPONSE>
 ) => RouteBuilder<
   REST_ARGS,
   | ROUTES
-  | {
-      method: METHOD;
-      pattern: PATTERN;
-      response: RESPONSE;
-      body: METHOD extends "get" ? never : TEXT;
-    }
+  | RouteDefinition<
+      METHOD,
+      PATTERN,
+      REQUEST extends JSONRequest<infer I>
+        ? JSONString<I>
+        : REQUEST extends TextRequest<infer I>
+        ? I
+        : never,
+      | RESPONSE
+      | (REQUEST extends JSONThrowableRequest<any, infer E> ? E : never)
+    >
 >;
 
 type AnyResponse =
@@ -142,17 +135,19 @@ type AnyResponse =
   | JSONResponse<any, any>
   | Response;
 
+const UNUSED = Symbol();
+
 type RouteHandler<
   PATTERN extends string,
   REQUEST extends Request,
-  REST_ARGS extends unknown[],
+  REST_ARGS extends unknown[] = [],
   RESPONSE extends AnyResponse = Response
 > = (
   context: {
-    request: REQUEST;
     params: PatternParamsObject<PATTERN>;
     url: URL;
   },
+  request: REQUEST,
   ...rest: REST_ARGS
 ) => Promise<RESPONSE> | RESPONSE;
 
@@ -160,18 +155,26 @@ type Method = "get" | "post" | "put" | "delete" | "patch" | "all";
 
 type Route<REST_ARGS extends unknown[]> = (
   segments: string[],
-  request: TextRequest<any> | Request,
+  request: Request,
   rest: REST_ARGS
 ) => Promise<Response | null>;
 
-type RouteStore = {
-  method: string;
-  pattern: string;
-  body: string;
-  response: AnyResponse;
+type RouteDefinition<
+  METHOD = string,
+  PATTERN = string,
+  BODY = string,
+  RESPONSE = AnyResponse
+> = {
+  method: METHOD;
+  pattern: PATTERN;
+  body: BODY;
+  response: RESPONSE;
 };
 
-type RouteBuilder<REST_ARGS extends unknown[], ROUTES extends RouteStore> = {
+type RouteBuilder<
+  REST_ARGS extends unknown[],
+  ROUTES extends RouteDefinition
+> = {
   [METHOD in Exclude<Method, "all">]: RouteProxy<METHOD, ROUTES, REST_ARGS>;
 } & {
   handle: (

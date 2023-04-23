@@ -12,5 +12,7 @@ describe("HasOverlap", () => {
     assertType<HasOverlap<"/:id", "/a">>(false);
     assertType<HasOverlap<"/a/b", "/:id">>(false);
     assertType<HasOverlap<"/a/:id/b", "/a/:id/c">>(false);
+    assertType<HasOverlap<"/a-a", "/b-b">>(false);
+    assertType<HasOverlap<"/b-b", "/a-a">>(false);
   });
 });

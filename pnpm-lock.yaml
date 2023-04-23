@@ -38,6 +38,9 @@ importers:
       arktype:
         specifier: 1.0.14-alpha
         version: 1.0.14-alpha
+      json-string:
+        specifier: ^0.0.1
+        version: 0.0.1
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
@@ -56,6 +59,9 @@ importers:
 
   packages/little-checker:
     devDependencies:
+      '@mewhhaha/json-string':
+        specifier: workspace:^
+        version: link:../json-string
       '@mewhhaha/little-router':
         specifier: workspace:^
         version: link:../little-router
@@ -949,6 +955,11 @@ packages:
       fsevents: 2.3.2
     dev: true
 
+  /clone@1.0.4:
+    resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
+    engines: {node: '>=0.8'}
+    dev: true
+
   /concordance@5.0.4:
     resolution: {integrity: sha512-OAcsnTEYu1ARJqWVGwf4zh4JDfHZEaSNlNccFmt8YjB2l/n19/PF2viLINHc57vO4FKIAFl2FWASIGZZWZ2Kxw==}
     engines: {node: '>=10.18.0 <11 || >=12.14.0 <13 || >=14'}
@@ -1005,6 +1016,12 @@ packages:
     engines: {node: '>=6'}
     dependencies:
       type-detect: 4.0.8
+    dev: true
+
+  /defaults@1.0.4:
+    resolution: {integrity: sha512-eFuaLoy/Rxalv2kr+lqMlUnrDWV+3j4pljOIJgLIhI058IQfWJ7vXhyEIHu+HtC738klGALYxOKDO0bQP3tg8A==}
+    dependencies:
+      clone: 1.0.4
     dev: true
 
   /dotenv@10.0.0:
@@ -1182,9 +1199,21 @@ packages:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
     dev: true
 
+  /javascript-natural-sort@0.7.1:
+    resolution: {integrity: sha512-nO6jcEfZWQXDhOiBtG2KvKyEptz7RVbpGP4vTD2hLBdmNQSsCiicO2Ioinv6UI4y9ukqnBpy+XZ9H6uLNgJTlw==}
+    dev: true
+
   /js-string-escape@1.0.1:
     resolution: {integrity: sha512-Smw4xcfIQ5LVjAOuJCvN/zIodzA/BBSsluuoSykP+lUvScIi4U6RJLfwHet5cxFnCswUjISV8oAXaqaJDY3chg==}
     engines: {node: '>= 0.8'}
+    dev: true
+
+  /json-string@0.0.1:
+    resolution: {integrity: sha512-TMo//v0uHl5UGO9xCdVIpgerKDzGuRlv6o465S0df0XpiNAzCDSll/BCO8kq5KoocvemGgztNAUyTaa3ifsJkg==}
+    dependencies:
+      defaults: 1.0.4
+      javascript-natural-sort: 0.7.1
+      repeat-string: 1.6.1
     dev: true
 
   /jsonc-parser@3.2.0:
@@ -1429,6 +1458,11 @@ packages:
     engines: {node: '>=8.10.0'}
     dependencies:
       picomatch: 2.3.1
+    dev: true
+
+  /repeat-string@1.6.1:
+    resolution: {integrity: sha512-PV0dzCYDNfRi1jCDbJzpW7jNNDRuCOG/jI5ctQcGKt/clZD+YcPS3yIlWuTJMmESC8aevCFmWJy5wjAFgNqN6w==}
+    engines: {node: '>=0.10'}
     dev: true
 
   /rollup-plugin-inject@3.0.2:

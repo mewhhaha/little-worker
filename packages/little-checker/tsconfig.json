@@ -5,6 +5,7 @@
     "module": "ES2020",
     "declaration": true,
     "esModuleInterop": true,
+    "types": ["@mewhhaha/json-string"],
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "outDir": "dist",

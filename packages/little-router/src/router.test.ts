@@ -1,5 +1,6 @@
-import { expect, describe, it } from "vitest";
-import { Router } from "./router.js";
+import { expect, describe, it, assertType } from "vitest";
+import { JSONRequest, Router } from "./router.js";
+import { JSONString } from "@mewhhaha/json-string";
 
 describe("Router", () => {
   it("should match fixed paths", async () => {
@@ -137,5 +138,27 @@ describe("Router with route chaining and overlapping", () => {
 
     expect(response1.status).toBe(200);
     expect(text1).toBe("Wildcard: a/b/c");
+  });
+
+  it("should be able to type request as JSONRequest", async () => {
+    const router = Router().post(
+      "/a",
+      async (_, request: JSONRequest<{ hello: "world" }>) => {
+        const t = await request.text();
+        assertType<JSONString<{ hello: "world" }>>(t);
+        return new Response(`Body: ${JSON.parse(t).hello}`);
+      }
+    );
+
+    const request1 = new Request("https://example.com/a", {
+      body: JSON.stringify({ hello: "world" }),
+      method: "POST",
+    });
+
+    const response1 = await router.handle(request1);
+    const text1 = await response1.text();
+
+    expect(response1.status).toBe(200);
+    expect(text1).toBe("Body: world");
   });
 });

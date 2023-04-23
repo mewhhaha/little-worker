@@ -1,4 +1,5 @@
 import { RequestMethod } from "@mewhhaha/typed-request";
+import { JSONString } from "@mewhhaha/json-string";
 
 type FetcherOptions = {
   base?: string;
@@ -53,7 +54,9 @@ type FetcherFunctionAny = (
 ) => Promise<Response>;
 
 type FetcherOf<ROUTES extends RouteDefinition> = {
-  [METHOD in ROUTES["method"]]: OverloadFunction<ROUTES>;
+  [METHOD in ROUTES["method"]]: OverloadFunction<
+    Extract<ROUTES, { method: METHOD }>
+  >;
 } & {
   fetch: FetcherFunctionAny;
 };
@@ -82,7 +85,7 @@ type PathParams<PATTERN, PATH> =
 
 type FetcherFunction<
   PATTERN extends string,
-  BODY extends string | undefined,
+  BODY extends string | JSONString<any> | undefined,
   HEADERS extends HeadersInit | undefined,
   RESPONSE extends Response
 > = <PATH extends string>(
@@ -100,6 +103,7 @@ interface DefinedRequestInit<
 > extends RequestInit {
   body: BODY;
   headers: HEADERS;
+  method?: undefined;
 }
 
 type OverloadFunction<T> = UnionToIntersection<
@@ -114,7 +118,7 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
 type InferFunction<T> = T extends {
   pattern: infer PATTERN extends string;
   response: infer RESPONSE extends Response;
-  body?: infer BODY extends string | undefined;
+  body?: infer BODY extends string | JSONString<any> | undefined;
   headers?: infer HEADERS extends HeadersInit | undefined;
 }
   ? FetcherFunction<PATTERN, BODY, HEADERS, RESPONSE>

@@ -60,4 +60,37 @@ describe("fetcher", () => {
     expect(response.status).toBe(200);
     expect(t).toBe(`User: 1, Cat: 2`);
   });
+
+  it("should fetch a route with different routes", async () => {
+    const router = Router()
+      .get("/users/:id/cats/:cat", async ({ params }) => {
+        return text(200, `User: ${params.id}, Cat: ${params.cat}`);
+      })
+      .post("/users/:id/dogs/:dog", async ({ params }) => {
+        return text(200, `User: ${params.id}, Dog: ${params.dog}`);
+      });
+
+    const f = fetcher<RoutesOf<typeof router>>(mock(router));
+
+    const response = await f.post("/users/1/dogs/2");
+    const t = await response.text();
+    assertType<`User: ${string}, Dog: ${string}`>(t);
+    expect(response.status).toBe(200);
+    expect(t).toBe(`User: 1, Dog: 2`);
+  });
+
+  it("should not show post route in get route", async () => {
+    const router = Router()
+      .get("/users/:id/cats/:cat", async ({ params }) => {
+        return text(200, `User: ${params.id}, Cat: ${params.cat}`);
+      })
+      .post("/users/:id/dogs/:dog", async ({ params }) => {
+        return text(200, `User: ${params.id}, Dog: ${params.dog}`);
+      });
+
+    const f = fetcher<RoutesOf<typeof router>>(mock(router));
+
+    //@ts-expect-error
+    await f.get("/users/:id/dogs/:dog");
+  });
 });
