@@ -1,10 +1,9 @@
-import { RequestMethod } from "@mewhhaha/typed-request";
 import {
   TextResponse,
   JSONResponse,
   BodyResponse,
 } from "@mewhhaha/typed-response";
-import { body } from "@mewhhaha/typed-response-fns";
+import { JSONOf, JSONString } from "@mewhhaha/json-string";
 import { match } from "./match";
 import { HasOverlap } from "./overlap";
 
@@ -27,12 +26,13 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
           return response;
         }
       } catch (err) {
-        if (err instanceof Error) return body(500, err.message);
-        return body(500, null);
+        if (err instanceof Error)
+          return new Response(err.message, { status: 500 });
+        return new Response(null, { status: 500 });
       }
     }
 
-    return body(500, null);
+    return new Response(null, { status: 500 });
   };
 
   const handler: ProxyHandler<RouteBuilder<REST_ARGS, never>> = {
@@ -45,7 +45,7 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
         return handle;
       }
 
-      return (pattern: string, h: RouteHandler<string, REST_ARGS>) => {
+      return (pattern: string, h: RouteHandler<string, Request, REST_ARGS>) => {
         const patternSegments = pattern.split("/");
         const route: Route<REST_ARGS> = async (segments, request, rest) => {
           if (property !== "all" && request.method.toLowerCase() !== property) {
@@ -57,7 +57,7 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
             return null;
           }
 
-          return h({ request, params }, ...rest);
+          return h({ request, params, url: new URL(request.url) }, ...rest);
         };
         routes.push(route);
         return proxy;
@@ -68,30 +68,73 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
   return new Proxy({} as any, handler);
 };
 
+export type Accept<TEXT extends string> = RouteHandler<
+  any,
+  TextRequest<TEXT>,
+  any,
+  any
+>;
+
+export type AcceptJSON<OBJ> = RouteHandler<
+  any,
+  JSONRequest<JSONString<OBJ>>,
+  any,
+  any
+>;
+
 export type RoutesOf<T> = T extends RouteBuilder<any, infer ROUTES>
   ? ROUTES
   : never;
+
+interface TextRequest<TEXT extends string> extends Request {
+  text(): Promise<TEXT>;
+  json(): Promise<unknown>;
+}
+
+interface JSONRequest<TEXT extends JSONString<any>> extends Request {
+  text(): Promise<TEXT>;
+  json(): Promise<JSONOf<TEXT>>;
+}
 
 type RouteProxy<
   METHOD extends Method,
   ROUTES extends RouteStore,
   REST_ARGS extends unknown[]
-> = <PATTERN extends string, RESPONSE extends AnyResponse>(
-  pattern: ROUTES[METHOD]["pattern"] extends never
+> = <
+  PATTERN extends string,
+  RESPONSE extends AnyResponse,
+  TEXT extends string = never
+>(
+  pattern: Extract<ROUTES, { method: METHOD }> extends never
     ? PATTERN
-    : HasOverlap<PATTERN, ROUTES[METHOD]["pattern"]> extends false
+    : HasOverlap<
+        PATTERN,
+        Extract<ROUTES, { method: METHOD }>["pattern"]
+      > extends false
     ? PATTERN
     : ValidationError<"Overlapping route pattern">,
-  h: RouteHandler<PATTERN, REST_ARGS, RESPONSE>
+  h: RouteHandler<
+    PATTERN,
+    METHOD extends "get"
+      ? Request
+      : TEXT extends never
+      ? Request
+      : TEXT extends JSONString<any>
+      ? JSONRequest<TEXT>
+      : TextRequest<TEXT>,
+    REST_ARGS,
+    RESPONSE
+  >
 ) => RouteBuilder<
   REST_ARGS,
-  ROUTES | Record<METHOD, { pattern: PATTERN; response: RESPONSE }>
+  | ROUTES
+  | {
+      method: METHOD;
+      pattern: PATTERN;
+      response: RESPONSE;
+      body: METHOD extends "get" ? never : TEXT;
+    }
 >;
-
-type RouteHandlerContext<PATTERN extends string> = {
-  request: Request;
-  params: PatternParamsObject<PATTERN>;
-};
 
 type AnyResponse =
   | TextResponse<any, any>
@@ -101,22 +144,32 @@ type AnyResponse =
 
 type RouteHandler<
   PATTERN extends string,
+  REQUEST extends Request,
   REST_ARGS extends unknown[],
   RESPONSE extends AnyResponse = Response
 > = (
-  { request, params }: RouteHandlerContext<PATTERN>,
+  context: {
+    request: REQUEST;
+    params: PatternParamsObject<PATTERN>;
+    url: URL;
+  },
   ...rest: REST_ARGS
-) => Promise<RESPONSE>;
+) => Promise<RESPONSE> | RESPONSE;
 
-type Method = Lowercase<RequestMethod> | "all";
+type Method = "get" | "post" | "put" | "delete" | "patch" | "all";
 
 type Route<REST_ARGS extends unknown[]> = (
   segments: string[],
-  request: Request,
+  request: TextRequest<any> | Request,
   rest: REST_ARGS
 ) => Promise<Response | null>;
 
-type RouteStore = Record<string, { pattern: string; response: AnyResponse }>;
+type RouteStore = {
+  method: string;
+  pattern: string;
+  body: string;
+  response: AnyResponse;
+};
 
 type RouteBuilder<REST_ARGS extends unknown[], ROUTES extends RouteStore> = {
   [METHOD in Exclude<Method, "all">]: RouteProxy<METHOD, ROUTES, REST_ARGS>;

@@ -12,3 +12,5 @@ export type JSONString<T> = string & {
   readonly __tag: unique symbol;
   readonly __value: T;
 };
+
+export type JSONOf<T> = T extends JSONString<infer JSON> ? JSON : never;

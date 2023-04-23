@@ -1,26 +1,45 @@
-import express from "express";
+import { Router, RoutesOf } from "@mewhhaha/little-router";
+import { json, text } from "@mewhhaha/typed-response";
+import { type } from "arktype";
+import { check } from "@mewhhaha/little-checker/arktype";
 
-const app = express()
-  .get("/example-get", (_, response) => {
-    response.send("Hello fetch!");
+const router = Router()
+  .get("/example-get", () => {
+    return text(200, "Hello fetch!");
   })
-  .post("/example-post", express.json(), async (request, response) => {
-    const { value } = request.body as { value: string };
-    response.json({ hello: value });
+  .post(
+    "/example-post",
+    check(type({ value: "'world'" }), async ({ request }) => {
+      const { value } = await request.json();
+
+      return json(200, { hello: value });
+    })
+  )
+  .post("/example-post/:id", async ({ params }) => {
+    return json(200, { hello: params.id });
   })
-  .post("/example-advanced", express.json(), async (request, response) => {
-    const { value } = request.body as { value: string };
-    if (value === "no") {
-      response.status(422).send("no no no");
-    }
-    response.json({ hello: value });
-  })
-  .get("/example-search-params", async (request, response) => {
+  .post(
+    "/example-advanced",
+    check(type({ value: "'world'|'no'" }), async ({ request }) => {
+      const { value } = await request.json();
+      if (value === "no") {
+        return text(422, "no no no");
+      }
+      return json(200, { hello: value });
+    })
+  )
+  .get("/example-search-params", async ({ request }) => {
     const url = new URL(request.url);
     const sort = url.searchParams.get("sort");
     const size = url.searchParams.get("size");
 
-    response.json({ sort, size });
+    return json(200, { sort, size });
   });
 
-export const start = () => app.listen(4545);
+export type Routes = RoutesOf<typeof router>;
+
+const handler: ExportedHandler = {
+  fetch: router.handle,
+};
+
+export default handler;

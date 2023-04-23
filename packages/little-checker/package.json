@@ -1,16 +1,26 @@
 {
-  "name": "@mewhhaha/little-router",
+  "name": "@mewhhaha/little-checker",
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "types": "dist/index.d.ts",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
   "keywords": [],
   "author": "Jacob Torrång",
   "license": "MIT",
+  "exports": {
+    "./arktype": {
+      "import": "./dist/arktype/index.js",
+      "types": "./dist/arktype/index.d.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "arktype": [
+        "dist/arktype/index.d.ts"
+      ]
+    }
+  },
   "files": [
-    "dist",
+    "dist/arktype",
     "README.md",
     "CHANGELOG.md"
   ],
@@ -20,8 +30,9 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@mewhhaha/json-string": "workspace:^",
+    "@mewhhaha/little-router": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^",
+    "arktype": "1.0.14-alpha",
     "typescript": "^5.0.4",
     "vitest": "^0.30.1"
   },

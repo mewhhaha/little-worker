@@ -10,20 +10,20 @@
   "author": "Jacob Torrång",
   "license": "MIT",
   "files": [
-    "dist",
+    "dist/*",
     "README.md",
     "CHANGELOG.md"
   ],
   "scripts": {
     "prepublish": "pnpm -w build",
-    "build": "tsc --project tsconfig.build.json"
+    "build": "tsc --project tsconfig.build.json",
+    "test": "vitest"
   },
   "devDependencies": {
-    "@mewhhaha/generics-stringify": "workspace:^",
+    "@mewhhaha/json-string": "workspace:^",
     "@mewhhaha/little-router": "workspace:^",
     "@mewhhaha/typed-request": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^",
-    "@mewhhaha/typed-response-fns": "workspace:^",
     "typescript": "^5.0.4",
     "vitest": "^0.30.1"
   },

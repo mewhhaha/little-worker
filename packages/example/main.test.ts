@@ -6,20 +6,25 @@ import {
   expect,
   test,
 } from "vitest";
-import { start } from "./main";
+import { UnstableDevWorker, unstable_dev } from "wrangler";
+import { fetcher } from "@mewhhaha/little-fetcher";
+import { Routes } from "./main";
 
 describe("example", () => {
-  let server: ReturnType<typeof start>;
+  let worker: UnstableDevWorker;
+  let f: ReturnType<typeof fetcher<Routes>>;
+
   beforeAll(async () => {
-    server = start();
+    worker = await unstable_dev("./main.ts");
+    f = fetcher<Routes>(worker as unknown as { fetch: typeof fetch });
   });
 
   afterAll(() => {
-    server.close();
+    worker.stop();
   });
 
   test("example-get", async () => {
-    const response = await fetch("http://localhost:4545/example-get");
+    const response = await f.get("/example-get");
 
     const value = await response.text();
     assertType<"Hello fetch!">(value);
@@ -28,7 +33,7 @@ describe("example", () => {
   });
 
   test("example-post", async () => {
-    const response = await fetch("http://localhost:4545/example-post", {
+    const response = await f.get("/example-post/:id", {
       body: JSON.stringify({ value: "world" }),
       method: "POST",
       headers: {

@@ -1,3 +1,5 @@
+import { JSONString } from "@mewhhaha/json-string";
+
 export type RequestMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 export type SearchString<
