@@ -85,7 +85,7 @@ type PathParams<PATTERN, PATH> =
 
 type FetcherFunction<
   PATTERN extends string,
-  BODY extends string | JSONString<any> | undefined,
+  BODY extends BodyInit | undefined,
   HEADERS extends HeadersInit | undefined,
   RESPONSE extends Response
 > = <PATH extends string>(
@@ -98,7 +98,7 @@ type FetcherFunction<
 ) => Promise<RESPONSE>;
 
 interface DefinedRequestInit<
-  BODY extends string | undefined,
+  BODY extends BodyInit | undefined,
   HEADERS extends HeadersInit | undefined
 > extends RequestInit {
   body: BODY;
@@ -109,6 +109,7 @@ interface DefinedRequestInit<
 type OverloadFunction<T> = UnionToIntersection<
   (T extends any ? InferFunction<T> : never) & {}
 >;
+
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
   k: infer I
 ) => void
@@ -118,7 +119,7 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
 type InferFunction<T> = T extends {
   pattern: infer PATTERN extends string;
   response: infer RESPONSE extends Response;
-  body?: infer BODY extends string | JSONString<any> | undefined;
+  body?: infer BODY extends BodyInit | undefined;
   headers?: infer HEADERS extends HeadersInit | undefined;
 }
   ? FetcherFunction<PATTERN, BODY, HEADERS, RESPONSE>

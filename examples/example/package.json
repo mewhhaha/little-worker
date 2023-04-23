@@ -11,17 +11,14 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
-  "dependencies": {
-    "@mewhhaha/little-checker": "workspace:^"
-  },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230404.0",
     "@mewhhaha/json-string": "workspace:^",
     "@mewhhaha/little-fetcher": "workspace:^",
     "@mewhhaha/little-router": "workspace:^",
+    "@mewhhaha/little-router-data": "workspace:^",
     "@mewhhaha/typed-request": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^",
-    "@types/express": "^4.17.17",
     "arktype": "1.0.14-alpha",
     "json-string": "^0.0.1",
     "typescript": "^5.0.4",

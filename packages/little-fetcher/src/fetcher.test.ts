@@ -16,7 +16,7 @@ const mock = <
 
 describe("fetcher", () => {
   it("should fetch a route with one param", async () => {
-    const router = Router().get("/users/:id", async ({ params }) => {
+    const router = Router().get("/users/:id", [], async ({ params }) => {
       return text(200, `User: ${params.id}`);
     });
 
@@ -30,9 +30,13 @@ describe("fetcher", () => {
   });
 
   it("should fetch a route with two params", async () => {
-    const router = Router().get("/users/:id/cats/:cat", async ({ params }) => {
-      return text(200, `User: ${params.id}, Cat: ${params.cat}`);
-    });
+    const router = Router().get(
+      "/users/:id/cats/:cat",
+      [],
+      async ({ params }) => {
+        return text(200, `User: ${params.id}, Cat: ${params.cat}`);
+      }
+    );
 
     const f = fetcher<RoutesOf<typeof router>>(mock(router));
 
@@ -45,10 +49,10 @@ describe("fetcher", () => {
 
   it("should fetch a route with two routes", async () => {
     const router = Router()
-      .get("/users/:id/cats/:cat", async ({ params }) => {
+      .get("/users/:id/cats/:cat", [], async ({ params }) => {
         return text(200, `User: ${params.id}, Cat: ${params.cat}`);
       })
-      .get("/users/:id/dogs/:dog", async ({ params }) => {
+      .get("/users/:id/dogs/:dog", [], async ({ params }) => {
         return text(200, `User: ${params.id}, Dog: ${params.dog}`);
       });
 
@@ -63,10 +67,10 @@ describe("fetcher", () => {
 
   it("should fetch a route with different routes", async () => {
     const router = Router()
-      .get("/users/:id/cats/:cat", async ({ params }) => {
+      .get("/users/:id/cats/:cat", [], async ({ params }) => {
         return text(200, `User: ${params.id}, Cat: ${params.cat}`);
       })
-      .post("/users/:id/dogs/:dog", async ({ params }) => {
+      .post("/users/:id/dogs/:dog", [], async ({ params }) => {
         return text(200, `User: ${params.id}, Dog: ${params.dog}`);
       });
 
@@ -81,10 +85,10 @@ describe("fetcher", () => {
 
   it("should not show post route in get route", async () => {
     const router = Router()
-      .get("/users/:id/cats/:cat", async ({ params }) => {
+      .get("/users/:id/cats/:cat", [], async ({ params }) => {
         return text(200, `User: ${params.id}, Cat: ${params.cat}`);
       })
-      .post("/users/:id/dogs/:dog", async ({ params }) => {
+      .post("/users/:id/dogs/:dog", [], async ({ params }) => {
         return text(200, `User: ${params.id}, Dog: ${params.dog}`);
       });
 

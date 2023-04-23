@@ -1,0 +1,22 @@
+{
+  "name": "benchmark",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "scripts": {
+    "dev": "tsc --project tsconfig.build.json && node dist/main.js",
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@mewhhaha/little-router": "workspace:^",
+    "@mewhhaha/typed-request": "workspace:^",
+    "@mewhhaha/typed-response": "workspace:^",
+    "itty-router": "^3.0.12",
+    "typescript": "^5.0.4",
+    "vitest": "^0.30.1"
+  }
+}

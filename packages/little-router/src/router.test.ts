@@ -1,11 +1,12 @@
-import { expect, describe, it, assertType } from "vitest";
-import { JSONRequest, Router } from "./router.js";
-import { JSONString } from "@mewhhaha/json-string";
+import { expect, describe, it, assertType, assert } from "vitest";
+import { Router } from "./router.js";
+import { error } from "@mewhhaha/typed-response";
 
 describe("Router", () => {
   it("should match fixed paths", async () => {
     const router = Router().get(
       "/test",
+      [],
       async () => new Response("Test route")
     );
 
@@ -18,7 +19,7 @@ describe("Router", () => {
   });
 
   it("should match path parameters", async () => {
-    const router = Router().get("/user/:id", async ({ params }) => {
+    const router = Router().get("/user/:id", [], async ({ params }) => {
       return new Response(`User: ${params.id}`);
     });
 
@@ -33,7 +34,7 @@ describe("Router", () => {
   });
 
   it("should match wildcard paths", async () => {
-    const router = Router().get("/*", async ({ params }) => {
+    const router = Router().get("/*", [], async ({ params }) => {
       return new Response(`Wildcard: ${params["*"]}`);
     });
 
@@ -50,6 +51,7 @@ describe("Router", () => {
   it("should return a 500 status for unmatched paths", async () => {
     const router = Router().get(
       "/test",
+      [],
       async () => new Response("Test route")
     );
 
@@ -63,8 +65,8 @@ describe("Router", () => {
 
   it("should only match the correct HTTP method", async () => {
     const router = Router()
-      .get("/test", async () => new Response("GET route"))
-      .post("/test", async () => new Response("POST route"));
+      .get("/test", [], async () => new Response("GET route"))
+      .post("/test", [], async () => new Response("POST route"));
 
     const getRequest = new Request("https://example.com/test", {
       method: "GET",
@@ -88,8 +90,8 @@ describe("Router", () => {
 describe("Router with route chaining and overlapping", () => {
   it("should handle chained routes correctly", async () => {
     const router = Router()
-      .get("/test1", async () => new Response("Test route 1"))
-      .get("/test2", async () => new Response("Test route 2"));
+      .get("/test1", [], async () => new Response("Test route 1"))
+      .get("/test2", [], async () => new Response("Test route 2"));
 
     const request1 = new Request("https://example.com/test1", {
       method: "GET",
@@ -111,9 +113,9 @@ describe("Router with route chaining and overlapping", () => {
 
   it("should not match overlapping routes with path parameters", async () => {
     const router = Router()
-      .get("/:id", async ({ params }) => new Response(`ID: ${params.id}`))
+      .get("/:id", [], async ({ params }) => new Response(`ID: ${params.id}`))
       // @ts-expect-error
-      .get("/a", async () => new Response("Fixed route"));
+      .get("/a", [], async () => new Response("Fixed route"));
 
     const request1 = new Request("https://example.com/a", { method: "GET" });
     const response1 = await router.handle(request1);
@@ -125,9 +127,13 @@ describe("Router with route chaining and overlapping", () => {
 
   it("should not match overlapping routes with wildcards", async () => {
     const router = Router()
-      .get("/*", async ({ params }) => new Response(`Wildcard: ${params["*"]}`))
+      .get(
+        "/*",
+        [],
+        async ({ params }) => new Response(`Wildcard: ${params["*"]}`)
+      )
       // @ts-expect-error
-      .get("/a/b/c", async () => new Response("Fixed route"));
+      .get("/a/b/c", [], async () => new Response("Fixed route"));
 
     const request1 = new Request("https://example.com/a/b/c", {
       method: "GET",
@@ -139,26 +145,50 @@ describe("Router with route chaining and overlapping", () => {
     expect(response1.status).toBe(200);
     expect(text1).toBe("Wildcard: a/b/c");
   });
+});
 
-  it("should be able to type request as JSONRequest", async () => {
+describe("Router with plugins", () => {
+  it("should handle context plugins correctly", async () => {
+    const jsonPlugin = async (request: Request) => {
+      const body = (await request.json()) as "json-plugin";
+      return { body };
+    };
+
     const router = Router().post(
-      "/a",
-      async (_, request: JSONRequest<{ hello: "world" }>) => {
-        const t = await request.text();
-        assertType<JSONString<{ hello: "world" }>>(t);
-        return new Response(`Body: ${JSON.parse(t).hello}`);
-      }
+      "/json-plugin",
+      [jsonPlugin],
+      async ({ body }) => new Response(`Plugin: ${body}`)
     );
 
-    const request1 = new Request("https://example.com/a", {
-      body: JSON.stringify({ hello: "world" }),
+    const request1 = new Request("https://example.com/json-plugin", {
+      body: JSON.stringify("json-plugin"),
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
 
     const response1 = await router.handle(request1);
     const text1 = await response1.text();
 
     expect(response1.status).toBe(200);
-    expect(text1).toBe("Body: world");
+    expect(text1).toBe("Plugin: json-plugin");
+  });
+
+  it("should return responses from plugins", async () => {
+    const authPlugin = async (_: Request) => {
+      return error(403, "Plugin: Forbidden");
+    };
+
+    const router = Router().get("/auth-plugin", [authPlugin], async () => {
+      return new Response(null);
+    });
+
+    const request1 = new Request("https://example.com/auth-plugin");
+    const response1 = await router.handle(request1);
+    const text1 = await response1.json();
+
+    expect(response1.status).toBe(403);
+    expect(text1).toBe("Plugin: Forbidden");
   });
 });

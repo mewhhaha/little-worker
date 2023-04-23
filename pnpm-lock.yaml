@@ -8,33 +8,50 @@ importers:
         specifier: ^1.9.3
         version: 1.9.3
 
-  packages/example:
-    dependencies:
-      '@mewhhaha/little-checker':
+  examples/benchmark:
+    devDependencies:
+      '@mewhhaha/little-router':
         specifier: workspace:^
-        version: link:../little-checker
+        version: link:../../packages/little-router
+      '@mewhhaha/typed-request':
+        specifier: workspace:^
+        version: link:../../packages/typed-request
+      '@mewhhaha/typed-response':
+        specifier: workspace:^
+        version: link:../../packages/typed-response
+      itty-router:
+        specifier: ^3.0.12
+        version: 3.0.12
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
+      vitest:
+        specifier: ^0.30.1
+        version: 0.30.1
+
+  examples/example:
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20230404.0
         version: 4.20230404.0
       '@mewhhaha/json-string':
         specifier: workspace:^
-        version: link:../json-string
+        version: link:../../packages/json-string
       '@mewhhaha/little-fetcher':
         specifier: workspace:^
-        version: link:../little-fetcher
+        version: link:../../packages/little-fetcher
       '@mewhhaha/little-router':
         specifier: workspace:^
-        version: link:../little-router
+        version: link:../../packages/little-router
+      '@mewhhaha/little-router-data':
+        specifier: workspace:^
+        version: link:../../packages/little-router-data
       '@mewhhaha/typed-request':
         specifier: workspace:^
-        version: link:../typed-request
+        version: link:../../packages/typed-request
       '@mewhhaha/typed-response':
         specifier: workspace:^
-        version: link:../typed-response
-      '@types/express':
-        specifier: ^4.17.17
-        version: 4.17.17
+        version: link:../../packages/typed-response
       arktype:
         specifier: 1.0.14-alpha
         version: 1.0.14-alpha
@@ -56,27 +73,6 @@ importers:
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
-
-  packages/little-checker:
-    devDependencies:
-      '@mewhhaha/json-string':
-        specifier: workspace:^
-        version: link:../json-string
-      '@mewhhaha/little-router':
-        specifier: workspace:^
-        version: link:../little-router
-      '@mewhhaha/typed-response':
-        specifier: workspace:^
-        version: link:../typed-response
-      arktype:
-        specifier: 1.0.14-alpha
-        version: 1.0.14-alpha
-      typescript:
-        specifier: ^5.0.4
-        version: 5.0.4
-      vitest:
-        specifier: ^0.30.1
-        version: 0.30.1
 
   packages/little-fetcher:
     devDependencies:
@@ -107,6 +103,27 @@ importers:
       '@mewhhaha/typed-response':
         specifier: workspace:^
         version: link:../typed-response
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
+      vitest:
+        specifier: ^0.30.1
+        version: 0.30.1
+
+  packages/little-router-data:
+    devDependencies:
+      '@mewhhaha/json-string':
+        specifier: workspace:^
+        version: link:../json-string
+      '@mewhhaha/little-router':
+        specifier: workspace:^
+        version: link:../little-router
+      '@mewhhaha/typed-response':
+        specifier: workspace:^
+        version: link:../typed-response
+      arktype:
+        specifier: 1.0.14-alpha
+        version: 1.0.14-alpha
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
@@ -737,13 +754,6 @@ packages:
       '@types/node': 18.15.13
     dev: true
 
-  /@types/body-parser@1.19.2:
-    resolution: {integrity: sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g==}
-    dependencies:
-      '@types/connect': 3.4.35
-      '@types/node': 18.15.13
-    dev: true
-
   /@types/chai-subset@1.3.3:
     resolution: {integrity: sha512-frBecisrNGz+F4T6bcc+NLeolfiojh5FxW2klu669+8BARtyQv2C/GkNW6FUodVe4BroGMP/wER/YDGc7rEllw==}
     dependencies:
@@ -754,50 +764,8 @@ packages:
     resolution: {integrity: sha512-KnRanxnpfpjUTqTCXslZSEdLfXExwgNxYPdiO2WGUj8+HDjFi8R3k5RVKPeSCzLjCcshCAtVO2QBbVuAV4kTnw==}
     dev: true
 
-  /@types/connect@3.4.35:
-    resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
-    dependencies:
-      '@types/node': 18.15.13
-    dev: true
-
-  /@types/express-serve-static-core@4.17.33:
-    resolution: {integrity: sha512-TPBqmR/HRYI3eC2E5hmiivIzv+bidAfXofM+sbonAGvyDhySGw9/PQZFt2BLOrjUUR++4eJVpx6KnLQK1Fk9tA==}
-    dependencies:
-      '@types/node': 18.15.13
-      '@types/qs': 6.9.7
-      '@types/range-parser': 1.2.4
-    dev: true
-
-  /@types/express@4.17.17:
-    resolution: {integrity: sha512-Q4FmmuLGBG58btUnfS1c1r/NQdlp3DMfGDGig8WhfpA2YRUtEkxAjkZb0yvplJGYdF1fsQ81iMDcH24sSCNC/Q==}
-    dependencies:
-      '@types/body-parser': 1.19.2
-      '@types/express-serve-static-core': 4.17.33
-      '@types/qs': 6.9.7
-      '@types/serve-static': 1.15.1
-    dev: true
-
-  /@types/mime@3.0.1:
-    resolution: {integrity: sha512-Y4XFY5VJAuw0FgAqPNd6NNoV44jbq9Bz2L7Rh/J6jLTiHBSBJa9fxqQIvkIld4GsoDOcCbvzOUAbLPsSKKg+uA==}
-    dev: true
-
   /@types/node@18.15.13:
     resolution: {integrity: sha512-N+0kuo9KgrUQ1Sn/ifDXsvg0TTleP7rIy4zOBGECxAljqvqfqpTfzx0Q1NUedOixRMBfe2Whhb056a42cWs26Q==}
-    dev: true
-
-  /@types/qs@6.9.7:
-    resolution: {integrity: sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==}
-    dev: true
-
-  /@types/range-parser@1.2.4:
-    resolution: {integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==}
-    dev: true
-
-  /@types/serve-static@1.15.1:
-    resolution: {integrity: sha512-NUo5XNiAdULrJENtJXZZ3fHtfMolzZwczzBbnAeBbqBwG+LaG6YaJtuwzwGSQZ2wsCrxjEhNNjAkKigy3n8teQ==}
-    dependencies:
-      '@types/mime': 3.0.1
-      '@types/node': 18.15.13
     dev: true
 
   /@types/stack-trace@0.0.29:
@@ -1197,6 +1165,10 @@ packages:
 
   /isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
+    dev: true
+
+  /itty-router@3.0.12:
+    resolution: {integrity: sha512-s98XTPhle6GGbaFf0kYrOD3Q8gyhnqvOqkwYijC3AmkceNKqWUp13YHg6dWmqmVv4pP7l7c94XI92I0EXVGO0w==}
     dev: true
 
   /javascript-natural-sort@0.7.1:

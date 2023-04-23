@@ -3,9 +3,10 @@ import {
   JSONResponse,
   BodyResponse,
 } from "@mewhhaha/typed-response";
-import { JSONString } from "@mewhhaha/json-string";
 import { match } from "./match.js";
 import { HasOverlap } from "./overlap.js";
+
+const EMPTY = [];
 
 export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
   REST_ARGS,
@@ -46,7 +47,11 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
         return handle;
       }
 
-      return (pattern: string, h: RouteHandler<string, Request, REST_ARGS>) => {
+      return (
+        pattern: string,
+        plugins: Plugin[],
+        h: RouteHandler<RouteHandlerContext<any>, REST_ARGS>
+      ) => {
         const patternSegments = pattern.split("/");
         const route: Route<REST_ARGS> = async (segments, request, rest) => {
           if (property !== "all" && request.method.toLowerCase() !== property) {
@@ -58,7 +63,15 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
             return null;
           }
 
-          return h({ params, url: new URL(request.url) }, request, ...rest);
+          const context = { params, url: new URL(request.url), request };
+
+          for (const plugin of plugins) {
+            const result = await plugin(request);
+            if (result instanceof Response) return result;
+            Object.assign(context, result);
+          }
+
+          return h(context, ...rest);
         };
         routes.push(route);
         return proxy;
@@ -79,30 +92,23 @@ export interface FormRequest extends Request {
   json(): Promise<never>;
 }
 
-export interface TextRequest<TEXT extends string> extends Request {
-  text(): Promise<TEXT>;
+export interface BodyRequest<CONTENT extends string> extends Request {
+  text(): Promise<CONTENT>;
   json(): Promise<unknown>;
 }
 
-export interface JSONRequest<OBJ> extends Request {
-  headers: Headers & { "Content-Type": "application/json" };
-  text(): Promise<JSONString<OBJ>>;
-  json(): Promise<unknown>;
-}
-
-export interface JSONThrowableRequest<OBJ, RESPONSES extends Response>
-  extends JSONRequest<OBJ> {
-  readonly __throwable: RESPONSES;
-}
+export type Plugin = (
+  request: any
+) => Promise<Record<string, any> | AnyResponse>;
 
 type RouteProxy<
   METHOD extends Method,
   ROUTES extends RouteDefinition,
   REST_ARGS extends unknown[]
 > = <
-  const REQUEST extends Request,
   const PATTERN extends string,
-  const RESPONSE extends AnyResponse
+  const RESPONSE extends AnyResponse,
+  PLUGINS extends Plugin[]
 >(
   pattern: Extract<ROUTES, { method: METHOD }> extends never
     ? PATTERN
@@ -112,22 +118,42 @@ type RouteProxy<
       > extends false
     ? PATTERN
     : ValidationError<"Overlapping route pattern">,
-  h: RouteHandler<PATTERN, REQUEST, REST_ARGS, RESPONSE>
+  plugins: PLUGINS,
+  h: RouteHandler<
+    | RouteHandlerContext<PATTERN, Parameters<PLUGINS[number]>[0]>
+    | Exclude<Awaited<ReturnType<PLUGINS[number]>>, Response>,
+    REST_ARGS,
+    RESPONSE
+  >
 ) => RouteBuilder<
   REST_ARGS,
   | ROUTES
   | RouteDefinition<
       METHOD,
       PATTERN,
-      REQUEST extends JSONRequest<infer I>
-        ? JSONString<I>
-        : REQUEST extends TextRequest<infer I>
-        ? I
-        : never,
-      | RESPONSE
-      | (REQUEST extends JSONThrowableRequest<any, infer E> ? E : never)
+      RequestBody<Parameters<PLUGINS[number]>[0]>,
+      RequestHeaders<Parameters<PLUGINS[number]>[0]>,
+      RESPONSE | Extract<Awaited<ReturnType<PLUGINS[number]>>, Response>
     >
 >;
+
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
+  k: infer I
+) => void
+  ? I
+  : never;
+
+type RequestBody<T extends Request> = T extends {
+  __init: { body: infer B extends BodyInit };
+}
+  ? B
+  : never;
+
+type RequestHeaders<T extends Request> = T extends {
+  __init: { headers: infer B extends Record<string, string> };
+}
+  ? B
+  : never;
 
 type AnyResponse =
   | TextResponse<any, any>
@@ -135,21 +161,23 @@ type AnyResponse =
   | JSONResponse<any, any>
   | Response;
 
-const UNUSED = Symbol();
-
 type RouteHandler<
-  PATTERN extends string,
-  REQUEST extends Request,
+  CONTEXT extends Record<string, any>,
   REST_ARGS extends unknown[] = [],
   RESPONSE extends AnyResponse = Response
 > = (
-  context: {
-    params: PatternParamsObject<PATTERN>;
-    url: URL;
-  },
-  request: REQUEST,
+  context: UnionToIntersection<CONTEXT>,
   ...rest: REST_ARGS
 ) => Promise<RESPONSE> | RESPONSE;
+
+type RouteHandlerContext<
+  PATTERN extends string,
+  REQUEST extends Request = Request
+> = {
+  params: PatternParamsObject<PATTERN>;
+  url: URL;
+  request: REQUEST;
+};
 
 type Method = "get" | "post" | "put" | "delete" | "patch" | "all";
 
@@ -160,15 +188,17 @@ type Route<REST_ARGS extends unknown[]> = (
 ) => Promise<Response | null>;
 
 type RouteDefinition<
-  METHOD = string,
-  PATTERN = string,
-  BODY = string,
-  RESPONSE = AnyResponse
+  METHOD extends string = string,
+  PATTERN extends string = string,
+  BODY extends BodyInit = BodyInit,
+  HEADERS extends Record<string, string> = Record<string, string>,
+  RESPONSE extends AnyResponse = AnyResponse
 > = {
   method: METHOD;
   pattern: PATTERN;
   body: BODY;
   response: RESPONSE;
+  headers: HEADERS;
 };
 
 type RouteBuilder<
