@@ -21,7 +21,7 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
     for (const route of routes) {
       try {
         const response = await route(segments, request, rest);
-        if (response == null) break;
+        if (response == null) continue;
         return response;
       } catch (err) {
         if (err instanceof Response) return err;
