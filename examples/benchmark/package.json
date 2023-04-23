@@ -5,8 +5,7 @@
   "type": "module",
   "description": "",
   "scripts": {
-    "dev": "tsc --project tsconfig.build.json && node dist/main.js",
-    "test": "vitest"
+    "benchmark": "vitest bench"
   },
   "keywords": [],
   "author": "",

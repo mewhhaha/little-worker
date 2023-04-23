@@ -1,0 +1,11 @@
+Comparing against itty-router because I like that project
+
+```bench
+ BENCH  Summary
+
+  itty - main.bench.ts > cold start
+    1.61x faster than little
+
+  itty - main.bench.ts > hot start
+    1.20x faster than little
+```

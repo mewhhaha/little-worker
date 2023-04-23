@@ -6,8 +6,6 @@ import {
 import { match } from "./match.js";
 import { HasOverlap } from "./overlap.js";
 
-const EMPTY = [];
-
 export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
   REST_ARGS,
   never
@@ -53,6 +51,7 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
         h: RouteHandler<RouteHandlerContext<any>, REST_ARGS>
       ) => {
         const patternSegments = pattern.split("/");
+
         const route: Route<REST_ARGS> = async (segments, request, rest) => {
           if (property !== "all" && request.method.toLowerCase() !== property) {
             return null;
@@ -85,17 +84,6 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
 export type RoutesOf<T> = T extends RouteBuilder<any, infer ROUTES>
   ? ROUTES
   : never;
-
-export interface FormRequest extends Request {
-  formData(): Promise<FormData>;
-  text(): Promise<string>;
-  json(): Promise<never>;
-}
-
-export interface BodyRequest<CONTENT extends string> extends Request {
-  text(): Promise<CONTENT>;
-  json(): Promise<unknown>;
-}
 
 export type Plugin = (
   request: any

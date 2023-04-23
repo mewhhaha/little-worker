@@ -20,7 +20,6 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@mewhhaha/json-string": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^",
     "typescript": "^5.0.4",
     "vitest": "^0.30.1"

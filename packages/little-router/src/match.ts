@@ -6,7 +6,7 @@ export const match = (
     return { "*": segments.join("/") };
   }
 
-  if (!pattern.includes("*") && segments.length !== pattern.length) {
+  if (segments.length !== pattern.length && !pattern.includes("*")) {
     return null;
   }
 
@@ -20,7 +20,7 @@ export const match = (
       return params;
     } else if (p[0] === ":") {
       params[p.slice(1)] = s;
-    } else if (s !== p) {
+    } else if (s.length !== p.length || s !== p) {
       return null;
     }
   }
