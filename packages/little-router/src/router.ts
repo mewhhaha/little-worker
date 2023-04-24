@@ -167,13 +167,6 @@ type RouteItem<REST_ARGS extends unknown[]> = [
   route: RouteHandler<any, REST_ARGS>
 ];
 
-type Route<REST_ARGS extends unknown[]> = (
-  params: Record<string, string>,
-  url: URL,
-  request: Request,
-  rest: REST_ARGS
-) => Promise<Response | null>;
-
 type RouteDefinition<
   METHOD extends string = string,
   PATTERN extends string = string,
