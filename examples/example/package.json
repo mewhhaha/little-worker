@@ -16,7 +16,7 @@
     "@mewhhaha/json-string": "workspace:^",
     "@mewhhaha/little-fetcher": "workspace:^",
     "@mewhhaha/little-router": "workspace:^",
-    "@mewhhaha/little-router-data": "workspace:^",
+    "@mewhhaha/little-router-plugin-data": "workspace:^",
     "@mewhhaha/typed-request": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^",
     "arktype": "1.0.14-alpha",

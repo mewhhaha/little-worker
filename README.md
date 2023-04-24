@@ -1,6 +1,6 @@
 - json-string
-- little-checker
 - little-fetcher
 - little-router
+- little-router/plugin-data
 - typed-request
 - typed-response

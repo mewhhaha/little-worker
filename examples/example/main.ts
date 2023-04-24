@@ -1,6 +1,6 @@
 import { Router, RoutesOf } from "@mewhhaha/little-router";
 import { json, text } from "@mewhhaha/typed-response";
-import { data_ } from "@mewhhaha/little-router-data/arktype";
+import { data_ } from "@mewhhaha/little-router-plugin-data/arktype";
 import { type } from "arktype";
 
 const router = Router()

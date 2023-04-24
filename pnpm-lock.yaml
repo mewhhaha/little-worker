@@ -43,9 +43,9 @@ importers:
       '@mewhhaha/little-router':
         specifier: workspace:^
         version: link:../../packages/little-router
-      '@mewhhaha/little-router-data':
+      '@mewhhaha/little-router-plugin-data':
         specifier: workspace:^
-        version: link:../../packages/little-router-data
+        version: link:../../packages/little-router-plugin-data
       '@mewhhaha/typed-request':
         specifier: workspace:^
         version: link:../../packages/typed-request
@@ -107,7 +107,7 @@ importers:
         specifier: ^0.30.1
         version: 0.30.1
 
-  packages/little-router-data:
+  packages/little-router-plugin-data:
     devDependencies:
       '@mewhhaha/json-string':
         specifier: workspace:^
