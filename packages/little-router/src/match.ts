@@ -2,11 +2,11 @@ export const match = (
   segments: string[],
   pattern: string[]
 ): null | Record<string, string> => {
-  if (pattern.length === 1 && pattern[0] === "*") {
+  if (pattern.length == 1 && pattern[0] == "*") {
     return { "*": segments.join("/") };
   }
 
-  if (segments.length !== pattern.length && !pattern.includes("*")) {
+  if (segments.length != pattern.length && !pattern.includes("*")) {
     return null;
   }
 
@@ -15,12 +15,12 @@ export const match = (
   for (let i = 0; i < segments.length; i++) {
     const s = segments[i];
     const p = pattern[i];
-    if (p === "*") {
+    if (p == "*") {
       params["*"] = segments.slice(i).join("/");
       return params;
-    } else if (p[0] === ":") {
+    } else if (p[0] == ":") {
       params[p.slice(1)] = s;
-    } else if (s.length !== p.length || s !== p) {
+    } else if (s != p) {
       return null;
     }
   }

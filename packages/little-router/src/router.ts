@@ -10,7 +10,7 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
   REST_ARGS,
   never
 > => {
-  const routes: Route<REST_ARGS>[] = [];
+  const routes: RouteItem<REST_ARGS>[] = [];
 
   const handle: RouteBuilder<REST_ARGS, never>["handle"] = async (
     request,
@@ -19,66 +19,56 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
     const url = new URL(request.url);
     const segments = url.pathname.split("/");
     try {
-      for (const route of routes) {
-        const response = await route(segments, url, request, rest);
-        if (response == null) continue;
-        return response;
+      for (const [method, pattern, plugins, h] of routes) {
+        if (request.method != method && method != "ALL") {
+          continue;
+        }
+
+        const params = match(segments, pattern);
+        if (params == null) {
+          continue;
+        }
+
+        const context = { params, url, request };
+
+        const results = await Promise.all(plugins.map((p) => p(request)));
+        for (const result of results) {
+          if (result instanceof Response) return result;
+          Object.assign(context, result);
+        }
+
+        return await h(context, ...rest);
       }
     } catch (err) {
       if (err instanceof Response) return err;
-      if (err instanceof Error)
+      if (err instanceof Error) {
         return new Response(err.message, { status: 500 });
+      }
       return new Response(null, { status: 500 });
     }
 
     return new Response(null, { status: 500 });
   };
 
-  const handler: ProxyHandler<RouteBuilder<REST_ARGS, never>> = {
+  const proxy: ProxyHandler<RouteBuilder<REST_ARGS, never>> = {
     get: <METHOD extends Method>(
       _: unknown,
-      property: METHOD,
+      method: METHOD,
       receiver: ReturnType<typeof Router>
     ) => {
       return (
-        pattern: string,
+        stringPattern: string,
         plugins: Plugin[],
         h: RouteHandler<RouteHandlerContext<any>, REST_ARGS>
       ) => {
-        const patternSegments = pattern.split("/");
-
-        const route: Route<REST_ARGS> = async (
-          segments,
-          url,
-          request,
-          rest
-        ) => {
-          if (request.method.toLowerCase() != property && property != "all") {
-            return null;
-          }
-
-          const params = match(segments, patternSegments);
-          if (params == null) {
-            return null;
-          }
-
-          const context = { params, url, request };
-
-          const results = await Promise.all(plugins.map((p) => p(request)));
-          for (const result of results) {
-            if (result instanceof Response) return result;
-            Object.assign(context, result);
-          }
-
-          return h(context, ...rest);
-        };
-        routes.push(route);
+        const pattern = stringPattern.split("/");
+        routes.push([method.toUpperCase(), pattern, plugins, h]);
         return receiver;
       };
     },
   };
 
-  return { __proto__: new Proxy({} as any, handler), handle } as any;
+  return { __proto__: new Proxy({} as any, proxy), handle } as any;
 };
 
 export type RoutesOf<T> = T extends RouteBuilder<any, infer ROUTES>
@@ -170,8 +160,15 @@ type RouteHandlerContext<
 
 type Method = "get" | "post" | "put" | "delete" | "patch" | "all";
 
-type Route<REST_ARGS extends unknown[]> = (
+type RouteItem<REST_ARGS extends unknown[]> = [
+  method: string,
   segments: string[],
+  plugins: Plugin[],
+  route: RouteHandler<any, REST_ARGS>
+];
+
+type Route<REST_ARGS extends unknown[]> = (
+  params: Record<string, string>,
   url: URL,
   request: Request,
   rest: REST_ARGS
