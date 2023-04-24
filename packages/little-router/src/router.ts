@@ -63,8 +63,8 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
 
           const context = { params, url: new URL(request.url), request };
 
-          for (const plugin of plugins) {
-            const result = await plugin(request);
+          const results = await Promise.all(plugins.map((p) => p(request)));
+          for (const result of results) {
             if (result instanceof Response) return result;
             Object.assign(context, result);
           }
