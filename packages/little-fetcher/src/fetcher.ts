@@ -93,25 +93,17 @@ type FetcherFunction<
         : never),
   ...init: RequestInit extends INIT
     ? [init?: Omit<RequestInit, "method">]
-    : INIT extends {
-        body?: infer BODY extends BodyInit | undefined;
-        headers?: infer HEADERS extends HeadersInit | undefined;
-      }
-    ? [
-        init: OptionalBody<BODY> &
-          OptionalHeaders<HEADERS> &
-          Omit<RequestInit, "body" | "headers" | "method">
+    : [
+        init: UndefinedToOptional<INIT> &
+          Omit<RequestInit, "method" | keyof INIT>
       ]
-    : never
 ) => Promise<RESPONSE>;
 
-type OptionalBody<T> = undefined extends T ? { body?: T } : { body: T };
-
-type OptionalHeaders<T> = undefined extends T
-  ? {
-      headers?: T;
-    }
-  : { headers: T };
+type UndefinedToOptional<T extends Record<string, any>> = keyof T extends any
+  ? undefined extends T[keyof T]
+    ? { [KEY in keyof T]?: T[KEY] }
+    : { [KEY in keyof T]: T[KEY] }
+  : never;
 
 type OverloadFunction<T> = UnionToIntersection<
   (T extends any ? InferFunction<T> : never) & {}
