@@ -18,17 +18,17 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
   ) => {
     const url = new URL(request.url);
     const segments = url.pathname.split("/");
-    for (const route of routes) {
-      try {
+    try {
+      for (const route of routes) {
         const response = await route(segments, request, rest);
         if (response == null) continue;
         return response;
-      } catch (err) {
-        if (err instanceof Response) return err;
-        if (err instanceof Error)
-          return new Response(err.message, { status: 500 });
-        return new Response(null, { status: 500 });
       }
+    } catch (err) {
+      if (err instanceof Response) return err;
+      if (err instanceof Error)
+        return new Response(err.message, { status: 500 });
+      return new Response(null, { status: 500 });
     }
 
     return new Response(null, { status: 500 });
@@ -37,13 +37,9 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
   const handler: ProxyHandler<RouteBuilder<REST_ARGS, never>> = {
     get: <METHOD extends Method>(
       _: unknown,
-      property: METHOD | "handle",
-      proxy: ReturnType<typeof Router>
+      property: METHOD,
+      receiver: ReturnType<typeof Router>
     ) => {
-      if (property === "handle") {
-        return handle;
-      }
-
       return (
         pattern: string,
         plugins: Plugin[],
@@ -72,12 +68,12 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
           return h(context, ...rest);
         };
         routes.push(route);
-        return proxy;
+        return receiver;
       };
     },
   };
 
-  return new Proxy({} as any, handler);
+  return { __proto__: new Proxy({} as any, handler), handle } as any;
 };
 
 export type RoutesOf<T> = T extends RouteBuilder<any, infer ROUTES>
