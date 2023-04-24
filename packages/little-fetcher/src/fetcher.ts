@@ -1,5 +1,4 @@
 import { RequestMethod } from "@mewhhaha/typed-request";
-import { JSONString } from "@mewhhaha/json-string";
 
 type FetcherOptions = {
   base?: string;
@@ -8,9 +7,8 @@ type FetcherOptions = {
 type RouteDefinition = {
   method: string;
   pattern: string;
-  body?: string;
-  response?: Response;
-  headers?: HeadersInit;
+  init: RequestInit;
+  response: Response;
 };
 
 type Method = Lowercase<RequestMethod>;
@@ -85,26 +83,35 @@ type PathParams<PATTERN, PATH> =
 
 type FetcherFunction<
   PATTERN extends string,
-  BODY extends BodyInit | undefined,
-  HEADERS extends HeadersInit | undefined,
-  RESPONSE extends Response
+  INIT extends RequestInit = RequestInit,
+  RESPONSE extends Response = Response
 > = <PATH extends string>(
   url:
     | PATTERN
     | (PATH extends BuildPath<PATTERN, PathParams<PATTERN, PATH>>
         ? PATH
         : never),
-  init?: DefinedRequestInit<BODY, HEADERS>
+  ...init: RequestInit extends INIT
+    ? [init?: Omit<RequestInit, "method">]
+    : INIT extends {
+        body?: infer BODY extends BodyInit | undefined;
+        headers?: infer HEADERS extends HeadersInit | undefined;
+      }
+    ? [
+        init: OptionalBody<BODY> &
+          OptionalHeaders<HEADERS> &
+          Omit<RequestInit, "body" | "headers" | "method">
+      ]
+    : never
 ) => Promise<RESPONSE>;
 
-interface DefinedRequestInit<
-  BODY extends BodyInit | undefined,
-  HEADERS extends HeadersInit | undefined
-> extends RequestInit {
-  body: BODY;
-  headers: HEADERS;
-  method?: undefined;
-}
+type OptionalBody<T> = undefined extends T ? { body?: T } : { body: T };
+
+type OptionalHeaders<T> = undefined extends T
+  ? {
+      headers?: T;
+    }
+  : { headers: T };
 
 type OverloadFunction<T> = UnionToIntersection<
   (T extends any ? InferFunction<T> : never) & {}
@@ -119,8 +126,7 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
 type InferFunction<T> = T extends {
   pattern: infer PATTERN extends string;
   response: infer RESPONSE extends Response;
-  body?: infer BODY extends BodyInit | undefined;
-  headers?: infer HEADERS extends HeadersInit | undefined;
+  init?: infer INIT extends RequestInit;
 }
-  ? FetcherFunction<PATTERN, BODY, HEADERS, RESPONSE>
+  ? FetcherFunction<PATTERN, INIT, RESPONSE>
   : never;

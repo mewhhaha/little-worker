@@ -84,9 +84,19 @@ export type RoutesOf<T> = T extends RouteBuilder<any, infer ROUTES>
   ? ROUTES
   : never;
 
-export type Plugin = (
-  request: any
-) => Promise<Record<string, any> | AnyResponse>;
+/**
+ * _INIT is for typing the expections of the RequestInit
+ * */
+export type Plugin<
+  REQUEST extends Request = any,
+  _INIT extends RequestInit = any
+> = (
+  request: REQUEST,
+  init?: _INIT
+) =>
+  | Promise<Record<string, any> | AnyResponse>
+  | Record<string, any>
+  | AnyResponse;
 
 type RouteProxy<
   METHOD extends Method,
@@ -118,28 +128,19 @@ type RouteProxy<
   | RouteDefinition<
       METHOD,
       PATTERN,
-      RequestBody<Parameters<PLUGINS[number]>[0]>,
-      RequestHeaders<Parameters<PLUGINS[number]>[0]>,
+      InitOf<PLUGINS>,
       RESPONSE | Extract<Awaited<ReturnType<PLUGINS[number]>>, Response>
     >
 >;
+
+type InitOf<PLUGINS extends Plugin[]> = PLUGINS extends Plugin<any, infer I>[]
+  ? I
+  : never;
 
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
   k: infer I
 ) => void
   ? I
-  : never;
-
-type RequestBody<T extends Request> = T extends {
-  __init: { body: infer B extends BodyInit };
-}
-  ? B
-  : never;
-
-type RequestHeaders<T extends Request> = T extends {
-  __init: { headers: infer B extends Record<string, string> };
-}
-  ? B
   : never;
 
 type AnyResponse =
@@ -177,15 +178,13 @@ type Route<REST_ARGS extends unknown[]> = (
 type RouteDefinition<
   METHOD extends string = string,
   PATTERN extends string = string,
-  BODY extends BodyInit = BodyInit,
-  HEADERS extends Record<string, string> = Record<string, string>,
+  INIT extends RequestInit = RequestInit,
   RESPONSE extends AnyResponse = AnyResponse
 > = {
   method: METHOD;
   pattern: PATTERN;
-  body: BODY;
+  init: INIT;
   response: RESPONSE;
-  headers: HEADERS;
 };
 
 type RouteBuilder<

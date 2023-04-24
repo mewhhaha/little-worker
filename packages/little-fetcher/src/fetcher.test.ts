@@ -1,5 +1,6 @@
 import { assertType, describe, expect, it } from "vitest";
 import { fetcher } from "./fetcher.js";
+import { JSONString } from "@mewhhaha/json-string";
 import { Router, RoutesOf } from "@mewhhaha/little-router";
 import { text } from "@mewhhaha/typed-response";
 
@@ -96,5 +97,55 @@ describe("fetcher", () => {
 
     //@ts-expect-error
     await f.get("/users/:id/dogs/:dog");
+  });
+
+  it.skip("should give error on missing headers", async () => {
+    const plugin = async (
+      _: Request,
+      _init?: { headers: { "X-Header": "value" } }
+    ) => {
+      return {};
+    };
+
+    const router = Router().post(
+      "/users/:id/dogs/:dog",
+      [plugin],
+      async ({ params }) => {
+        return text(200, `User: ${params.id}, Dog: ${params.dog}`);
+      }
+    );
+
+    const f = fetcher<RoutesOf<typeof router>>(mock(router));
+
+    // @ts-expect-error
+    f.post("/users/:id/dogs/:dog");
+
+    // @ts-expect-error
+    f.post("/users/:id/dogs/:dog", { headers: {} });
+
+    f.post("/users/:id/dogs/:dog", { headers: { "X-Header": "value" } });
+  });
+
+  it.skip("should give error on missing body", async () => {
+    const plugin = async (_: Request, _init?: { body: "body" }) => {
+      return {};
+    };
+
+    const router = Router().post(
+      "/users/:id/dogs/:dog",
+      [plugin],
+      async ({ params }) => {
+        return text(200, `User: ${params.id}, Dog: ${params.dog}`);
+      }
+    );
+
+    const f = fetcher<RoutesOf<typeof router>>(mock(router));
+
+    // @ts-expect-error
+    f.post("/users/:id/dogs/:dog");
+
+    f.post("/users/:id/dogs/:dog", {
+      body: "body",
+    });
   });
 });

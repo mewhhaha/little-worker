@@ -1,17 +1,16 @@
 import { error } from "@mewhhaha/typed-response";
 import { Plugin } from "@mewhhaha/little-router";
-import { Infer, Type } from "arktype";
+import { Type } from "arktype";
 import { JSONString } from "@mewhhaha/json-string";
 
-export interface JSONRequest<T> extends Request {
-  __init: {
-    headers: { "Content-Type": "application/json" };
-    body: JSONString<T>;
-  };
-}
-
 export const data_ = <T>(parser: Type<T>) =>
-  (async (request: JSONRequest<T>) => {
+  (async (
+    request: Request,
+    _init?: {
+      headers?: { "Content-Type": "application/json" } & Record<string, string>;
+      body?: JSONString<T>;
+    }
+  ) => {
     try {
       const r = parser(await request.json());
       if (r.problems) {
