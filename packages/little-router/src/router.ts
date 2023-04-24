@@ -20,7 +20,7 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
     const segments = url.pathname.split("/");
     try {
       for (const route of routes) {
-        const response = await route(segments, request, rest);
+        const response = await route(segments, url, request, rest);
         if (response == null) continue;
         return response;
       }
@@ -47,8 +47,13 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
       ) => {
         const patternSegments = pattern.split("/");
 
-        const route: Route<REST_ARGS> = async (segments, request, rest) => {
-          if (property != "all" && request.method.toLowerCase() != property) {
+        const route: Route<REST_ARGS> = async (
+          segments,
+          url,
+          request,
+          rest
+        ) => {
+          if (request.method.toLowerCase() != property && property != "all") {
             return null;
           }
 
@@ -57,7 +62,7 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
             return null;
           }
 
-          const context = { params, url: new URL(request.url), request };
+          const context = { params, url, request };
 
           const results = await Promise.all(plugins.map((p) => p(request)));
           for (const result of results) {
@@ -167,6 +172,7 @@ type Method = "get" | "post" | "put" | "delete" | "patch" | "all";
 
 type Route<REST_ARGS extends unknown[]> = (
   segments: string[],
+  url: URL,
   request: Request,
   rest: REST_ARGS
 ) => Promise<Response | null>;
