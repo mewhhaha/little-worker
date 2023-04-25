@@ -5,6 +5,12 @@ import { Router as IttyRouter } from "itty-router";
 const ITERATIONS = 10000;
 const BASE = `/test/`;
 
+const BENCH_CONFIG = {
+  iterations: ITERATIONS,
+  warmupIterations: 10,
+  warmupTime: 1000,
+};
+
 describe("cold start", () => {
   const request = new Request(`https://example.com${BASE}9`, {
     method: "GET",
@@ -21,7 +27,7 @@ describe("cold start", () => {
 
       await ittyRouter.handle(request);
     },
-    { iterations: ITERATIONS }
+    BENCH_CONFIG
   );
 
   bench(
@@ -39,7 +45,7 @@ describe("cold start", () => {
         await littleRouter.handle(request);
       }
     },
-    { iterations: ITERATIONS }
+    BENCH_CONFIG
   );
 });
 
@@ -66,7 +72,7 @@ describe("hot start", async () => {
     async () => {
       await ittyRouter.handle(request);
     },
-    { iterations: ITERATIONS }
+    BENCH_CONFIG
   );
 
   bench(
@@ -74,6 +80,6 @@ describe("hot start", async () => {
     async () => {
       await littleRouter.handle(request);
     },
-    { iterations: ITERATIONS }
+    BENCH_CONFIG
   );
 });
