@@ -10,7 +10,7 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
   REST_ARGS,
   never
 > => {
-  const routes: RouteItem<REST_ARGS>[] = [];
+  const routes: Route<REST_ARGS>[] = [];
 
   const handle: RouteBuilder<REST_ARGS, never>["handle"] = async (
     request,
@@ -29,18 +29,14 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
           continue;
         }
 
-        const context = { params, url, request };
+        const ctx = context(request, url, params, plugins);
 
-        const results = await Promise.all(plugins.map((p) => p(request)));
-        for (const result of results) {
-          if (result instanceof Response) return result;
-          Object.assign(context, result);
-        }
-
-        return await h(context, ...rest);
+        return await h(ctx, ...rest);
       }
     } catch (err) {
-      if (err instanceof Response) return err;
+      if (err instanceof Response) {
+        return err;
+      }
       if (err instanceof Error) {
         return new Response(err.message, { status: 500 });
       }
@@ -71,6 +67,23 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
   return { __proto__: new Proxy({} as any, proxy), handle } as any;
 };
 
+const context = async (
+  request: Request,
+  url: URL,
+  params: Record<string, string>,
+  plugins: Plugin[]
+) => {
+  const ctx = { params, url, request };
+
+  const results = await Promise.all(plugins.map((p) => p(request)));
+  for (const result of results) {
+    if (result instanceof Response) return result;
+    Object.assign(ctx, result);
+  }
+
+  return ctx;
+};
+
 export type RoutesOf<T> = T extends RouteBuilder<any, infer ROUTES>
   ? ROUTES
   : never;
@@ -91,7 +104,7 @@ export type Plugin<
 
 type RouteProxy<
   METHOD extends Method,
-  ROUTES extends RouteDefinition,
+  ROUTES extends RequestDefinition,
   REST_ARGS extends unknown[]
 > = <
   const PATTERN extends string,
@@ -116,7 +129,7 @@ type RouteProxy<
 ) => RouteBuilder<
   REST_ARGS,
   | ROUTES
-  | RouteDefinition<
+  | RequestDefinition<
       METHOD,
       PATTERN,
       InitOf<PLUGINS>,
@@ -160,14 +173,14 @@ type RouteHandlerContext<
 
 type Method = "get" | "post" | "put" | "delete" | "patch" | "all";
 
-type RouteItem<REST_ARGS extends unknown[]> = [
+type Route<REST_ARGS extends unknown[]> = [
   method: string,
   segments: string[],
   plugins: Plugin[],
   route: RouteHandler<any, REST_ARGS>
 ];
 
-type RouteDefinition<
+type RequestDefinition<
   METHOD extends string = string,
   PATTERN extends string = string,
   INIT extends RequestInit = RequestInit,
@@ -181,7 +194,7 @@ type RouteDefinition<
 
 type RouteBuilder<
   REST_ARGS extends unknown[],
-  ROUTES extends RouteDefinition
+  ROUTES extends RequestDefinition
 > = {
   [METHOD in Exclude<Method, "all">]: RouteProxy<METHOD, ROUTES, REST_ARGS>;
 } & {

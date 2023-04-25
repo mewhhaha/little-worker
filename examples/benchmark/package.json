@@ -5,7 +5,7 @@
   "type": "module",
   "description": "",
   "scripts": {
-    "benchmark": "vitest bench"
+    "bench": "vitest bench"
   },
   "keywords": [],
   "author": "",
