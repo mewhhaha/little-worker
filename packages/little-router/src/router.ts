@@ -1,10 +1,8 @@
-import {
-  TextResponse,
-  JSONResponse,
-  BodyResponse,
-} from "@mewhhaha/typed-response";
 import { match } from "./match.js";
 import { HasOverlap } from "./overlap.js";
+import { AnyResponse } from "./types.js";
+import { Plugin, PluginContext } from "./plugin.js";
+import { FetchDefinition } from "./fetch.js";
 
 export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
   REST_ARGS,
@@ -20,7 +18,7 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
     const segments = url.pathname.split("/");
     try {
       for (const [method, pattern, plugins, h] of routes) {
-        if (request.method != method && method != "ALL") {
+        if (request.method !== method && method !== "ALL") {
           continue;
         }
 
@@ -29,7 +27,8 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
           continue;
         }
 
-        const ctx = context(request, url, params, plugins);
+        const ctx = await context(request, url, params, plugins, rest);
+        if (ctx instanceof Response) return ctx;
 
         return await h(ctx, ...rest);
       }
@@ -37,10 +36,10 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
       if (err instanceof Response) {
         return err;
       }
-      if (err instanceof Error) {
-        return new Response(err.message, { status: 500 });
-      }
-      return new Response(null, { status: 500 });
+
+      return new Response(err instanceof Error ? err.message : null, {
+        status: 500,
+      });
     }
 
     return new Response(null, { status: 500 });
@@ -71,14 +70,28 @@ const context = async (
   request: Request,
   url: URL,
   params: Record<string, string>,
-  plugins: Plugin[]
+  plugins: Plugin[],
+  rest: unknown[]
 ) => {
-  const ctx = { params, url, request };
+  const pctx = { params, url, request };
+  const results = await Promise.all(plugins.map((p) => p(pctx, ...rest)));
 
-  const results = await Promise.all(plugins.map((p) => p(request)));
+  const ctx: Record<string, any> = pctx;
+
   for (const result of results) {
-    if (result instanceof Response) return result;
-    Object.assign(ctx, result);
+    if (result instanceof Response) {
+      return result;
+    }
+
+    for (const key in result) {
+      const value = result[key as keyof typeof result];
+      if (key in ctx) {
+        throw new Error(
+          `Plugin tried to overwrite context property ${key} with ${value}`
+        );
+      }
+      ctx[key] = value;
+    }
   }
 
   return ctx;
@@ -88,23 +101,9 @@ export type RoutesOf<T> = T extends RouteBuilder<any, infer ROUTES>
   ? ROUTES
   : never;
 
-/**
- * _INIT is for typing the expections of the RequestInit
- * */
-export type Plugin<
-  REQUEST extends Request = any,
-  _INIT extends RequestInit = any
-> = (
-  request: REQUEST,
-  init?: _INIT
-) =>
-  | Promise<Record<string, any> | AnyResponse>
-  | Record<string, any>
-  | AnyResponse;
-
 type RouteProxy<
   METHOD extends Method,
-  ROUTES extends RequestDefinition,
+  ROUTES extends FetchDefinition,
   REST_ARGS extends unknown[]
 > = <
   const PATTERN extends string,
@@ -121,7 +120,7 @@ type RouteProxy<
     : ValidationError<"Overlapping route pattern">,
   plugins: PLUGINS,
   h: RouteHandler<
-    | RouteHandlerContext<PATTERN, Parameters<PLUGINS[number]>[0]>
+    | RouteHandlerContext<PATTERN>
     | Exclude<Awaited<ReturnType<PLUGINS[number]>>, Response>,
     REST_ARGS,
     RESPONSE
@@ -129,15 +128,32 @@ type RouteProxy<
 ) => RouteBuilder<
   REST_ARGS,
   | ROUTES
-  | RequestDefinition<
+  | FetchDefinition<
       METHOD,
       PATTERN,
+      SearchOf<PLUGINS>,
       InitOf<PLUGINS>,
       RESPONSE | Extract<Awaited<ReturnType<PLUGINS[number]>>, Response>
     >
 >;
 
-type InitOf<PLUGINS extends Plugin[]> = PLUGINS extends Plugin<any, infer I>[]
+type SearchOf<PLUGINS extends Plugin[]> = PLUGINS extends ((
+  context: PluginContext<{
+    init: any;
+    search: infer I extends string | undefined;
+  }>,
+  ...rest: any[]
+) => any)[]
+  ? I
+  : never;
+
+type InitOf<PLUGINS extends Plugin[]> = PLUGINS extends ((
+  context: PluginContext<{
+    init: infer I extends RequestInit | undefined;
+    search: any;
+  }>,
+  ...rest: any[]
+) => any)[]
   ? I
   : never;
 
@@ -146,12 +162,6 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
 ) => void
   ? I
   : never;
-
-type AnyResponse =
-  | TextResponse<any, any>
-  | BodyResponse<any>
-  | JSONResponse<any, any>
-  | Response;
 
 type RouteHandler<
   CONTEXT extends Record<string, any>,
@@ -162,13 +172,10 @@ type RouteHandler<
   ...rest: REST_ARGS
 ) => Promise<RESPONSE> | RESPONSE;
 
-type RouteHandlerContext<
-  PATTERN extends string,
-  REQUEST extends Request = Request
-> = {
+type RouteHandlerContext<PATTERN extends string> = {
   params: PatternParamsObject<PATTERN>;
   url: URL;
-  request: REQUEST;
+  request: Request;
 };
 
 type Method = "get" | "post" | "put" | "delete" | "patch" | "all";
@@ -177,24 +184,12 @@ type Route<REST_ARGS extends unknown[]> = [
   method: string,
   segments: string[],
   plugins: Plugin[],
-  route: RouteHandler<any, REST_ARGS>
+  route: RouteHandler<Record<string, any>, REST_ARGS>
 ];
-
-type RequestDefinition<
-  METHOD extends string = string,
-  PATTERN extends string = string,
-  INIT extends RequestInit = RequestInit,
-  RESPONSE extends AnyResponse = AnyResponse
-> = {
-  method: METHOD;
-  pattern: PATTERN;
-  init: INIT;
-  response: RESPONSE;
-};
 
 type RouteBuilder<
   REST_ARGS extends unknown[],
-  ROUTES extends RequestDefinition
+  ROUTES extends FetchDefinition
 > = {
   [METHOD in Exclude<Method, "all">]: RouteProxy<METHOD, ROUTES, REST_ARGS>;
 } & {

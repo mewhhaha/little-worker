@@ -15,6 +15,8 @@ export type SearchString<
   ? STRING
   : never;
 
+type X = SearchString<"sort=asc", `sort=${"asc" | "desc"}` | `sort=${number}`>;
+
 export interface GetRequestInit extends RequestInit {
   method?: "GET";
   body?: never;

@@ -1,6 +1,7 @@
 import { expect, describe, it, assertType, assert } from "vitest";
 import { Router } from "./router.js";
 import { error } from "@mewhhaha/typed-response";
+import { PluginContext } from "./plugin.js";
 
 describe("Router", () => {
   it("should match fixed paths", async () => {
@@ -149,7 +150,7 @@ describe("Router with route chaining and overlapping", () => {
 
 describe("Router with plugins", () => {
   it("should handle context plugins correctly", async () => {
-    const jsonPlugin = async (request: Request) => {
+    const jsonPlugin = async ({ request }: PluginContext) => {
       const body = (await request.json()) as "json-plugin";
       return { body };
     };
@@ -176,7 +177,7 @@ describe("Router with plugins", () => {
   });
 
   it("should return responses from plugins", async () => {
-    const authPlugin = async (_: Request) => {
+    const authPlugin = async (_: PluginContext) => {
       return error(403, "Plugin: Forbidden");
     };
 
@@ -186,9 +187,11 @@ describe("Router with plugins", () => {
 
     const request1 = new Request("https://example.com/auth-plugin");
     const response1 = await router.handle(request1);
-    const text1 = await response1.json();
 
     expect(response1.status).toBe(403);
+
+    const text1 = await response1.json();
+
     expect(text1).toBe("Plugin: Forbidden");
   });
 });

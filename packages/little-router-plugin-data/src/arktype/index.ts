@@ -1,16 +1,17 @@
 import { error } from "@mewhhaha/typed-response";
-import { Plugin } from "@mewhhaha/little-router";
+import { Plugin, PluginContext } from "@mewhhaha/little-router";
 import { Type } from "arktype";
 import { JSONString } from "@mewhhaha/json-string";
 
 export const data_ = <T>(parser: Type<T>) =>
-  (async (
-    request: Request,
-    _init?: {
-      headers?: { "Content-Type": "application/json" } & Record<string, string>;
-      body?: JSONString<T>;
-    }
-  ) => {
+  (async ({
+    request,
+  }: PluginContext<{
+    init: {
+      headers: { "Content-Type": "application/json" } & Record<string, string>;
+      body: JSONString<T>;
+    };
+  }>) => {
     try {
       const r = parser(await request.json());
       if (r.problems) {

@@ -38,12 +38,14 @@ describe("check", () => {
   });
 
   it("should return 200 for correct JSON", async () => {
-    const result = await data_(type("string"))(
-      new Request("http://from.fetcher", {
+    const result = await data_(type("string"))({
+      request: new Request("http://from.fetcher", {
         body: JSON.stringify("Hello world!"),
         method: "POST",
-      }) as any
-    );
+      }),
+      url: new URL("http://from.fetcher"),
+      params: {},
+    });
     expect(result).toStrictEqual({ data: "Hello world!" });
   });
 
