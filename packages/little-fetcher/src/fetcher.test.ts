@@ -87,7 +87,7 @@ describe("fetcher", () => {
     const plugin = async ({
       url,
     }: PluginContext<{
-      search?: [["sort", "asc" | "desc"], ["size", "10"]];
+      search?: { sort: "asc" | "desc"; size: "10" };
     }>) => {
       const sort = url.searchParams.get("sort");
       const size = url.searchParams.get("size");

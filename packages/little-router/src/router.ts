@@ -140,11 +140,11 @@ type RouteProxy<
 type SearchOf<PLUGINS extends Plugin[]> = PLUGINS extends ((
   context: PluginContext<{
     init: any;
-    search: infer I extends Queries;
+    search: infer I extends Queries | undefined;
   }>,
   ...rest: any[]
 ) => any)[]
-  ? I
+  ? NonNullable<I>
   : never;
 
 type InitOf<PLUGINS extends Plugin[]> = PLUGINS extends ((

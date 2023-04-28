@@ -1,7 +1,7 @@
 import { AnyResponse } from "./types.js";
 
-export type Query = [string, string | string[] | undefined];
-export type Queries = [Query, ...Query[]];
+export type Value = string | string[] | undefined;
+export type Queries = Record<string, Value>;
 
 export type FetchDefinition<
   METHOD extends string = string,

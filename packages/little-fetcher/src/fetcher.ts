@@ -1,6 +1,6 @@
 import { RequestMethod } from "@mewhhaha/typed-request";
 import { FetchDefinition, Queries } from "@mewhhaha/little-router";
-import { ValidPath } from "./valid-path.js";
+import { QueryParams, ValidPath } from "./valid-path.js";
 
 type FetcherOptions = {
   base?: string;
@@ -48,8 +48,8 @@ type FetcherFunction<
   RESPONSE extends Response = Response
 > = <PATH extends string>(
   url:
-    | `${PATTERN}${StringifyQueries<SEARCH> | ""}`
-    | ValidPath<PATH, PATTERN, SEARCH>,
+    | `${PATTERN}${`?${QueryParams<SEARCH>}` | ""}`
+    | (ValidPath<PATH, PATTERN, SEARCH> extends true ? PATH : never),
   ...init: undefined extends INIT
     ? [
         init?: UndefinedToOptional<NonNullable<INIT>> &
@@ -74,18 +74,9 @@ type FetcherOf<ROUTES extends FetchDefinition> = {
   fetch: FetcherFunctionAny;
 };
 
-type StringifyQueries<T> = T extends [
-  [infer KEY extends string, infer VALUE extends string[] | string | undefined],
-  ...infer REST
-]
-  ? `${NonNullable<VALUE> extends (infer R extends string)[]
-      ? `${KEY}[]=${R}`
-      : NonNullable<VALUE> extends string
-      ? `${KEY}=${NonNullable<VALUE>}`
-      : never}${StringifyQueries<REST> extends ""
-      ? ""
-      : `&${StringifyQueries<REST>}`}`
-  : "";
+// type StringifyQueriesTest = StringifyQueries<
+//   [["sort", "asc" | "desc"], ["size", "10"]]
+// >;
 
 type OverloadFunction<T> = UnionToIntersection<
   (T extends any ? InferFunction<T> : never) & {}
