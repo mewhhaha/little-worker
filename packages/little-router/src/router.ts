@@ -2,7 +2,7 @@ import { match } from "./match.js";
 import { HasOverlap } from "./overlap.js";
 import { AnyResponse } from "./types.js";
 import { Plugin, PluginContext } from "./plugin.js";
-import { FetchDefinition } from "./fetch.js";
+import { FetchDefinition, Queries } from "./fetch.js";
 
 export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
   REST_ARGS,
@@ -140,7 +140,7 @@ type RouteProxy<
 type SearchOf<PLUGINS extends Plugin[]> = PLUGINS extends ((
   context: PluginContext<{
     init: any;
-    search: infer I extends string | undefined;
+    search: infer I extends Queries;
   }>,
   ...rest: any[]
 ) => any)[]

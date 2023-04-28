@@ -1,9 +1,13 @@
+import { Queries } from "./fetch.js";
 import { AnyResponse } from "./types.js";
 
 export type PluginContext<
-  HINT extends { init?: RequestInit; search?: string } = {
+  HINT extends {
     init?: RequestInit;
-    search?: string;
+    search?: Queries;
+  } = {
+    init?: RequestInit;
+    search?: Queries;
   }
 > = {
   readonly request: Request;

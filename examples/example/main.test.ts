@@ -63,4 +63,19 @@ describe("example", () => {
       }
     }
   );
+
+  test("example-query-params", async () => {
+    const response = await f.get("/example-query-params?size=");
+
+    if (response.ok) {
+      const value = await response.json();
+      assertType<{ eating: true; fruit: "banana" }>(value);
+      expect(response.status).toBe(200);
+      expect(value).toStrictEqual({ eating: true, fruit: "banana" });
+    } else if (response.status === 406) {
+      const value = await response.text();
+      assertType<"allergic to apples">(value);
+      expect(value).toBe("allergic to apples");
+    }
+  });
 });

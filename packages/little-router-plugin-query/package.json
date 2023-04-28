@@ -1,0 +1,40 @@
+{
+  "name": "@mewhhaha/little-router-plugin-query",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "keywords": [],
+  "author": "Jacob Torrång",
+  "license": "MIT",
+  "exports": {
+    "./arktype": {
+      "import": "./dist/arktype/index.js",
+      "types": "./dist/arktype/index.d.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "arktype": [
+        "dist/arktype/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist/arktype",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "prepublish": "pnpm -w build",
+    "build": "tsc --project tsconfig.build.json",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@mewhhaha/little-router": "workspace:^",
+    "@mewhhaha/typed-response": "workspace:^",
+    "arktype": "1.0.14-alpha",
+    "typescript": "^5.0.4",
+    "vitest": "^0.30.1"
+  },
+  "sideEffects": false
+}

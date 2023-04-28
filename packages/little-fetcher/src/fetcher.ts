@@ -1,5 +1,6 @@
-import { RequestMethod, SearchString } from "@mewhhaha/typed-request";
-import { FetchDefinition } from "@mewhhaha/little-router";
+import { RequestMethod } from "@mewhhaha/typed-request";
+import { FetchDefinition, Queries } from "@mewhhaha/little-router";
+import { ValidPath } from "./valid-path.js";
 
 type FetcherOptions = {
   base?: string;
@@ -40,6 +41,26 @@ export const fetcher = <ROUTES extends FetchDefinition>(
   return new Proxy({} as any, handler);
 };
 
+type FetcherFunction<
+  PATTERN extends string,
+  SEARCH extends Queries = Queries,
+  INIT extends RequestInit | undefined = RequestInit,
+  RESPONSE extends Response = Response
+> = <PATH extends string>(
+  url:
+    | `${PATTERN}${StringifyQueries<SEARCH> | ""}`
+    | ValidPath<PATH, PATTERN, SEARCH>,
+  ...init: undefined extends INIT
+    ? [
+        init?: UndefinedToOptional<NonNullable<INIT>> &
+          Omit<RequestInit, "method" | keyof INIT>
+      ]
+    : [
+        init: UndefinedToOptional<NonNullable<INIT>> &
+          Omit<RequestInit, "method" | keyof INIT>
+      ]
+) => Promise<RESPONSE>;
+
 type FetcherFunctionAny = (
   url: `/${string}`,
   init?: RequestInit
@@ -53,70 +74,18 @@ type FetcherOf<ROUTES extends FetchDefinition> = {
   fetch: FetcherFunctionAny;
 };
 
-type BuildPath<PATTERN, PARAMS extends string> = Extract<
-  PARAMS,
-  `${string}/${string}` // Don't allow slashes in params
-> extends never
-  ? PATTERN extends `${infer PRE}:${string}/${infer POST}`
-    ? `${PRE}${PARAMS}/${BuildPath<POST, PARAMS>}`
-    : PATTERN extends `${infer PRE}:${string}`
-    ? `${PRE}${PARAMS}`
-    : PATTERN
-  : never;
-
-type PathParams<PATTERN, PATH> =
-  PATTERN extends `${infer PRE}:${string}/${infer PATTERN_REST}`
-    ? PATH extends `${PRE}${infer PARAM}/${infer PATH_REST}`
-      ? PARAM | PathParams<PATTERN_REST, PATH_REST>
-      : never
-    : PATTERN extends `${infer PRE}:${string}`
-    ? PATH extends `${PRE}${infer PARAM}`
-      ? PARAM
-      : never
-    : never;
-
-type FetcherFunction<
-  PATTERN extends string,
-  SEARCH extends string | undefined = string,
-  INIT extends RequestInit | undefined = RequestInit,
-  RESPONSE extends Response = Response
-> = <PATH extends string>(
-  url:
-    | `${PATTERN}${SEARCH extends undefined
-        ? ""
-        : string extends SEARCH
-        ? ""
-        : `?${SEARCH}` | ""}`
-    | (PATH extends `${infer P}?${infer S}`
-        ? P extends `${BuildPath<PATTERN, PathParams<PATTERN, P>>}`
-          ? SearchString<`?${S}`, NonNullable<SEARCH>> extends never
-            ? never
-            : PATH
-          : never
-        : PATH extends `${BuildPath<PATTERN, PathParams<PATTERN, PATH>>}`
-        ? PATH
-        : never),
-  ...init: undefined extends INIT
-    ? [
-        init?: UndefinedToOptional<NonNullable<INIT>> &
-          Omit<RequestInit, "method" | keyof INIT>
-      ]
-    : [
-        init: UndefinedToOptional<NonNullable<INIT>> &
-          Omit<RequestInit, "method" | keyof INIT>
-      ]
-) => Promise<RESPONSE>;
-
-type X = SearchString<
-  "?sort=asc&size=10",
-  `sort=${"asc" | "desc"}` | `size=${number}`
->;
-
-type UndefinedToOptional<T extends Record<string, any>> = keyof T extends any
-  ? undefined extends T[keyof T]
-    ? { [KEY in keyof T]?: T[KEY] }
-    : { [KEY in keyof T]: T[KEY] }
-  : never;
+type StringifyQueries<T> = T extends [
+  [infer KEY extends string, infer VALUE extends string[] | string | undefined],
+  ...infer REST
+]
+  ? `${NonNullable<VALUE> extends (infer R extends string)[]
+      ? `${KEY}[]=${R}`
+      : NonNullable<VALUE> extends string
+      ? `${KEY}=${NonNullable<VALUE>}`
+      : never}${StringifyQueries<REST> extends ""
+      ? ""
+      : `&${StringifyQueries<REST>}`}`
+  : "";
 
 type OverloadFunction<T> = UnionToIntersection<
   (T extends any ? InferFunction<T> : never) & {}
@@ -131,8 +100,14 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
 type InferFunction<T> = T extends {
   pattern: infer PATTERN extends string;
   response: infer RESPONSE extends Response;
-  search: infer SEARCH extends string | undefined;
+  search: infer SEARCH extends Queries;
   init: infer INIT extends RequestInit | undefined;
 }
   ? FetcherFunction<PATTERN, SEARCH, INIT, RESPONSE>
+  : never;
+
+type UndefinedToOptional<T extends Record<string, any>> = keyof T extends any
+  ? undefined extends T[keyof T]
+    ? { [KEY in keyof T]?: T[KEY] }
+    : { [KEY in keyof T]: T[KEY] }
   : never;

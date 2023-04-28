@@ -1,6 +1,7 @@
 import { Router, RoutesOf } from "@mewhhaha/little-router";
 import { json, text } from "@mewhhaha/typed-response";
 import { data_ } from "@mewhhaha/little-router-plugin-data/arktype";
+import { query_ } from "@mewhhaha/little-router-plugin-query/arktype";
 import { type } from "arktype";
 
 const router = Router()
@@ -27,12 +28,13 @@ const router = Router()
       return json(200, { eating: true, fruit: data.value });
     }
   )
-  .get("/example-search-params", [], async ({ url }) => {
-    const sort = url.searchParams.get("sort");
-    const size = url.searchParams.get("size");
-
-    return json(200, { sort, size });
-  });
+  .get(
+    "/example-query-params",
+    [query_(type({ "sort?": "'asc'|'desc'", size: /^\d+$/ }))],
+    async ({ query: { sort, size } }) => {
+      return json(200, { sort, size });
+    }
+  );
 
 export type Routes = RoutesOf<typeof router>;
 
