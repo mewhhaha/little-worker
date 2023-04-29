@@ -7,10 +7,6 @@ concurrency:
   group: publish
   cancel-in-progress: true
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
   publish:
     name: Publish packages to npm
