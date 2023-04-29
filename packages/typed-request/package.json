@@ -16,7 +16,9 @@
   "license": "MIT",
   "scripts": {
     "prepublish": "pnpm -w build",
-    "build": "tsc --project tsconfig.build.json"
+    "lint": "eslint --ext .ts src",
+    "build": "tsc --project tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
     "@mewhhaha/config": "workspace:^",

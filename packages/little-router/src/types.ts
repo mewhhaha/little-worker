@@ -9,3 +9,4 @@ export type AnyResponse =
   | BodyResponse<any>
   | JSONResponse<any, any>
   | Response;
+("");

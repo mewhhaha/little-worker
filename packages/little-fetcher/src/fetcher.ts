@@ -79,7 +79,7 @@ type FetcherOf<ROUTES extends FetchDefinition> = {
 // >;
 
 type OverloadFunction<T> = UnionToIntersection<
-  (T extends any ? InferFunction<T> : never) & {}
+  (T extends any ? InferFunction<T> : never) & NonNullable<unknown>
 >;
 
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (

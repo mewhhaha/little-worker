@@ -1,4 +1,4 @@
-import { expect, describe, it, assertType, assert } from "vitest";
+import { expect, describe, it } from "vitest";
 import { Router } from "./router.js";
 import { error } from "@mewhhaha/typed-response";
 import { PluginContext } from "./plugin.js";
@@ -115,7 +115,7 @@ describe("Router with route chaining and overlapping", () => {
   it("should not match overlapping routes with path parameters", async () => {
     const router = Router()
       .get("/:id", [], async ({ params }) => new Response(`ID: ${params.id}`))
-      // @ts-expect-error
+      // @ts-expect-error Test
       .get("/a", [], async () => new Response("Fixed route"));
 
     const request1 = new Request("https://example.com/a", { method: "GET" });
@@ -133,7 +133,7 @@ describe("Router with route chaining and overlapping", () => {
         [],
         async ({ params }) => new Response(`Wildcard: ${params["*"]}`)
       )
-      // @ts-expect-error
+      // @ts-expect-error Test
       .get("/a/b/c", [], async () => new Response("Fixed route"));
 
     const request1 = new Request("https://example.com/a/b/c", {

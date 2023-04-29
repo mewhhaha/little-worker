@@ -38,7 +38,7 @@ const router = Router()
 
 export type Routes = RoutesOf<typeof router>;
 
-const handler: ExportedHandler = {
+const handler = {
   fetch: router.handle,
 };
 

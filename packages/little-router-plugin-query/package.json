@@ -27,6 +27,7 @@
   "scripts": {
     "prepublish": "pnpm -w build",
     "build": "tsc --project tsconfig.build.json",
+    "lint": "eslint --ext .ts src",
     "test": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },

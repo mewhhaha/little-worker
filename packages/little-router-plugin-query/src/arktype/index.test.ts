@@ -2,7 +2,7 @@ import { describe, it, expect, assertType } from "vitest";
 import { query_ } from "./index.js";
 import { type } from "arktype";
 import { Router } from "@mewhhaha/little-router";
-import { json, text } from "@mewhhaha/typed-response";
+import { json } from "@mewhhaha/typed-response";
 
 describe("check", () => {
   it("should return parsed headers", async () => {

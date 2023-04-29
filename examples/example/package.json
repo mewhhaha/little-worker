@@ -6,7 +6,8 @@
   "description": "",
   "scripts": {
     "dev": "tsc --project tsconfig.build.json && node dist/main.js",
-    "test": "vitest"
+    "test": "vitest",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "keywords": [],
   "author": "",

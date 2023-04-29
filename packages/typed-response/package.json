@@ -16,7 +16,9 @@
   ],
   "scripts": {
     "prepublish": "pnpm -w build",
-    "build": "tsc --project tsconfig.build.json"
+    "build": "tsc --project tsconfig.build.json",
+    "lint": "eslint --ext .ts src",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
     "@mewhhaha/config": "workspace:^",
