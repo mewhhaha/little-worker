@@ -2,8 +2,8 @@ import {
   type Plugin,
   type PluginContext,
   type Queries,
-  error,
 } from "@mewhhaha/little-router";
+import { error } from "@mewhhaha/typed-response";
 import { type Type } from "arktype";
 
 type SearchOptions = {

@@ -1,10 +1,7 @@
-import {
-  type Plugin,
-  type PluginContext,
-  error,
-} from "@mewhhaha/little-router";
+import { type Plugin, type PluginContext } from "@mewhhaha/little-router";
 import type { Type } from "arktype";
 import type { JSONString } from "@mewhhaha/json-string";
+import { error } from "@mewhhaha/typed-response";
 
 type InferIn<T> = Type<T> extends {
   inferIn: infer I extends

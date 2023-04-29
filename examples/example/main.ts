@@ -1,7 +1,8 @@
-import { Router, RoutesOf, json, text } from "@mewhhaha/little-router";
+import { Router, RoutesOf } from "@mewhhaha/little-router";
 import { data_ } from "@mewhhaha/little-router-plugin-data";
 import { query_ } from "@mewhhaha/little-router-plugin-query";
 import { type } from "arktype";
+import { text, json } from "@mewhhaha/typed-response";
 
 const router = Router()
   .get("/example-get", [], () => {

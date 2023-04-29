@@ -25,6 +25,7 @@
     "@mewhhaha/config": "workspace:^",
     "@mewhhaha/little-fetcher": "workspace:^",
     "@mewhhaha/little-router": "workspace:^",
+    "@mewhhaha/typed-response": "workspace:^",
     "arktype": "1.0.14-alpha",
     "typescript": "^5.0.4",
     "vitest": "^0.30.1"

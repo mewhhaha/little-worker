@@ -1,7 +1,8 @@
 import { describe, it, expect, assertType } from "vitest";
 import { query_ } from "./index.js";
 import { type } from "arktype";
-import { Router, json } from "@mewhhaha/little-router";
+import { Router } from "@mewhhaha/little-router";
+import { json } from "@mewhhaha/typed-response";
 
 describe("check", () => {
   it("should return parsed headers", async () => {

@@ -1,13 +1,8 @@
 import { assertType, describe, expect, it } from "vitest";
 import { fetcher } from "./fetcher.js";
-import {
-  PluginContext,
-  Router,
-  RoutesOf,
-  error,
-  text,
-} from "@mewhhaha/little-router";
+import { PluginContext, Router, RoutesOf } from "@mewhhaha/little-router";
 import { fromRouter } from "@mewhhaha/testing";
+import { text, error } from "@mewhhaha/typed-response";
 
 describe("fetcher", () => {
   it("should fetch a route with one param", async () => {

@@ -1,9 +1,10 @@
 import { describe, it, expect, assertType } from "vitest";
 import { data_ } from "./index.js";
 import { type } from "arktype";
-import { Router, RoutesOf, text } from "@mewhhaha/little-router";
+import { Router, RoutesOf } from "@mewhhaha/little-router";
 import { fetcher } from "@mewhhaha/little-fetcher";
 import { fromRouter } from "@mewhhaha/testing";
+import { text } from "@mewhhaha/typed-response";
 
 describe("check", () => {
   it("should return 400 for invalid JSON", async () => {
