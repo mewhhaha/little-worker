@@ -21,6 +21,9 @@
     "test": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
+  "dependencies": {
+    "@mewhhaha/json-string": "workspace:^"
+  },
   "devDependencies": {
     "@mewhhaha/config": "workspace:^",
     "@mewhhaha/json-string": "workspace:^",
@@ -33,7 +36,6 @@
   },
   "sideEffects": false,
   "peerDependencies": {
-    "@mewhhaha/json-string": "workspace:^",
     "@mewhhaha/little-router": "workspace:^",
     "arktype": "*"
   }

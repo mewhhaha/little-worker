@@ -115,13 +115,14 @@ importers:
         version: 0.30.1
 
   packages/little-router:
+    dependencies:
+      '@mewhhaha/typed-response':
+        specifier: workspace:^
+        version: link:../typed-response
     devDependencies:
       '@mewhhaha/config':
         specifier: workspace:^
         version: link:../../tools/config
-      '@mewhhaha/typed-response':
-        specifier: workspace:^
-        version: link:../typed-response
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
