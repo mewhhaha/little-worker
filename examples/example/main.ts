@@ -1,7 +1,6 @@
-import { Router, RoutesOf } from "@mewhhaha/little-router";
-import { json, text } from "@mewhhaha/typed-response";
-import { data_ } from "@mewhhaha/little-router-plugin-data/arktype";
-import { query_ } from "@mewhhaha/little-router-plugin-query/arktype";
+import { Router, RoutesOf, json, text } from "@mewhhaha/little-router";
+import { data_ } from "@mewhhaha/little-router-plugin-data";
+import { query_ } from "@mewhhaha/little-router-plugin-query";
 import { type } from "arktype";
 
 const router = Router()
@@ -32,7 +31,7 @@ const router = Router()
     "/example-query-params",
     [query_(type({ "sort?": "'asc'|'desc'", size: /^\d+$/ }))],
     async ({ query: { sort, size } }) => {
-      return json(200, { sort, size });
+      return text(200, `Sort: ${sort}, Size: ${size}`);
     }
   );
 

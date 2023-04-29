@@ -17,7 +17,7 @@
   "scripts": {
     "prepublish": "pnpm -w build",
     "build": "tsc --project tsconfig.build.json",
-    "lint": "eslint --ext .ts src",
+    "lint": "eslint --ext .ts src/**",
     "test": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
@@ -25,8 +25,8 @@
     "@mewhhaha/config": "workspace:^",
     "@mewhhaha/json-string": "workspace:^",
     "@mewhhaha/little-router": "workspace:^",
+    "@mewhhaha/testing": "workspace:^",
     "@mewhhaha/typed-request": "workspace:^",
-    "@mewhhaha/typed-response": "workspace:^",
     "typescript": "^5.0.4",
     "vitest": "^0.30.1"
   },

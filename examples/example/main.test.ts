@@ -68,14 +68,12 @@ describe("example", () => {
     const response = await f.get("/example-query-params?size=10");
 
     if (response.ok) {
-      const value = await response.json();
-      assertType<{ eating: true; fruit: "banana" }>(value);
-      expect(response.status).toBe(200);
-      expect(value).toStrictEqual({ eating: true, fruit: "banana" });
-    } else if (response.status === 406) {
       const value = await response.text();
-      assertType<"allergic to apples">(value);
-      expect(value).toBe("allergic to apples");
+      assertType<`Sort: ${"asc" | "desc" | "undefined"}, Size: ${string}`>(
+        value
+      );
+      expect(response.status).toBe(200);
+      expect(value).toStrictEqual(`Sort: undefined, Size: 10`);
     }
   });
 });

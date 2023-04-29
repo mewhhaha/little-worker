@@ -2,6 +2,7 @@ import { assertType, describe, expect, it } from "vitest";
 import { fetcher } from "./fetcher.js";
 import { PluginContext, Router, RoutesOf } from "@mewhhaha/little-router";
 import { error, text } from "@mewhhaha/typed-response";
+import { fromRouter } from "@mewhhaha/testing";
 
 describe("fetcher", () => {
   it("should fetch a route with one param", async () => {
@@ -9,7 +10,7 @@ describe("fetcher", () => {
       return text(200, `User: ${params.id}`);
     });
 
-    const f = fetcher<RoutesOf<typeof router>>(fromR(router));
+    const f = fetcher<RoutesOf<typeof router>>(fromRouter(router));
 
     const response = await f.get("/users/1");
     const t = await response.text();
@@ -27,7 +28,7 @@ describe("fetcher", () => {
       }
     );
 
-    const f = fetcher<RoutesOf<typeof router>>(mock(router));
+    const f = fetcher<RoutesOf<typeof router>>(fromRouter(router));
 
     const response = await f.get(`/users/1/cats/2`);
     const t = await response.text();
@@ -45,7 +46,7 @@ describe("fetcher", () => {
         return text(200, `User: ${params.id}, Dog: ${params.dog}`);
       });
 
-    const f = fetcher<RoutesOf<typeof router>>(mock(router));
+    const f = fetcher<RoutesOf<typeof router>>(fromRouter(router));
 
     const response = await f.get(`/users/1/cats/2`);
     const t = await response.text();
@@ -63,7 +64,7 @@ describe("fetcher", () => {
         return text(200, `User: ${params.id}, Dog: ${params.dog}`);
       });
 
-    const f = fetcher<RoutesOf<typeof router>>(mock(router));
+    const f = fetcher<RoutesOf<typeof router>>(fromRouter(router));
 
     const response = await f.post("/users/1/dogs/2");
     const t = await response.text();
@@ -100,7 +101,7 @@ describe("fetcher", () => {
       return text(200, `Search: ${search.sort}, ${search.size}`);
     });
 
-    const f = fetcher<RoutesOf<typeof router>>(mock(router));
+    const f = fetcher<RoutesOf<typeof router>>(fromRouter(router));
 
     const response = await f.get("/users/a?sort=asc&size=10");
 
@@ -117,7 +118,7 @@ describe("fetcher", () => {
         return text(200, `User: ${params.id}, Dog: ${params.dog}`);
       });
 
-    const f = fetcher<RoutesOf<typeof router>>(mock(router));
+    const f = fetcher<RoutesOf<typeof router>>(fromRouter(router));
 
     //@ts-expect-error Test
     await f.get("/users/:id/dogs/:dog");
@@ -138,7 +139,7 @@ describe("fetcher", () => {
       }
     );
 
-    const f = fetcher<RoutesOf<typeof router>>(mock(router));
+    const f = fetcher<RoutesOf<typeof router>>(fromRouter(router));
 
     // @ts-expect-error Test
     f.post("/users/:id/dogs/:dog");
@@ -162,7 +163,7 @@ describe("fetcher", () => {
       }
     );
 
-    const f = fetcher<RoutesOf<typeof router>>(mock(router));
+    const f = fetcher<RoutesOf<typeof router>>(fromRouter(router));
 
     // @ts-expect-error Test
     f.post("/users/:id/dogs/:dog");

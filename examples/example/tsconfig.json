@@ -1,3 +1,6 @@
 {
-  "extends": "@mewhhaha/config/tsconfig.json"
+  "extends": "@mewhhaha/config/tsconfig.json",
+  "compilerOptions": {
+    "types": ["@mewhhaha/json-string"]
+  }
 }

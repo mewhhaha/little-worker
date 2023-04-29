@@ -33,19 +33,10 @@ importers:
         version: 0.30.1
 
   examples/example:
-    devDependencies:
-      '@cloudflare/workers-types':
-        specifier: ^4.20230404.0
-        version: 4.20230404.0
-      '@mewhhaha/config':
-        specifier: workspace:^
-        version: link:../../tools/config
+    dependencies:
       '@mewhhaha/json-string':
         specifier: workspace:^
         version: link:../../packages/json-string
-      '@mewhhaha/little-fetcher':
-        specifier: workspace:^
-        version: link:../../packages/little-fetcher
       '@mewhhaha/little-router':
         specifier: workspace:^
         version: link:../../packages/little-router
@@ -55,15 +46,25 @@ importers:
       '@mewhhaha/little-router-plugin-query':
         specifier: workspace:^
         version: link:../../packages/little-router-plugin-query
+      arktype:
+        specifier: 1.0.14-alpha
+        version: 1.0.14-alpha
+    devDependencies:
+      '@cloudflare/workers-types':
+        specifier: ^4.20230404.0
+        version: 4.20230404.0
+      '@mewhhaha/config':
+        specifier: workspace:^
+        version: link:../../tools/config
+      '@mewhhaha/little-fetcher':
+        specifier: workspace:^
+        version: link:../../packages/little-fetcher
       '@mewhhaha/typed-request':
         specifier: workspace:^
         version: link:../../packages/typed-request
       '@mewhhaha/typed-response':
         specifier: workspace:^
         version: link:../../packages/typed-response
-      arktype:
-        specifier: 1.0.14-alpha
-        version: 1.0.14-alpha
       json-string:
         specifier: ^0.0.1
         version: 0.0.1
@@ -97,12 +98,12 @@ importers:
       '@mewhhaha/little-router':
         specifier: workspace:^
         version: link:../little-router
+      '@mewhhaha/testing':
+        specifier: workspace:^
+        version: link:../../tools/testing
       '@mewhhaha/typed-request':
         specifier: workspace:^
         version: link:../typed-request
-      '@mewhhaha/typed-response':
-        specifier: workspace:^
-        version: link:../typed-response
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
@@ -139,9 +140,9 @@ importers:
       '@mewhhaha/little-router':
         specifier: workspace:^
         version: link:../little-router
-      '@mewhhaha/typed-response':
+      '@mewhhaha/testing':
         specifier: workspace:^
-        version: link:../typed-response
+        version: link:../../tools/testing
       arktype:
         specifier: 1.0.14-alpha
         version: 1.0.14-alpha
@@ -163,9 +164,6 @@ importers:
       '@mewhhaha/little-router':
         specifier: workspace:^
         version: link:../little-router
-      '@mewhhaha/typed-response':
-        specifier: workspace:^
-        version: link:../typed-response
       arktype:
         specifier: 1.0.14-alpha
         version: 1.0.14-alpha
@@ -212,7 +210,7 @@ importers:
         specifier: ^5.0.4
         version: 5.0.4
 
-  tools/mocking:
+  tools/testing:
     devDependencies:
       '@mewhhaha/config':
         specifier: workspace:^
@@ -1165,7 +1163,6 @@ packages:
   /arktype@1.0.14-alpha:
     resolution: {integrity: sha512-theD5K4QrYCWMtQ52Masj169IgtMJ8Argld/MBS4lotEwR3b+GzfBvsqVJ1OIKhJDTdES02FLQTjcfRe00//mA==}
     requiresBuild: true
-    dev: true
 
   /array-union@2.1.0:
     resolution: {integrity: sha512-HGyxoOTYUyCM6stUe6EJgnd4EoewAI7zMdfqO+kGjnlZmBDz/cR5pf8r/cR4Wq60sL/p0IkcjUEEPwS3GFrIyw==}

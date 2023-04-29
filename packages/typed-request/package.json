@@ -16,7 +16,7 @@
   "license": "MIT",
   "scripts": {
     "prepublish": "pnpm -w build",
-    "lint": "eslint --ext .ts src",
+    "lint": "eslint --ext .ts src/**",
     "build": "tsc --project tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },

@@ -97,7 +97,10 @@ const context = async (
   return ctx;
 };
 
-export type RoutesOf<T> = T extends RouteBuilder<any, infer ROUTES>
+export type RoutesOf<T> = T extends RouteBuilder<
+  any,
+  infer ROUTES extends FetchDefinition
+>
   ? ROUTES
   : never;
 
@@ -178,20 +181,20 @@ type RouteHandlerContext<PATTERN extends string> = {
   request: Request;
 };
 
-type Method = "get" | "post" | "put" | "delete" | "patch" | "all";
+export type Method = "get" | "post" | "put" | "delete" | "patch" | "all";
 
-type Route<REST_ARGS extends unknown[]> = [
+export type Route<REST_ARGS extends unknown[]> = [
   method: string,
   segments: string[],
   plugins: Plugin[],
   route: RouteHandler<Record<string, any>, REST_ARGS>
 ];
 
-type RouteBuilder<
+export type RouteBuilder<
   REST_ARGS extends unknown[],
   ROUTES extends FetchDefinition
 > = {
-  [METHOD in Exclude<Method, "all">]: RouteProxy<METHOD, ROUTES, REST_ARGS>;
+  [METHOD in Method]: RouteProxy<METHOD, ROUTES, REST_ARGS>;
 } & {
   handle: (
     request: Request,
@@ -199,7 +202,7 @@ type RouteBuilder<
   ) => Promise<Response> | Response;
 };
 
-type PatternParams<PATTERN> =
+export type PatternParams<PATTERN> =
   PATTERN extends `${string}:${infer PARAM}/${infer REST}`
     ? PARAM | PatternParams<REST>
     : PATTERN extends `${string}:${infer PARAM}`
