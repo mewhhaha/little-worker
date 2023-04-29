@@ -9,12 +9,14 @@
     "typecheck": "CI=true turbo typecheck",
     "lint": "CI=true turbo lint",
     "bench": "CI=true turbo bench",
-    "validate": "CI=true turbo test lint typecheck"
+    "ci:validate": "CI=true turbo test lint typecheck",
+    "ci:publish": "CI=true pnpm -w build && pnpm publish -r --tag latest --access public"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@changesets/cli": "^2.26.1",
     "turbo": "^1.9.3"
   }
 }

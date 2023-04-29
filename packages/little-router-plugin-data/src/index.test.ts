@@ -1,8 +1,7 @@
 import { describe, it, expect, assertType } from "vitest";
 import { data_ } from "./index.js";
 import { type } from "arktype";
-import { Router, RoutesOf } from "@mewhhaha/little-router";
-import { text } from "@mewhhaha/typed-response";
+import { Router, RoutesOf, text } from "@mewhhaha/little-router";
 import { fetcher } from "@mewhhaha/little-fetcher";
 import { fromRouter } from "@mewhhaha/testing";
 

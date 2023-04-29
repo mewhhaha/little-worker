@@ -1,7 +1,12 @@
 import { assertType, describe, expect, it } from "vitest";
 import { fetcher } from "./fetcher.js";
-import { PluginContext, Router, RoutesOf } from "@mewhhaha/little-router";
-import { error, text } from "@mewhhaha/typed-response";
+import {
+  PluginContext,
+  Router,
+  RoutesOf,
+  error,
+  text,
+} from "@mewhhaha/little-router";
 import { fromRouter } from "@mewhhaha/testing";
 
 describe("fetcher", () => {
