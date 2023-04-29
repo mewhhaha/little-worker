@@ -1,13 +1,3 @@
 {
-  "compilerOptions": {
-    "moduleResolution": "nodenext",
-    "target": "ESNext",
-    "module": "ES2020",
-    "declaration": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "outDir": "dist",
-    "skipLibCheck": true
-  }
+  "extends": "@mewhhaha/config/tsconfig.json"
 }

@@ -65,7 +65,7 @@ describe("example", () => {
   );
 
   test("example-query-params", async () => {
-    const response = await f.get("/example-query-params?size=");
+    const response = await f.get("/example-query-params?size=10");
 
     if (response.ok) {
       const value = await response.json();

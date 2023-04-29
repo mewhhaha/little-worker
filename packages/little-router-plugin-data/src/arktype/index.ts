@@ -3,13 +3,24 @@ import { Plugin, PluginContext } from "@mewhhaha/little-router";
 import { Type } from "arktype";
 import { JSONString } from "@mewhhaha/json-string";
 
+type InferIn<T> = Type<T> extends {
+  inferIn: infer I extends
+    | Record<any, any>
+    | string
+    | Array<any>
+    | number
+    | Date;
+}
+  ? I
+  : never;
+
 export const data_ = <T>(parser: Type<T>) =>
   (async ({
     request,
   }: PluginContext<{
     init: {
       headers: { "Content-Type": "application/json" } & Record<string, string>;
-      body: JSONString<T>;
+      body: JSONString<InferIn<T>>;
     };
   }>) => {
     try {

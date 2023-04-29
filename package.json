@@ -6,6 +6,8 @@
   "scripts": {
     "build": "turbo build",
     "test": "CI=true turbo test",
+    "typecheck": "CI=true turbo typecheck",
+    "lint": "CI=true turbo lint",
     "bench": "CI=true turbo bench"
   },
   "keywords": [],

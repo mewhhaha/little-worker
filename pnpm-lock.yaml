@@ -10,6 +10,9 @@ importers:
 
   examples/benchmark:
     devDependencies:
+      '@mewhhaha/config':
+        specifier: workspace:^
+        version: link:../../tools/config
       '@mewhhaha/little-router':
         specifier: workspace:^
         version: link:../../packages/little-router
@@ -34,6 +37,9 @@ importers:
       '@cloudflare/workers-types':
         specifier: ^4.20230404.0
         version: 4.20230404.0
+      '@mewhhaha/config':
+        specifier: workspace:^
+        version: link:../../tools/config
       '@mewhhaha/json-string':
         specifier: workspace:^
         version: link:../../packages/json-string
@@ -73,12 +79,18 @@ importers:
 
   packages/json-string:
     devDependencies:
+      '@mewhhaha/config':
+        specifier: workspace:^
+        version: link:../../tools/config
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
 
   packages/little-fetcher:
     devDependencies:
+      '@mewhhaha/config':
+        specifier: workspace:^
+        version: link:../../tools/config
       '@mewhhaha/json-string':
         specifier: workspace:^
         version: link:../json-string
@@ -100,6 +112,9 @@ importers:
 
   packages/little-router:
     devDependencies:
+      '@mewhhaha/config':
+        specifier: workspace:^
+        version: link:../../tools/config
       '@mewhhaha/typed-response':
         specifier: workspace:^
         version: link:../typed-response
@@ -112,9 +127,15 @@ importers:
 
   packages/little-router-plugin-data:
     devDependencies:
+      '@mewhhaha/config':
+        specifier: workspace:^
+        version: link:../../tools/config
       '@mewhhaha/json-string':
         specifier: workspace:^
         version: link:../json-string
+      '@mewhhaha/little-fetcher':
+        specifier: workspace:^
+        version: link:../little-fetcher
       '@mewhhaha/little-router':
         specifier: workspace:^
         version: link:../little-router
@@ -133,6 +154,12 @@ importers:
 
   packages/little-router-plugin-query:
     devDependencies:
+      '@mewhhaha/config':
+        specifier: workspace:^
+        version: link:../../tools/config
+      '@mewhhaha/little-fetcher':
+        specifier: workspace:^
+        version: link:../little-fetcher
       '@mewhhaha/little-router':
         specifier: workspace:^
         version: link:../little-router
@@ -151,12 +178,29 @@ importers:
 
   packages/typed-request:
     devDependencies:
+      '@mewhhaha/config':
+        specifier: workspace:^
+        version: link:../../tools/config
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
 
   packages/typed-response:
     devDependencies:
+      '@mewhhaha/config':
+        specifier: workspace:^
+        version: link:../../tools/config
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
+
+  tools/config: {}
+
+  tools/mocking:
+    devDependencies:
+      '@mewhhaha/config':
+        specifier: workspace:^
+        version: link:../config
       typescript:
         specifier: ^5.0.4
         version: 5.0.4

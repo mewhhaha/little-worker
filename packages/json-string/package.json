@@ -16,9 +16,10 @@
   ],
   "scripts": {
     "prepublish": "pnpm -w build",
-    "build": "tsc --project tsconfig.json"
+    "build": "tsc --project tsconfig.build.json"
   },
   "devDependencies": {
+    "@mewhhaha/config": "workspace:^",
     "typescript": "^5.0.4"
   },
   "sideEffects": false

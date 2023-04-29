@@ -27,9 +27,12 @@
   "scripts": {
     "prepublish": "pnpm -w build",
     "build": "tsc --project tsconfig.build.json",
-    "test": "vitest"
+    "test": "vitest",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
+    "@mewhhaha/config": "workspace:^",
+    "@mewhhaha/little-fetcher": "workspace:^",
     "@mewhhaha/little-router": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^",
     "arktype": "1.0.14-alpha",

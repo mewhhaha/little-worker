@@ -21,14 +21,19 @@ type SearchOptions = {
  * @param param1
  * @returns
  */
-export const query_ = <T extends Queries>(
-  parser: Type<T>,
+
+type InferIn<T> = Type<T> extends { inferIn: infer I extends Queries }
+  ? I
+  : never;
+
+export const query_ = <IN extends InferIn<T>, T>(
+  parser: Type<InferIn<T> extends never ? never : T>,
   { arrayDelimiter = "," }: SearchOptions = {}
 ) =>
   (async ({
     url,
   }: PluginContext<{
-    search?: T;
+    search?: IN;
   }>) => {
     const result: Record<string, string | string[] | undefined> = {};
     for (const key of new Set(url.searchParams.keys())) {

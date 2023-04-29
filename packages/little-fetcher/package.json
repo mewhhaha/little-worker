@@ -20,6 +20,7 @@
     "test": "vitest"
   },
   "devDependencies": {
+    "@mewhhaha/config": "workspace:^",
     "@mewhhaha/json-string": "workspace:^",
     "@mewhhaha/little-router": "workspace:^",
     "@mewhhaha/typed-request": "workspace:^",

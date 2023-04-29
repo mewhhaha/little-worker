@@ -20,6 +20,7 @@
     "test": "vitest"
   },
   "devDependencies": {
+    "@mewhhaha/config": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^",
     "typescript": "^5.0.4",
     "vitest": "^0.30.1"

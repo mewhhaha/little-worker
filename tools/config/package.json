@@ -1,0 +1,14 @@
+{
+  "name": "@mewhhaha/config",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "files": [
+    "tsconfig.json"
+  ],
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {}
+}

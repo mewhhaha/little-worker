@@ -2,72 +2,35 @@ import { describe, it, expect, assertType } from "vitest";
 import { query_ } from "./index.js";
 import { type } from "arktype";
 import { Router } from "@mewhhaha/little-router";
-import { text } from "@mewhhaha/typed-response";
+import { json, text } from "@mewhhaha/typed-response";
 
 describe("check", () => {
-  it("should return 400 for invalid JSON", async () => {
-    try {
-      await query_(type("string"))(
-        new Request("http://from.fetcher", {
-          body: "undefined",
-          method: "POST",
-        }) as any
-      );
-    } catch (e) {
-      expect(e).toBeInstanceOf(Response);
-      if (e instanceof Response) {
-        expect(e.status).toBe(400);
-      }
-    }
-  });
-
-  it("should return 422 for incorrect JSON", async () => {
-    try {
-      await query_(type("string"))(
-        new Request("http://from.fetcher", {
-          body: JSON.stringify(2),
-          method: "POST",
-        }) as any
-      );
-    } catch (e) {
-      expect(e).toBeInstanceOf(Response);
-      if (e instanceof Response) {
-        expect(e.status).toBe(400);
-      }
-    }
-  });
-
-  it("should return 200 for correct JSON", async () => {
-    const result = await query_(type("string"))({
-      request: new Request("http://from.fetcher", {
-        body: JSON.stringify("Hello world!"),
-        method: "POST",
-      }),
-      url: new URL("http://from.fetcher"),
+  it("should return parsed headers", async () => {
+    const result = await query_(type({ hello: "'world'" }))({
+      request: new Request("http://from.fetcher?hello=world"),
+      url: new URL("http://from.fetcher?hello=world"),
       params: {},
     });
-    expect(result).toStrictEqual({ data: "Hello world!" });
+
+    expect(result).toStrictEqual({ query: { hello: "world" } });
   });
 
   it("should work as a plugin for the router", async () => {
-    const router = Router().post(
+    const router = Router().get(
       "/a",
-      [query_(type("'hello'"))],
-      ({ data }) => {
-        assertType<"hello">(data);
-        return text(200, data);
+      [query_(type({ hello: "'world'" }))],
+      ({ query: { hello } }) => {
+        assertType<"world" | undefined>(hello);
+        return json(200, hello);
       }
     );
 
     const response = await router.handle(
-      new Request("http://from.fetcher/a", {
-        body: JSON.stringify("hello"),
-        method: "POST",
-      })
+      new Request("http://from.fetcher/a?hello=world")
     );
 
-    const t = await response.text();
+    const t = await response.json();
     expect(response.status).toBe(200);
-    expect(t).toBe("hello");
+    expect(t).toBe("world");
   });
 });

@@ -11,6 +11,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@mewhhaha/config": "workspace:^",
     "@mewhhaha/little-router": "workspace:^",
     "@mewhhaha/typed-request": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^",
