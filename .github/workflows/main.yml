@@ -36,3 +36,5 @@ jobs:
 
       - name: Publish all packages
         run: pnpm ci:publish
+        env:
+          NPM_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
