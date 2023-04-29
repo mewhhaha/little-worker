@@ -1,6 +1,5 @@
 import { match } from "./match.js";
 import { HasOverlap } from "./overlap.js";
-import { AnyResponse } from "./types.js";
 import { Plugin, PluginContext } from "./plugin.js";
 import { FetchDefinition, Queries } from "./fetch.js";
 
@@ -110,7 +109,7 @@ type RouteProxy<
   REST_ARGS extends unknown[]
 > = <
   const PATTERN extends string,
-  const RESPONSE extends AnyResponse,
+  const RESPONSE extends Response,
   PLUGINS extends Plugin[]
 >(
   pattern: Extract<ROUTES, { method: METHOD }> extends never
@@ -169,7 +168,7 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
 type RouteHandler<
   CONTEXT extends Record<string, any>,
   REST_ARGS extends unknown[] = [],
-  RESPONSE extends AnyResponse = Response
+  RESPONSE extends Response = Response
 > = (
   context: UnionToIntersection<CONTEXT>,
   ...rest: REST_ARGS

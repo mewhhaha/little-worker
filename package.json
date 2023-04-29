@@ -11,6 +11,7 @@
     "lint": "CI=true turbo lint",
     "bench": "CI=true turbo bench",
     "ci:validate": "CI=true turbo test lint typecheck",
+    "ci:version": "pnpm changeset version",
     "ci:publish": "CI=true pnpm -w build && pnpm publish -r --tag latest --access public"
   },
   "keywords": [],

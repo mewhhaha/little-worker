@@ -1,5 +1,4 @@
 import { Queries } from "./fetch.js";
-import { AnyResponse } from "./types.js";
 
 export type PluginContext<
   HINT extends {
@@ -25,7 +24,4 @@ export type PluginContext<
 export type Plugin<REST_ARGS extends unknown[] = unknown[]> = (
   { request, url, params }: PluginContext<any>,
   ...rest: REST_ARGS
-) =>
-  | Promise<Record<string, any> | AnyResponse>
-  | Record<string, any>
-  | AnyResponse;
+) => Promise<Record<string, any> | Response> | Record<string, any> | Response;

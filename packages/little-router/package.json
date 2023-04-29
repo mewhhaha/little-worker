@@ -21,9 +21,6 @@
     "test": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
-  "dependencies": {
-    "@mewhhaha/typed-response": "workspace:^"
-  },
   "devDependencies": {
     "@mewhhaha/config": "workspace:^",
     "typescript": "^5.0.4",
