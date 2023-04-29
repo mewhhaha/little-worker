@@ -3,6 +3,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: publish
+  cancel-in-progress: true
+
 jobs:
   publish:
     name: Publish packages to npm
@@ -28,7 +32,7 @@ jobs:
       - name: Validate all packages
         run: pnpm ci:validate
 
-    #   - name: Publish all packages
-    #     run: pnpm ci:publish
-    #     env:
-    #       NPM_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+      - name: Publish all packages
+        run: pnpm ci:publish
+        env:
+          NPM_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
