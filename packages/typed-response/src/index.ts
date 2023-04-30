@@ -71,21 +71,24 @@ export type Ok<CODE extends number> = number extends CODE
 
 export interface TextResponse<CODE extends HttpStatusXXX, TEXT extends string>
   extends Response {
-  text: () => Promise<TEXT>;
-  json: () => Promise<unknown>;
+  text(): Promise<TEXT>;
+  json(): Promise<unknown>;
+  json<T = unknown>(): Promise<T>;
   status: CODE;
   ok: Ok<CODE>;
 }
 
 export interface JSONResponse<CODE extends HttpStatusXXX, JSON>
   extends Response {
-  json: () => Promise<JSON>;
+  json(): Promise<JSON>;
+  json<T = JSON>(): Promise<T>;
   status: CODE;
   ok: Ok<CODE>;
 }
 
 export interface BodyResponse<CODE extends HttpStatusXXX> extends Response {
-  json: () => Promise<unknown>;
+  json(): Promise<unknown>;
+  json<T = unknown>(): Promise<T>;
   status: CODE;
   ok: Ok<CODE>;
 }
