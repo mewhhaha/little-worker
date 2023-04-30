@@ -1,5 +1,13 @@
 # @mewhhaha/little-router-plugin-query
 
+## 0.0.3
+
+### Patch Changes
+
+- b08e85d: Update typed response to also be aligned with cloudflare Response
+- Updated dependencies [b08e85d]
+  - @mewhhaha/little-router@0.0.3
+
 ## 0.0.2
 
 ### Patch Changes
