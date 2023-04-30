@@ -134,10 +134,14 @@ export const error = <
   code: CODE,
   value?: JSON,
   init?: Omit<ResponseInit, "status">
-) => json(code, value ?? null, init);
+) => json(code, value ?? null, init) as JSONResponse<CODE, JSON>;
 
 export const ok = <const CODE extends HttpStatus2XX, const JSON = null>(
   code: CODE,
   value?: JSON,
   init?: Omit<ResponseInit, "status">
-) => json(code, value ?? null, init);
+): JSONResponse<CODE, JSON> =>
+  json(code, value === undefined ? null : value, init) as JSONResponse<
+    CODE,
+    JSON
+  >;
