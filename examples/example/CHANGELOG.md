@@ -1,5 +1,16 @@
 # example
 
+## 0.0.3
+
+### Patch Changes
+
+- b08e85d: Update typed response to also be aligned with cloudflare Response
+- Updated dependencies [b08e85d]
+  - @mewhhaha/json-string@0.0.3
+  - @mewhhaha/little-router@0.0.3
+  - @mewhhaha/little-router-plugin-data@0.0.3
+  - @mewhhaha/little-router-plugin-query@0.0.3
+
 ## 0.0.2
 
 ### Patch Changes
