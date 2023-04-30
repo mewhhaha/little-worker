@@ -1,5 +1,11 @@
 # @mewhhaha/little-fetcher
 
+## 0.0.4
+
+### Patch Changes
+
+- fdeca5a: Fix null being always returned from ok and error
+
 ## 0.0.3
 
 ### Patch Changes
