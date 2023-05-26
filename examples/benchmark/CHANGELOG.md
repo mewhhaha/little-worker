@@ -1,5 +1,11 @@
 # benchmark
 
+## 0.0.5
+
+### Patch Changes
+
+- e7ad13e: Update README for plugins
+
 ## 0.0.4
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # example
 
+## 0.0.5
+
+### Patch Changes
+
+- e7ad13e: Update README for plugins
+- Updated dependencies [e7ad13e]
+  - @mewhhaha/little-router-plugin-query@0.0.5
+  - @mewhhaha/little-router-plugin-data@0.0.5
+  - @mewhhaha/little-router@0.0.5
+  - @mewhhaha/json-string@0.0.5
+
 ## 0.0.4
 
 ### Patch Changes
