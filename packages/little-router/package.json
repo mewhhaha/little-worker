@@ -25,7 +25,7 @@
     "@mewhhaha/config": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^",
     "typescript": "^5.0.4",
-    "vitest": "^0.30.1"
+    "vitest": "^0.31.1"
   },
   "sideEffects": false
 }
