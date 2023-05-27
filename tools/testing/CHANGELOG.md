@@ -1,5 +1,11 @@
 # @mewhhaha/testing
 
+## 0.0.6
+
+### Patch Changes
+
+- 9f88b4b: Fix wildcards not working for little-fetcher
+
 ## 0.0.5
 
 ### Patch Changes
