@@ -1,5 +1,11 @@
 # @mewhhaha/config
 
+## 0.0.7
+
+### Patch Changes
+
+- 490444b: Fix little-fetcher not working with param and and ending with wildcard
+
 ## 0.0.6
 
 ### Patch Changes
