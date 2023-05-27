@@ -103,6 +103,8 @@ export type RoutesOf<T> = T extends RouteBuilder<
   ? ROUTES
   : never;
 
+type StartsWithSlash<T extends string> = T extends `/${string}` ? T : never;
+
 type RouteProxy<
   METHOD extends Method,
   ROUTES extends FetchDefinition,
@@ -113,12 +115,12 @@ type RouteProxy<
   PLUGINS extends Plugin[]
 >(
   pattern: Extract<ROUTES, { method: METHOD }> extends never
-    ? PATTERN
+    ? StartsWithSlash<PATTERN>
     : HasOverlap<
         PATTERN,
         Extract<ROUTES, { method: METHOD }>["pattern"]
       > extends false
-    ? PATTERN
+    ? StartsWithSlash<PATTERN>
     : ValidationError<"Overlapping route pattern">,
   plugins: PLUGINS,
   h: RouteHandler<

@@ -34,6 +34,11 @@ describe("Router", () => {
     expect(text).toBe("User: 42");
   });
 
+  it.skip("should require beginning slash", async () => {
+    // @ts-expect-error Should fail on missing beginning slash
+    Router().get("user/:id", [], () => new Response());
+  });
+
   it("should match wildcard paths", async () => {
     const router = Router().get("/*", [], async ({ params }) => {
       return new Response(`Wildcard: ${params["*"]}`);
