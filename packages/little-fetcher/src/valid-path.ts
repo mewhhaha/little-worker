@@ -26,6 +26,10 @@ export type ValidPathname<
     : false
   : PATH extends PATTERN
   ? true
+  : PATTERN extends `${infer PRE}/*`
+  ? PATH extends `${PRE}/${string}`
+    ? true
+    : false
   : false;
 
 export type ValidSearch<

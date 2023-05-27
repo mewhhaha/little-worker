@@ -22,9 +22,16 @@ describe("ValidPath", () => {
 });
 
 describe("ValidPathname", () => {
-  it.skip("should return true", () => {
+  it.skip("should support params", () => {
     assertType<ValidPathname<"/users/1/dogs/2", "/users/:id/dogs/:dog">>(true);
+  });
+
+  it.skip("should support exact path", () => {
     assertType<ValidPathname<"/users/1", "/users/1">>(true);
+  });
+
+  it.skip("should support wildcard", () => {
+    assertType<ValidPathname<"/users/a/b/c", "/users/*">>(true);
   });
 });
 
