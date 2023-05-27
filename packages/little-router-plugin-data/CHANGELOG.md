@@ -1,5 +1,14 @@
 # @mewhhaha/little-router-plugin-data
 
+## 0.0.6
+
+### Patch Changes
+
+- 9f88b4b: Fix wildcards not working for little-fetcher
+- Updated dependencies [9f88b4b]
+  - @mewhhaha/json-string@0.0.6
+  - @mewhhaha/little-router@0.0.6
+
 ## 0.0.5
 
 ### Patch Changes
