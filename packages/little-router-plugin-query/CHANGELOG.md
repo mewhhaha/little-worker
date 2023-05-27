@@ -1,5 +1,13 @@
 # @mewhhaha/little-router-plugin-query
 
+## 0.0.7
+
+### Patch Changes
+
+- 490444b: Fix little-fetcher not working with param and and ending with wildcard
+- Updated dependencies [490444b]
+  - @mewhhaha/little-router@0.0.7
+
 ## 0.0.6
 
 ### Patch Changes
