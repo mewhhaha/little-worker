@@ -33,6 +33,10 @@ describe("ValidPathname", () => {
   it.skip("should support wildcard", () => {
     assertType<ValidPathname<"/users/a/b/c", "/users/*">>(true);
   });
+
+  it.skip("should support params and wildcard", () => {
+    assertType<ValidPathname<"/users/a/b/c", "/users/:id/*">>(true);
+  });
 });
 
 describe("ValidSearch", () => {
