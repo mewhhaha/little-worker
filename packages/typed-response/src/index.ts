@@ -136,12 +136,15 @@ export const error = <
   init?: Omit<ResponseInit, "status">
 ) => json(code, value ?? null, init) as JSONResponse<CODE, JSON>;
 
-export const ok = <const CODE extends HttpStatus2XX, const JSON = null>(
+export const success = <const CODE extends HttpStatus2XX, const JSON = null>(
   code: CODE,
   value?: JSON,
   init?: Omit<ResponseInit, "status">
 ): JSONResponse<CODE, JSON> =>
-  json(code, value === undefined ? null : value, init) as JSONResponse<
-    CODE,
-    JSON
-  >;
+  json(code, value ?? null, init) as JSONResponse<CODE, JSON>;
+
+export const ok = <const JSON = null>(
+  value?: JSON,
+  init?: Omit<ResponseInit, "status">
+): JSONResponse<200, JSON> =>
+  json(200, value ?? null, init) as JSONResponse<200, JSON>;
