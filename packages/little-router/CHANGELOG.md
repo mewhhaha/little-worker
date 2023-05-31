@@ -1,5 +1,12 @@
 # @mewhhaha/little-router
 
+## 0.0.8
+
+### Patch Changes
+
+- bdfbac5: Add `success` helper and hardcode `ok` to be 200
+- 097ef83: Fix typescript not complaining about missing beginning slash
+
 ## 0.0.7
 
 ### Patch Changes

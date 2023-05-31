@@ -1,6 +1,6 @@
 {
   "name": "@mewhhaha/little-fetcher",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "",
   "type": "module",
   "types": "dist/index.d.ts",
