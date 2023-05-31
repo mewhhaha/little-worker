@@ -1,4 +1,5 @@
 export type HttpStatus1XX = 100 | 101 | 102 | 103;
+
 export type HttpStatus2XX =
   | 200
   | 201
@@ -93,6 +94,11 @@ export interface BodyResponse<CODE extends HttpStatusXXX> extends Response {
   ok: Ok<CODE>;
 }
 
+/**
+ * Helper for returning a json response.
+ * @example
+ * return json(200, null)
+ */
 export const json = <const CODE extends HttpStatusXXX, const JSON>(
   code: CODE,
   value: JSON,
@@ -104,6 +110,11 @@ export const json = <const CODE extends HttpStatusXXX, const JSON>(
     headers: { ...init?.headers, "Content-Type": "application/json" },
   }) as JSONResponse<CODE, JSON>;
 
+/**
+ * Helper for returning a text response.
+ * @example
+ * return text(200, "ok")
+ */
 export const text = <
   const CODE extends HttpStatusXXX,
   const TEXT extends string
@@ -117,6 +128,11 @@ export const text = <
     status: code,
   }) as TextResponse<CODE, TEXT>;
 
+/**
+ * Helper for returning an error response with JSON body.
+ * @example
+ * return body(101, null, { webSocket: socket })
+ */
 export const body = <const CODE extends HttpStatusXXX>(
   code: CODE,
   value?: BodyInit | null,
@@ -127,6 +143,11 @@ export const body = <const CODE extends HttpStatusXXX>(
     status: code,
   }) as BodyResponse<CODE>;
 
+/**
+ * Helper for returning any typed response.
+ * @example
+ * return error(403, { message: "You shall not pass" })
+ */
 export const error = <
   const CODE extends HttpStatus4XX | HttpStatus5XX,
   const JSON = null
@@ -136,12 +157,25 @@ export const error = <
   init?: Omit<ResponseInit, "status">
 ) => json(code, value ?? null, init) as JSONResponse<CODE, JSON>;
 
-export const ok = <const CODE extends HttpStatus2XX, const JSON = null>(
+/**
+ * Helper for returning a error success with JSON body.
+ * @example
+ * return success(201, { message: "I am created" })
+ */
+export const success = <const CODE extends HttpStatus2XX, const JSON = null>(
   code: CODE,
   value?: JSON,
   init?: Omit<ResponseInit, "status">
 ): JSONResponse<CODE, JSON> =>
-  json(code, value === undefined ? null : value, init) as JSONResponse<
-    CODE,
-    JSON
-  >;
+  json(code, value ?? null, init) as JSONResponse<CODE, JSON>;
+
+/**
+ * Helper for returning a 200 response with JSON body.
+ * @example
+ * return ok({ value: "ok"})
+ */
+export const ok = <const JSON = null>(
+  value?: JSON,
+  init?: Omit<ResponseInit, "status">
+): JSONResponse<200, JSON> =>
+  json(200, value ?? null, init) as JSONResponse<200, JSON>;
