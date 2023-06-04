@@ -1,6 +1,6 @@
 import { expect, describe, it } from "vitest";
 import { Router } from "./router.js";
-import { error } from "@mewhhaha/typed-response";
+import { error, ok } from "@mewhhaha/typed-response";
 import { PluginContext } from "./plugin.js";
 
 describe("Router", () => {
@@ -155,14 +155,14 @@ describe("Router with route chaining and overlapping", () => {
 
 describe("Router with plugins", () => {
   it("should handle context plugins correctly", async () => {
-    const jsonPlugin = async ({ request }: PluginContext) => {
+    const json_ = async ({ request }: PluginContext) => {
       const body = (await request.json()) as "json-plugin";
       return { body };
     };
 
     const router = Router().post(
       "/json-plugin",
-      [jsonPlugin],
+      [json_],
       async ({ body }) => new Response(`Plugin: ${body}`)
     );
 
@@ -182,11 +182,11 @@ describe("Router with plugins", () => {
   });
 
   it("should return responses from plugins", async () => {
-    const authPlugin = async (_: PluginContext) => {
+    const auth_ = async (_: PluginContext) => {
       return error(403, "Plugin: Forbidden");
     };
 
-    const router = Router().get("/auth-plugin", [authPlugin], async () => {
+    const router = Router().get("/auth-plugin", [auth_], async () => {
       return new Response(null);
     });
 
@@ -198,5 +198,26 @@ describe("Router with plugins", () => {
     const text1 = await response1.json();
 
     expect(text1).toBe("Plugin: Forbidden");
+  });
+
+  it("should work with extra parameters", async () => {
+    const extra_ = async (_: PluginContext, str: string) => {
+      return { value: str };
+    };
+
+    const router = Router<[string]>().get(
+      "/extra-plugin",
+      [extra_],
+      async ({ value }) => {
+        return ok(`Plugin: ${value}`);
+      }
+    );
+
+    const request1 = new Request("https://example.com/extra-plugin");
+    const response1 = await router.handle(request1, "extra");
+
+    expect(response1.status).toBe(200);
+    const text1 = await response1.json();
+    expect(text1).toBe("Plugin: extra");
   });
 });

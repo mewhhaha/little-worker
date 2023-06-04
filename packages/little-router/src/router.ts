@@ -65,12 +65,12 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
   return { __proto__: new Proxy({} as any, proxy), handle } as any;
 };
 
-const context = async (
+const context = async <REST_ARGS extends unknown[]>(
   request: Request,
   url: URL,
   params: Record<string, string>,
-  plugins: Plugin[],
-  rest: unknown[]
+  plugins: Plugin<REST_ARGS>[],
+  rest: REST_ARGS
 ) => {
   const pctx = { params, url, request };
   const results = await Promise.all(plugins.map((p) => p(pctx, ...rest)));
@@ -112,7 +112,7 @@ type RouteProxy<
 > = <
   const PATTERN extends string,
   const RESPONSE extends Response,
-  PLUGINS extends Plugin[]
+  PLUGINS extends Plugin<REST_ARGS>[]
 >(
   pattern: Extract<ROUTES, { method: METHOD }> extends never
     ? StartsWithSlash<PATTERN>
@@ -141,7 +141,7 @@ type RouteProxy<
     >
 >;
 
-type SearchOf<PLUGINS extends Plugin[]> = PLUGINS extends ((
+type SearchOf<PLUGINS extends Plugin<any>[]> = PLUGINS extends ((
   context: PluginContext<{
     init: any;
     search: infer I extends Queries | undefined;
@@ -151,7 +151,7 @@ type SearchOf<PLUGINS extends Plugin[]> = PLUGINS extends ((
   ? NonNullable<I>
   : never;
 
-type InitOf<PLUGINS extends Plugin[]> = PLUGINS extends ((
+type InitOf<PLUGINS extends Plugin<any>[]> = PLUGINS extends ((
   context: PluginContext<{
     init: infer I extends RequestInit | undefined;
     search: any;
@@ -187,7 +187,7 @@ export type Method = "get" | "post" | "put" | "delete" | "patch" | "all";
 export type Route<REST_ARGS extends unknown[]> = [
   method: string,
   segments: string[],
-  plugins: Plugin[],
+  plugins: Plugin<REST_ARGS>[],
   route: RouteHandler<Record<string, any>, REST_ARGS>
 ];
 
