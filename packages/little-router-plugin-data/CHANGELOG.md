@@ -1,5 +1,14 @@
 # @mewhhaha/little-router-plugin-data
 
+## 0.0.10
+
+### Patch Changes
+
+- c5f3668: Add options route
+- Updated dependencies [c5f3668]
+  - @mewhhaha/little-router@0.0.10
+  - @mewhhaha/json-string@0.0.10
+
 ## 0.0.9
 
 ### Patch Changes
