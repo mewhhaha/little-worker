@@ -182,7 +182,14 @@ type RouteHandlerContext<PATTERN extends string> = {
   request: Request;
 };
 
-export type Method = "get" | "post" | "put" | "delete" | "patch" | "all";
+export type Method =
+  | "get"
+  | "post"
+  | "put"
+  | "delete"
+  | "patch"
+  | "options"
+  | "all";
 
 export type Route<REST_ARGS extends unknown[]> = [
   method: string,
