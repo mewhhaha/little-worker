@@ -1,5 +1,11 @@
 # @mewhhaha/json-string
 
+## 0.0.10
+
+### Patch Changes
+
+- c5f3668: Add options route
+
 ## 0.0.9
 
 ### Patch Changes
