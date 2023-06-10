@@ -3,6 +3,30 @@ import { HasOverlap } from "./overlap.js";
 import { Plugin, PluginContext } from "./plugin.js";
 import { FetchDefinition, Queries } from "./fetch.js";
 
+/**
+ * Returns an instance of RouteBuilder that you can use to build your routing
+ * structure.
+ *
+ * @typeParam REST_ARGS - Used to type Env and ExecutionContext from cloudflare
+ *                        workers. More info in [cloudflare workers docs]( https://developers.cloudflare.com/workers/platform/environment-variables/).
+ *
+ * The returned RouteBuilder can be build upon by using the method function,
+ * with names corresponding to http request methods.
+ *
+ * {@link Method | Availible Methods}
+ *
+ * @example
+ * ```ts
+ * type Env = {
+ *   MY_ENV_VAR: string;
+ *   MY_SECRET: string;
+ *   myKVNamespace: KVNamespace;
+ * };
+ * const router = Router<Env, ExecutionContext>
+ * ```
+ *
+ * More on cloudflare worker types in [their documentation](https://github.com/cloudflare/workerd/tree/main/npm/workers-types#using-bindings).
+ */
 export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
   REST_ARGS,
   never
