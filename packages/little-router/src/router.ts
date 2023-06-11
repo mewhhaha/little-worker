@@ -114,11 +114,11 @@ type RouteProxy<
   const RESPONSE extends Response,
   PLUGINS extends Plugin<REST_ARGS>[]
 >(
-  pattern: Extract<ROUTES, { method: METHOD }> extends never
+  pattern: Extract<ROUTES, { method: METHOD | "all" }> extends never
     ? StartsWithSlash<PATTERN>
     : HasOverlap<
         PATTERN,
-        Extract<ROUTES, { method: METHOD }>["pattern"]
+        Extract<ROUTES, { method: METHOD | "all" }>["pattern"]
       > extends false
     ? StartsWithSlash<PATTERN>
     : ValidationError<"Overlapping route pattern">,

@@ -32,8 +32,8 @@
     "@mewhhaha/testing": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^",
     "arktype": "1.0.14-alpha",
-    "typescript": "^5.0.4",
-    "vitest": "^0.31.1"
+    "typescript": "^5.1.3",
+    "vitest": "^0.32.0"
   },
   "sideEffects": false,
   "peerDependencies": {
