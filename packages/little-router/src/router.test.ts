@@ -151,6 +151,13 @@ describe("Router with route chaining and overlapping", () => {
     expect(response1.status).toBe(200);
     expect(text1).toBe("Wildcard: a/b/c");
   });
+
+  it.skip("should not match overlapping routes with all method", async () => {
+    Router()
+      .all("/a/b/c", [], async () => new Response())
+      // @ts-expect-error Test
+      .get("/a/b/c", [], async () => new Response());
+  });
 });
 
 describe("Router with plugins", () => {
