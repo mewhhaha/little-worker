@@ -226,8 +226,49 @@ export type RouteBuilder<
   REST_ARGS extends unknown[],
   ROUTES extends FetchDefinition
 > = {
-  [METHOD in Method]: RouteProxy<METHOD, ROUTES, REST_ARGS>;
-} & {
+  /**
+   * @param route - The route to match for this http method handler
+   * @param pluginArray  - A list of plugins to be applied to this route
+   * @param handler  - A function to run when the path has been matched
+   * @returns an instance of RouteBuilder
+   */
+  get: RouteProxy<"get", ROUTES, REST_ARGS>;
+  /**
+   * @param route - The route to match for this http method handler
+   * @param pluginArray  - A list of plugins to be applied to this route
+   * @param handler  - A function to run when the path has been matched
+   * @returns an instance of RouteBuilder
+   */
+  post: RouteProxy<"post", ROUTES, REST_ARGS>;
+  /**
+   * @param route - The route to match for this http method handler
+   * @param pluginArray  - A list of plugins to be applied to this route
+   * @param handler  - A function to run when the path has been matched
+   * @returns an instance of RouteBuilder
+   */
+  put: RouteProxy<"put", ROUTES, REST_ARGS>;
+  /**
+   * @param route - The route to match for this http method handler
+   * @param pluginArray  - A list of plugins to be applied to this route
+   * @param handler  - A function to run when the path has been matched
+   * @returns an instance of RouteBuilder
+   */
+  delete: RouteProxy<"delete", ROUTES, REST_ARGS>;
+  /**
+   * @param route - The route to match for this http method handler
+   * @param pluginArray  - A list of plugins to be applied to this route
+   * @param handler  - A function to run when the path has been matched
+   * @returns an instance of RouteBuilder
+   */
+  patch: RouteProxy<"patch", ROUTES, REST_ARGS>;
+  /**
+   * @param route - The route to match for this http method handler
+   * @param pluginArray  - A list of plugins to be applied to this route
+   * @param handler  - A function to run when the path has been matched
+   * @returns an instance of RouteBuilder
+   */
+  options: RouteProxy<"options", ROUTES, REST_ARGS>;
+  all: RouteProxy<"all", ROUTES, REST_ARGS>;
   handle: (
     request: Request,
     ...rest: REST_ARGS

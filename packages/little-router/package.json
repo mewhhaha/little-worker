@@ -27,5 +27,8 @@
     "typescript": "^5.1.3",
     "vitest": "^0.32.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "dependencies": {
+    "typedoc": "^0.24.8"
+  }
 }

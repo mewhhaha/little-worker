@@ -215,8 +215,8 @@ describe("Router with plugins", () => {
     const router = Router<[string]>().get(
       "/extra-plugin",
       [extra_],
-      async ({ value }) => {
-        return ok(`Plugin: ${value}`);
+      async () => {
+        return ok(200);
       }
     );
 
