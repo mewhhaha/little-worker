@@ -13,7 +13,7 @@ import { FetchDefinition, Queries } from "./fetch.js";
  * The returned RouteBuilder can be build upon by using the method function,
  * with names corresponding to http request methods.
  *
- * {@link Method | Availible Methods}
+ * {@link Method | Available Methods}
  *
  * @example
  * ```ts
