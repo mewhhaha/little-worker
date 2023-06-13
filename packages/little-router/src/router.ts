@@ -22,7 +22,7 @@ import { FetchDefinition, Queries } from "./fetch.js";
  *   MY_SECRET: string;
  *   myKVNamespace: KVNamespace;
  * };
- * const router = Router<Env, ExecutionContext>
+ * const router = Router<[Env, ExecutionContext]>
  * ```
  *
  * More on cloudflare worker types in [their documentation](https://github.com/cloudflare/workerd/tree/main/npm/workers-types#using-bindings).
