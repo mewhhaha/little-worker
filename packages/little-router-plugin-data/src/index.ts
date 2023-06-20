@@ -3,7 +3,7 @@ import type { Type } from "arktype";
 import type { JSONString } from "@mewhhaha/json-string";
 import { error } from "@mewhhaha/typed-response";
 
-type InferIn<T> = Type<T> extends {
+type InOf<T> = T extends {
   inferIn: infer I extends
     | Record<any, any>
     | string
@@ -14,13 +14,19 @@ type InferIn<T> = Type<T> extends {
   ? I
   : never;
 
-export const data_ = <T>(parser: Type<T>) =>
+type OutOf<T> = T extends {
+  infer: infer I;
+}
+  ? I
+  : never;
+
+export const data_ = <T extends Type<any>>(parser: T) =>
   (async ({
     request,
   }: PluginContext<{
     init: {
       headers: { "Content-Type": "application/json" } & Record<string, string>;
-      body: JSONString<InferIn<T>>;
+      body: JSONString<InOf<T>>;
     };
   }>) => {
     try {
@@ -29,7 +35,7 @@ export const data_ = <T>(parser: Type<T>) =>
         return error(422, r.problems.summary);
       }
 
-      return { data: r.data as T };
+      return { data: r.data as OutOf<T> };
     } catch (err) {
       if (err instanceof Error) {
         return error(400, err.message);
