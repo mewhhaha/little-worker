@@ -1,6 +1,6 @@
 import { describe, bench } from "vitest";
 import { Router as LittleRouter } from "@mewhhaha/little-router";
-import { Router as IttyRouter } from "itty-router";
+import { Router as IttyRouter } from "itty-router/Router.js";
 
 const ITERATIONS = 10000;
 const BASE = `/test/`;
