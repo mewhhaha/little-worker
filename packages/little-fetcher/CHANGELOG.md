@@ -1,5 +1,12 @@
 # @mewhhaha/little-fetcher
 
+## 0.0.11
+
+### Patch Changes
+
+- 1c5516b: Fix arktype inference of outgoing data
+- 97ad605: Fix all not causing type errors for overlapping routes
+
 ## 0.0.10
 
 ### Patch Changes

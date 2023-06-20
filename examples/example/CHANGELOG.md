@@ -1,5 +1,18 @@
 # example
 
+## 0.0.11
+
+### Patch Changes
+
+- 1c5516b: Fix arktype inference of outgoing data
+- 97ad605: Fix all not causing type errors for overlapping routes
+- Updated dependencies [1c5516b]
+- Updated dependencies [97ad605]
+  - @mewhhaha/little-router-plugin-data@0.0.11
+  - @mewhhaha/json-string@0.0.11
+  - @mewhhaha/little-router@0.0.11
+  - @mewhhaha/little-router-plugin-query@0.0.11
+
 ## 0.0.10
 
 ### Patch Changes
