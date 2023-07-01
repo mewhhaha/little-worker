@@ -1,5 +1,11 @@
 # @mewhhaha/typed-response
 
+## 0.0.12
+
+### Patch Changes
+
+- 8cd0dad: Fix query in out arktype parameters
+
 ## 0.0.11
 
 ### Patch Changes

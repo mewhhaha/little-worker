@@ -1,5 +1,13 @@
 # @mewhhaha/little-router-plugin-query
 
+## 0.0.12
+
+### Patch Changes
+
+- 8cd0dad: Fix query in out arktype parameters
+- Updated dependencies [8cd0dad]
+  - @mewhhaha/little-router@0.0.12
+
 ## 0.0.11
 
 ### Patch Changes
