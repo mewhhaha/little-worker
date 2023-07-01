@@ -40,7 +40,7 @@ type SearchOptions = {
  * ```
  */
 export const query_ = <T extends Type<any>>(
-  parser: OutOf<T> extends Queries ? T : never,
+  parser: T extends { infer: Queries } ? T : never,
   { arrayDelimiter = "," }: SearchOptions = {}
 ) =>
   (async ({

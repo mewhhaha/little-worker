@@ -18,7 +18,7 @@ describe("check", () => {
   it("should work as a plugin for the router", async () => {
     const router = Router().get(
       "/a",
-      [query_(type({ hello: "'world'" }))],
+      [query_(type({ hello: '"world"' }))],
       ({ query: { hello } }) => {
         assertType<"world" | undefined>(hello);
         return json(200, hello);
