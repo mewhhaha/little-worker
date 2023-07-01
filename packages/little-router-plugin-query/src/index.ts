@@ -6,6 +6,23 @@ import {
 import { error } from "@mewhhaha/typed-response";
 import { type Type } from "arktype";
 
+type InOf<T> = T extends {
+  inferIn: infer I extends
+    | Record<any, any>
+    | string
+    | Array<any>
+    | number
+    | Date;
+}
+  ? I
+  : never;
+
+type OutOf<T> = T extends {
+  infer: infer I;
+}
+  ? I
+  : never;
+
 type SearchOptions = {
   /**
    * Default for array delimiter is "," */
@@ -26,18 +43,14 @@ type SearchOptions = {
  * @returns
  */
 
-type InferIn<T> = Type<T> extends { inferIn: infer I extends Queries }
-  ? I
-  : never;
-
-export const query_ = <IN extends InferIn<T>, T>(
-  parser: Type<InferIn<T> extends never ? never : T>,
+export const query_ = <T extends Type<any>>(
+  parser: T,
   { arrayDelimiter = "," }: SearchOptions = {}
 ) =>
   (async ({
     url,
   }: PluginContext<{
-    search?: IN;
+    search?: InOf<T>;
   }>) => {
     const result: Record<string, string | string[] | undefined> = {};
     for (const key of new Set(url.searchParams.keys())) {
@@ -57,7 +70,7 @@ export const query_ = <IN extends InferIn<T>, T>(
         return error(422, r.problems.summary);
       }
 
-      return { query: r.data as T };
+      return { query: r.data as OutOf<T> };
     } catch (err) {
       if (err instanceof Error) {
         return error(400, err.message);
