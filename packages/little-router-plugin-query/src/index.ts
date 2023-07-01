@@ -38,13 +38,9 @@ type SearchOptions = {
  * // This assumes default delimiter of ","
  * "?foo[]=bar,baz" = { foo: ["bar", "baz"] }
  * ```
- * @param parser
- * @param param1
- * @returns
  */
-
 export const query_ = <T extends Type<any>>(
-  parser: T,
+  parser: OutOf<T> extends Queries ? T : never,
   { arrayDelimiter = "," }: SearchOptions = {}
 ) =>
   (async ({
