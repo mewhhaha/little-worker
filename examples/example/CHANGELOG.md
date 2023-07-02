@@ -1,5 +1,16 @@
 # example
 
+## 0.0.14
+
+### Patch Changes
+
+- 9baf7eb: Fix nonsensical restriction of out value
+- Updated dependencies [9baf7eb]
+  - @mewhhaha/little-router-plugin-query@0.0.14
+  - @mewhhaha/json-string@0.0.14
+  - @mewhhaha/little-router@0.0.14
+  - @mewhhaha/little-router-plugin-data@0.0.14
+
 ## 0.0.13
 
 ### Patch Changes
