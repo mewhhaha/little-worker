@@ -1,5 +1,11 @@
 # benchmark
 
+## 0.0.13
+
+### Patch Changes
+
+- 206e794: Fix issue with input paramters still not accepting functions
+
 ## 0.0.12
 
 ### Patch Changes

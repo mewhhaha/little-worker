@@ -1,5 +1,16 @@
 # example
 
+## 0.0.13
+
+### Patch Changes
+
+- 206e794: Fix issue with input paramters still not accepting functions
+- Updated dependencies [206e794]
+  - @mewhhaha/little-router-plugin-query@0.0.13
+  - @mewhhaha/json-string@0.0.13
+  - @mewhhaha/little-router@0.0.13
+  - @mewhhaha/little-router-plugin-data@0.0.13
+
 ## 0.0.12
 
 ### Patch Changes
