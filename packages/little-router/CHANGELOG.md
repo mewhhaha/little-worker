@@ -1,5 +1,11 @@
 # @mewhhaha/little-router
 
+## 0.0.14
+
+### Patch Changes
+
+- 9baf7eb: Fix nonsensical restriction of out value
+
 ## 0.0.13
 
 ### Patch Changes
