@@ -13,7 +13,7 @@ export type InOf<T> = T extends {
   : never;
 
 export type OutOf<T> = T extends {
-  infer: infer I extends Queries;
+  infer: infer I;
 }
   ? I
   : never;
