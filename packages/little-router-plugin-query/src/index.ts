@@ -6,19 +6,14 @@ import {
 import { error } from "@mewhhaha/typed-response";
 import { type Type } from "arktype";
 
-type InOf<T> = T extends {
-  inferIn: infer I extends
-    | Record<any, any>
-    | string
-    | Array<any>
-    | number
-    | Date;
+export type InOf<T> = T extends {
+  inferIn: infer I extends Queries;
 }
   ? I
   : never;
 
-type OutOf<T> = T extends {
-  infer: infer I;
+export type OutOf<T> = T extends {
+  infer: infer I extends Queries;
 }
   ? I
   : never;
@@ -30,8 +25,19 @@ type SearchOptions = {
 };
 
 /**
- * This parses either as a string or an array of strings if it ends with []
+ * The input value for query has to be `Record<string, string | string[] | undefined>`.
+ *
  * @example
+ * ```tsx
+ * query_(type({ foo: "'bar'" }))
+ * query_(type({ foo: "'bar'[]" }))
+ *
+ * // This is invalid
+ * query_(type({ foo: "number" }))
+ * ```
+ *
+ * Search params are parsed as arrays if they end with [], with a default delimiter that is ",".
+ *
  * ```
  * "?foo=bar" = { foo: "bar"}
  *
@@ -40,7 +46,7 @@ type SearchOptions = {
  * ```
  */
 export const query_ = <T extends Type<any>>(
-  parser: T extends { infer: Queries } ? T : never,
+  parser: T,
   { arrayDelimiter = "," }: SearchOptions = {}
 ) =>
   (async ({

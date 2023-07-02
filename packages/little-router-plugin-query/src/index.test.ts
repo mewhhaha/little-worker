@@ -18,7 +18,7 @@ describe("check", () => {
   it("should work as a plugin for the router", async () => {
     const router = Router().get(
       "/a",
-      [query_(type({ hello: '"world"' }))],
+      [query_(type({ hello: "'world'" }))],
       ({ query: { hello } }) => {
         assertType<"world" | undefined>(hello);
         return json(200, hello);
@@ -32,5 +32,11 @@ describe("check", () => {
     const t = await response.json();
     expect(response.status).toBe(200);
     expect(t).toBe("world");
+  });
+
+  it.skip("should work for morphs", async () => {
+    query_(type({ hello: "parsedInteger" }));
+    query_(type({ hello: "parsedDate" }));
+    query_(type({ hello: ["string", "|>", (str: string) => new Date(str)] }));
   });
 });
