@@ -216,7 +216,7 @@ describe("Router with plugins", () => {
       "/extra-plugin",
       [extra_],
       async ({ value }) => {
-        return ok(`Plugin: ${value}`);
+        return ok(200, `Plugin: ${value}`);
       }
     );
 
