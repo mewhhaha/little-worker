@@ -1,5 +1,13 @@
 # @mewhhaha/little-router-plugin-query
 
+## 0.0.15
+
+### Patch Changes
+
+- 1bd7af1: Go back to just ok code
+- Updated dependencies [1bd7af1]
+  - @mewhhaha/little-router@0.0.15
+
 ## 0.0.14
 
 ### Patch Changes
