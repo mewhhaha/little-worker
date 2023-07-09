@@ -1,5 +1,14 @@
 # @mewhhaha/little-router-plugin-data
 
+## 0.0.15
+
+### Patch Changes
+
+- 1bd7af1: Go back to just ok code
+- Updated dependencies [1bd7af1]
+  - @mewhhaha/json-string@0.0.15
+  - @mewhhaha/little-router@0.0.15
+
 ## 0.0.14
 
 ### Patch Changes
