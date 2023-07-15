@@ -1,5 +1,16 @@
 # example
 
+## 0.0.16
+
+### Patch Changes
+
+- 331784b: Serialize in json-string
+- Updated dependencies [331784b]
+  - @mewhhaha/json-string@0.0.16
+  - @mewhhaha/little-router@0.0.16
+  - @mewhhaha/little-router-plugin-data@0.0.16
+  - @mewhhaha/little-router-plugin-query@0.0.16
+
 ## 0.0.15
 
 ### Patch Changes
