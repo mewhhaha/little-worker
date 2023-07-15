@@ -19,8 +19,8 @@ describe("example", () => {
     f = fetcher<Routes>(worker as unknown as { fetch: typeof fetch });
   });
 
-  afterAll(() => {
-    worker.stop();
+  afterAll(async () => {
+    await worker.stop();
   });
 
   test("example-get", async () => {

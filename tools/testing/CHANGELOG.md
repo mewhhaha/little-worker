@@ -1,5 +1,36 @@
 # @mewhhaha/testing
 
+## 0.0.15
+
+### Patch Changes
+
+- 1bd7af1: Go back to just ok code
+
+## 0.0.14
+
+### Patch Changes
+
+- 9baf7eb: Fix nonsensical restriction of out value
+
+## 0.0.13
+
+### Patch Changes
+
+- 206e794: Fix issue with input paramters still not accepting functions
+
+## 0.0.12
+
+### Patch Changes
+
+- 8cd0dad: Fix query in out arktype parameters
+
+## 0.0.11
+
+### Patch Changes
+
+- 1c5516b: Fix arktype inference of outgoing data
+- 97ad605: Fix all not causing type errors for overlapping routes
+
 ## 0.0.10
 
 ### Patch Changes

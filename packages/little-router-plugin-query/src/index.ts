@@ -6,6 +6,18 @@ import {
 import { error } from "@mewhhaha/typed-response";
 import { type Type } from "arktype";
 
+export type InOf<T> = T extends {
+  inferIn: infer I extends Queries;
+}
+  ? I
+  : never;
+
+export type OutOf<T> = T extends {
+  infer: infer I;
+}
+  ? I
+  : never;
+
 type SearchOptions = {
   /**
    * Default for array delimiter is "," */
@@ -13,31 +25,34 @@ type SearchOptions = {
 };
 
 /**
- * This parses either as a string or an array of strings if it ends with []
+ * The input value for query has to be `Record<string, string | string[] | undefined>`.
+ *
  * @example
+ * ```tsx
+ * query_(type({ foo: "'bar'" }))
+ * query_(type({ foo: "'bar'[]" }))
+ *
+ * // This is invalid
+ * query_(type({ foo: "number" }))
+ * ```
+ *
+ * Search params are parsed as arrays if they end with [], with a default delimiter that is ",".
+ *
  * ```
  * "?foo=bar" = { foo: "bar"}
  *
  * // This assumes default delimiter of ","
  * "?foo[]=bar,baz" = { foo: ["bar", "baz"] }
  * ```
- * @param parser
- * @param param1
- * @returns
  */
-
-type InferIn<T> = Type<T> extends { inferIn: infer I extends Queries }
-  ? I
-  : never;
-
-export const query_ = <IN extends InferIn<T>, T>(
-  parser: Type<InferIn<T> extends never ? never : T>,
+export const query_ = <T extends Type<any>>(
+  parser: T,
   { arrayDelimiter = "," }: SearchOptions = {}
 ) =>
   (async ({
     url,
   }: PluginContext<{
-    search?: IN;
+    search?: InOf<T>;
   }>) => {
     const result: Record<string, string | string[] | undefined> = {};
     for (const key of new Set(url.searchParams.keys())) {
@@ -57,7 +72,7 @@ export const query_ = <IN extends InferIn<T>, T>(
         return error(422, r.problems.summary);
       }
 
-      return { query: r.data as T };
+      return { query: r.data as OutOf<T> };
     } catch (err) {
       if (err instanceof Error) {
         return error(400, err.message);

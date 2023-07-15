@@ -1,5 +1,52 @@
 # @mewhhaha/little-router-plugin-data
 
+## 0.0.15
+
+### Patch Changes
+
+- 1bd7af1: Go back to just ok code
+- Updated dependencies [1bd7af1]
+  - @mewhhaha/json-string@0.0.15
+  - @mewhhaha/little-router@0.0.15
+
+## 0.0.14
+
+### Patch Changes
+
+- 9baf7eb: Fix nonsensical restriction of out value
+- Updated dependencies [9baf7eb]
+  - @mewhhaha/json-string@0.0.14
+  - @mewhhaha/little-router@0.0.14
+
+## 0.0.13
+
+### Patch Changes
+
+- 206e794: Fix issue with input paramters still not accepting functions
+- Updated dependencies [206e794]
+  - @mewhhaha/json-string@0.0.13
+  - @mewhhaha/little-router@0.0.13
+
+## 0.0.12
+
+### Patch Changes
+
+- 8cd0dad: Fix query in out arktype parameters
+- Updated dependencies [8cd0dad]
+  - @mewhhaha/json-string@0.0.12
+  - @mewhhaha/little-router@0.0.12
+
+## 0.0.11
+
+### Patch Changes
+
+- 1c5516b: Fix arktype inference of outgoing data
+- 97ad605: Fix all not causing type errors for overlapping routes
+- Updated dependencies [1c5516b]
+- Updated dependencies [97ad605]
+  - @mewhhaha/json-string@0.0.11
+  - @mewhhaha/little-router@0.0.11
+
 ## 0.0.10
 
 ### Patch Changes

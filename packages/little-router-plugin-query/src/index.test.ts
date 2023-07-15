@@ -33,4 +33,10 @@ describe("check", () => {
     expect(response.status).toBe(200);
     expect(t).toBe("world");
   });
+
+  it.skip("should work for morphs", async () => {
+    query_(type({ hello: "parsedInteger" }));
+    query_(type({ hello: "parsedDate" }));
+    query_(type({ hello: ["string", "|>", (str: string) => new Date(str)] }));
+  });
 });

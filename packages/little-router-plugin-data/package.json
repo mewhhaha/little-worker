@@ -1,6 +1,6 @@
 {
   "name": "@mewhhaha/little-router-plugin-data",
-  "version": "0.0.10",
+  "version": "0.0.15",
   "description": "",
   "type": "module",
   "main": "dist/index.js",
@@ -32,7 +32,7 @@
     "@mewhhaha/testing": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^",
     "arktype": "1.0.14-alpha",
-    "typescript": "^5.1.3",
+    "typescript": "^5.1.6",
     "vitest": "^0.32.2"
   },
   "sideEffects": false,

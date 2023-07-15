@@ -158,24 +158,13 @@ export const error = <
 ) => json(code, value ?? null, init) as JSONResponse<CODE, JSON>;
 
 /**
- * Helper for returning a error success with JSON body.
+ * Helper for returning a 2XX response with JSON body.
  * @example
- * return success(201, { message: "I am created" })
+ * return ok(200, { value: "ok"})
  */
-export const success = <const CODE extends HttpStatus2XX, const JSON = null>(
+export const ok = <const CODE extends HttpStatus2XX, const JSON = null>(
   code: CODE,
   value?: JSON,
   init?: Omit<ResponseInit, "status">
 ): JSONResponse<CODE, JSON> =>
   json(code, value ?? null, init) as JSONResponse<CODE, JSON>;
-
-/**
- * Helper for returning a 200 response with JSON body.
- * @example
- * return ok({ value: "ok"})
- */
-export const ok = <const JSON = null>(
-  value?: JSON,
-  init?: Omit<ResponseInit, "status">
-): JSONResponse<200, JSON> =>
-  json(200, value ?? null, init) as JSONResponse<200, JSON>;
