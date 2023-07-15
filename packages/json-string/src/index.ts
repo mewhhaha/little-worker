@@ -10,12 +10,10 @@ declare global {
 
 export type JSONString<T> = string & {
   readonly __tag: unique symbol;
-  readonly __value: T;
+  readonly __value: SerializedObject<T>;
 };
 
-export type JSONOf<T> = T extends JSONString<infer JSON>
-  ? SerializedObject<JSON>
-  : never;
+export type JSONOf<T> = T extends JSONString<infer JSON> ? JSON : never;
 
 type Primitive = string | number | boolean | null | undefined;
 
