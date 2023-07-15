@@ -1,5 +1,13 @@
 # @mewhhaha/little-router-plugin-query
 
+## 0.0.17
+
+### Patch Changes
+
+- 6360a40: Fix JSON string serialization
+- Updated dependencies [6360a40]
+  - @mewhhaha/little-router@0.0.17
+
 ## 0.0.16
 
 ### Patch Changes

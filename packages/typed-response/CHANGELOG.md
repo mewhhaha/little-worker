@@ -1,5 +1,11 @@
 # @mewhhaha/typed-response
 
+## 0.0.17
+
+### Patch Changes
+
+- 6360a40: Fix JSON string serialization
+
 ## 0.0.16
 
 ### Patch Changes
