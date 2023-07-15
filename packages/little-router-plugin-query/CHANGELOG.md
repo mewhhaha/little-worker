@@ -1,5 +1,13 @@
 # @mewhhaha/little-router-plugin-query
 
+## 0.0.16
+
+### Patch Changes
+
+- 331784b: Serialize in json-string
+- Updated dependencies [331784b]
+  - @mewhhaha/little-router@0.0.16
+
 ## 0.0.15
 
 ### Patch Changes

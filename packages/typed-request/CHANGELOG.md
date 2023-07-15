@@ -1,5 +1,11 @@
 # @mewhhaha/typed-request
 
+## 0.0.16
+
+### Patch Changes
+
+- 331784b: Serialize in json-string
+
 ## 0.0.15
 
 ### Patch Changes
