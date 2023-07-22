@@ -67,7 +67,7 @@ type FetcherFunctionAny = (
 ) => Promise<Response>;
 
 type FetcherOf<ROUTES extends FetchDefinition> = {
-  [METHOD in ROUTES["method"]]: OverloadFunction<
+  [METHOD in Extract<Lowercase<ROUTES["method"]>, Method>]: OverloadFunction<
     Extract<ROUTES, { method: METHOD }>
   >;
 } & {
