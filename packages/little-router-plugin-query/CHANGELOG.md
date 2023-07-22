@@ -1,5 +1,13 @@
 # @mewhhaha/little-router-plugin-query
 
+## 0.0.18
+
+### Patch Changes
+
+- 768fb45: Experimental exposed type
+- Updated dependencies [768fb45]
+  - @mewhhaha/little-router@0.0.18
+
 ## 0.0.17
 
 ### Patch Changes
