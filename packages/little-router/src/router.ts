@@ -208,6 +208,8 @@ export type RouteBuilder<
     request: Request,
     ...rest: REST_ARGS
   ) => Promise<Response> | Response;
+  /** Not an actual value, just an easy way to expose the types to do `typeof router._types` */
+  _types: ROUTES;
 };
 
 export type PatternParams<PATTERN> =
