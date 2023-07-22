@@ -1,5 +1,11 @@
 # @mewhhaha/little-fetcher
 
+## 0.0.18
+
+### Patch Changes
+
+- 768fb45: Experimental exposed type
+
 ## 0.0.17
 
 ### Patch Changes
