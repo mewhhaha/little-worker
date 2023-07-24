@@ -41,25 +41,48 @@ export const fetcher = <ROUTES extends FetchDefinition>(
   return new Proxy({} as any, handler);
 };
 
-type FetcherFunction<
-  PATTERN extends string,
-  SEARCH extends Queries = Queries,
-  INIT extends RequestInit | undefined = RequestInit,
-  RESPONSE extends Response = Response
-> = <PATH extends string>(
-  url:
-    | `${PATTERN}${`?${QueryParams<SEARCH>}` | ""}`
-    | (ValidPath<PATH, PATTERN, SEARCH> extends true ? PATH : never),
-  ...init: undefined extends INIT
-    ? [
-        init?: UndefinedToOptional<NonNullable<INIT>> &
-          Omit<RequestInit, "method" | keyof INIT>
-      ]
-    : [
-        init: UndefinedToOptional<NonNullable<INIT>> &
-          Omit<RequestInit, "method" | keyof INIT>
-      ]
-) => Promise<RESPONSE>;
+type FetcherFunction<T extends FetchDefinition> = <PATH extends string>(
+  ...args: NarrowMatch<
+    T extends {
+      pattern: infer PATTERN extends string;
+      search: infer SEARCH extends Queries;
+      init: infer INIT extends RequestInit | undefined;
+    }
+      ? {
+          valid: ValidPath<PATH, PATTERN, SEARCH>;
+
+          args: [
+            url: ValidPath<PATH, PATTERN, SEARCH> extends true
+              ? PATH
+              : `${PATTERN}${`?${QueryParams<SEARCH>}` | ""}`,
+            ...init: undefined extends INIT
+              ? [
+                  init?: UndefinedToOptional<NonNullable<INIT>> &
+                    Omit<RequestInit, "method" | keyof INIT>
+                ]
+              : [
+                  init: UndefinedToOptional<NonNullable<INIT>> &
+                    Omit<RequestInit, "method" | keyof INIT>
+                ]
+          ];
+        }
+      : []
+  >
+) => T extends {
+  pattern: infer PATTERN extends string;
+  search: infer SEARCH extends Queries;
+  response: infer RESPONSE extends Response;
+}
+  ? ValidPath<PATH, PATTERN, SEARCH> extends true
+    ? Promise<RESPONSE>
+    : never
+  : never;
+
+type NarrowMatch<
+  T extends { valid: true | false; args: [url: string, ...args: any] }
+> = Extract<T, { valid: true }> extends never
+  ? T["args"]
+  : Extract<T, { valid: true }>["args"];
 
 type FetcherFunctionAny = (
   url: `/${string}`,
@@ -67,35 +90,12 @@ type FetcherFunctionAny = (
 ) => Promise<Response>;
 
 type FetcherOf<ROUTES extends FetchDefinition> = {
-  [METHOD in Extract<Lowercase<ROUTES["method"]>, Method>]: OverloadFunction<
+  [METHOD in Extract<Lowercase<ROUTES["method"]>, Method>]: FetcherFunction<
     Extract<ROUTES, { method: METHOD }>
   >;
 } & {
   fetch: FetcherFunctionAny;
 };
-
-// type StringifyQueriesTest = StringifyQueries<
-//   [["sort", "asc" | "desc"], ["size", "10"]]
-// >;
-
-type OverloadFunction<T> = UnionToIntersection<
-  (T extends any ? InferFunction<T> : never) & NonNullable<unknown>
->;
-
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
-  k: infer I
-) => void
-  ? I
-  : never;
-
-type InferFunction<T> = T extends {
-  pattern: infer PATTERN extends string;
-  response: infer RESPONSE extends Response;
-  search: infer SEARCH extends Queries;
-  init: infer INIT extends RequestInit | undefined;
-}
-  ? FetcherFunction<PATTERN, SEARCH, INIT, RESPONSE>
-  : never;
 
 type UndefinedToOptional<T extends Record<string, any>> = keyof T extends any
   ? undefined extends T[keyof T]
