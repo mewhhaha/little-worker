@@ -1,5 +1,12 @@
 # @mewhhaha/testing
 
+## 0.0.20
+
+### Patch Changes
+
+- f713ee7: Fix replacer function in JSON.stringify
+- 139dadf: Add helper JSONStringify function
+
 ## 0.0.19
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @mewhhaha/little-router-plugin-data
 
+## 0.0.20
+
+### Patch Changes
+
+- f713ee7: Fix replacer function in JSON.stringify
+- 139dadf: Add helper JSONStringify function
+- Updated dependencies [f713ee7]
+- Updated dependencies [139dadf]
+  - @mewhhaha/json-string@0.0.20
+  - @mewhhaha/little-router@0.0.20
+
 ## 0.0.19
 
 ### Patch Changes
