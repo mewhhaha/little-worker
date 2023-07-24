@@ -1,5 +1,16 @@
 # @mewhhaha/little-router-plugin-data
 
+## 0.0.19
+
+### Patch Changes
+
+- 8946dfd: Improve fetcher autocomplete greatly
+- d9d6038: Remove invalid methods from fetcher
+- Updated dependencies [8946dfd]
+- Updated dependencies [d9d6038]
+  - @mewhhaha/json-string@0.0.19
+  - @mewhhaha/little-router@0.0.19
+
 ## 0.0.18
 
 ### Patch Changes

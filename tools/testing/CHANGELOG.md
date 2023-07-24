@@ -1,5 +1,12 @@
 # @mewhhaha/testing
 
+## 0.0.19
+
+### Patch Changes
+
+- 8946dfd: Improve fetcher autocomplete greatly
+- d9d6038: Remove invalid methods from fetcher
+
 ## 0.0.18
 
 ### Patch Changes
