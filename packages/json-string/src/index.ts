@@ -2,7 +2,11 @@ declare global {
   interface JSON {
     stringify<T>(
       value: T,
-      replacer?: null,
+      replacer?:
+        | ((this: any, key: string, value: any) => any)
+        | (string | number)[]
+        | undefined
+        | null,
       space?: string | number
     ): JSONString<T>;
   }
