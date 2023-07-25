@@ -12,22 +12,9 @@ declare global {
   }
 }
 
-/** Wrapper around JSON.stringify that lets you autocomplete the parameters properly based on the return type */
-export const JSONStringify = <T extends JSONString<any>>(
-  value: T extends JSONString<infer U> ? U : never,
-  replacer?:
-    | ((this: any, key: string, value: any) => any)
-    | (string | number)[]
-    | undefined
-    | null,
-  space?: string | number
-): T => {
-  return JSON.stringify(value, replacer, space) as T;
-};
-
 export type JSONString<T> = string & {
   readonly __tag: unique symbol;
-  readonly __value: SerializedObject<T>;
+  readonly __value: SerializedJSON<T>;
 };
 
 export type JSONOf<T> = T extends JSONString<infer JSON> ? JSON : never;
