@@ -162,9 +162,17 @@ export const error = <
  * @example
  * return ok(200, { value: "ok"})
  */
-export const ok = <const CODE extends HttpStatus2XX, const JSON = null>(
+export const ok = <
+  const CODE extends Exclude<HttpStatus2XX, 204 | 205>,
+  const JSON = null
+>(
   code: CODE,
   value?: JSON,
   init?: Omit<ResponseInit, "status">
 ): JSONResponse<CODE, JSON> =>
   json(code, value ?? null, init) as JSONResponse<CODE, JSON>;
+
+export const empty = <const CODE extends 101 | 204 | 205 | 304>(
+  code: CODE,
+  init?: Omit<ResponseInit, "status">
+): TextResponse<CODE, ""> => text(code, "", init);
