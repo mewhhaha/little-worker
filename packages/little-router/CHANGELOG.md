@@ -1,5 +1,12 @@
 # @mewhhaha/little-router
 
+## 0.0.21
+
+### Patch Changes
+
+- f48247d: Fix JSONString value type
+- 70c3613: Add empty helper response
+
 ## 0.0.20
 
 ### Patch Changes
