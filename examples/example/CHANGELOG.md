@@ -1,5 +1,18 @@
 # example
 
+## 0.0.21
+
+### Patch Changes
+
+- f48247d: Fix JSONString value type
+- 70c3613: Add empty helper response
+- Updated dependencies [f48247d]
+- Updated dependencies [70c3613]
+  - @mewhhaha/json-string@0.0.21
+  - @mewhhaha/little-router@0.0.21
+  - @mewhhaha/little-router-plugin-data@0.0.21
+  - @mewhhaha/little-router-plugin-query@0.0.21
+
 ## 0.0.20
 
 ### Patch Changes
