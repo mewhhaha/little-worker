@@ -16,6 +16,7 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
     const url = new URL(request.url);
     const segments = url.pathname.split("/");
     try {
+      // [method, pattern, plugins, h]
       for (const [method, pattern, plugins, h] of routes) {
         if (request.method !== method && method !== "ALL") {
           continue;
