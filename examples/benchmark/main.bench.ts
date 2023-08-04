@@ -44,9 +44,9 @@ describe("cold start", () => {
       const honoRouter = new Hono();
       for (let i = 0; i < 10; i++) {
         // Setup time also matters for cold starts
-        honoRouter.get(`${BASE}${i}`, (c) => c.body(`Test route ${i}`));
-        honoRouter.post(`${BASE}${i}`, (c) => c.body(`Test route ${i}`));
-        honoRouter.put(`${BASE}${i}`, (c) => c.body(`Test route ${i}`));
+        honoRouter.get(`${BASE}${i}`, () => new Response(`Test route ${i}`));
+        honoRouter.post(`${BASE}${i}`, () => new Response(`Test route ${i}`));
+        honoRouter.put(`${BASE}${i}`, () => new Response(`Test route ${i}`));
       }
 
       await honoRouter.fetch(request[(Math.random() * 30) | 0]);
@@ -112,9 +112,9 @@ describe("hot start", async () => {
   const honoRouter = new Hono();
   for (let i = 0; i < 10; i++) {
     // Setup time also matters for cold starts
-    honoRouter.get(`${BASE}${i}`, (c) => c.body(`Test route ${i}`));
-    honoRouter.post(`${BASE}${i}`, (c) => c.body(`Test route ${i}`));
-    honoRouter.put(`${BASE}${i}`, (c) => c.body(`Test route ${i}`));
+    honoRouter.get(`${BASE}${i}`, () => new Response(`Test route ${i}`));
+    honoRouter.post(`${BASE}${i}`, () => new Response(`Test route ${i}`));
+    honoRouter.put(`${BASE}${i}`, () => new Response(`Test route ${i}`));
   }
 
   bench(
