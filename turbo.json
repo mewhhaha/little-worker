@@ -15,6 +15,7 @@
       "dependsOn": []
     },
     "bench": {
+      "cache": false,
       "dependsOn": ["build"]
     }
   }

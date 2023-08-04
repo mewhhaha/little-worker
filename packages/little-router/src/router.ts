@@ -27,7 +27,9 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
           continue;
         }
 
-        const ctx = await context(request, url, params, plugins, rest);
+        const pctx = { url, request, params };
+        const ctx =
+          plugins.length > 0 ? await context(pctx, plugins, rest) : pctx;
         if (ctx instanceof Response) return ctx;
 
         return await h(ctx, ...rest);
@@ -75,13 +77,14 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
 };
 
 const context = async <REST_ARGS extends unknown[]>(
-  request: Request,
-  url: URL,
-  params: Record<string, string>,
+  pctx: {
+    params: Record<string, string>;
+    url: URL;
+    request: Request;
+  },
   plugins: Plugin<REST_ARGS>[],
   rest: REST_ARGS
 ) => {
-  const pctx = { params, url, request };
   const results = await Promise.all(plugins.map((p) => p(pctx, ...rest)));
 
   const ctx: Record<string, any> = pctx;
