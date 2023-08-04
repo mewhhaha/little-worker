@@ -45,25 +45,33 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
     return new Response(null, { status: 500 });
   };
 
-  const proxy: ProxyHandler<RouteBuilder<REST_ARGS, never>> = {
-    get: <METHOD extends Method>(
-      _: unknown,
-      method: METHOD,
-      receiver: ReturnType<typeof Router>
+  const r: Record<string, any> = { handle };
+
+  const adder = <METHOD extends Method>(method: METHOD) => {
+    return (
+      stringPattern: string,
+      plugins: Plugin[],
+      h: RouteHandler<RouteHandlerContext<any>, REST_ARGS>
     ) => {
-      return (
-        stringPattern: string,
-        plugins: Plugin[],
-        h: RouteHandler<RouteHandlerContext<any>, REST_ARGS>
-      ) => {
-        const pattern = stringPattern.split("/");
-        routes.push([method.toUpperCase(), pattern, plugins, h]);
-        return receiver;
-      };
-    },
+      const pattern = stringPattern.split("/");
+      routes.push([method.toUpperCase(), pattern, plugins, h]);
+      return r;
+    };
   };
 
-  return { __proto__: new Proxy({} as any, proxy), handle } as any;
+  for (const method of [
+    "get",
+    "post",
+    "put",
+    "delete",
+    "options",
+    "patch",
+    "all",
+  ] satisfies Method[]) {
+    r[method] = adder(method);
+  }
+
+  return r as any;
 };
 
 const context = async <REST_ARGS extends unknown[]>(

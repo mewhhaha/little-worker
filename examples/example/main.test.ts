@@ -20,6 +20,7 @@ describe("example", () => {
   });
 
   afterAll(async () => {
+    await worker.waitUntilExit();
     await worker.stop();
   });
 
