@@ -109,11 +109,11 @@ type StartsWithSlash<T extends string> = T extends `/${string}` ? T : never;
 type RouteProxy<
   METHOD extends Method,
   ROUTES extends FetchDefinition,
-  REST_ARGS extends unknown[]
+  REST_ARGS extends unknown[],
 > = <
   const PATTERN extends string,
   const RESPONSE extends Response,
-  PLUGINS extends Plugin<REST_ARGS>[]
+  PLUGINS extends Plugin<REST_ARGS>[],
 >(
   pattern: Extract<ROUTES, { method: METHOD | "all" }> extends never
     ? StartsWithSlash<PATTERN>
@@ -171,7 +171,7 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
 type RouteHandler<
   CONTEXT extends Record<string, any>,
   REST_ARGS extends unknown[] = [],
-  RESPONSE extends Response = Response
+  RESPONSE extends Response = Response,
 > = (
   context: UnionToIntersection<CONTEXT>,
   ...rest: REST_ARGS
@@ -196,12 +196,12 @@ export type Route<REST_ARGS extends unknown[]> = [
   method: string,
   segments: string[],
   plugins: Plugin<REST_ARGS>[],
-  route: RouteHandler<Record<string, any>, REST_ARGS>
+  route: RouteHandler<Record<string, any>, REST_ARGS>,
 ];
 
 export type RouteBuilder<
   REST_ARGS extends unknown[],
-  ROUTES extends FetchDefinition
+  ROUTES extends FetchDefinition,
 > = {
   [METHOD in Method]: RouteProxy<METHOD, ROUTES, REST_ARGS>;
 } & {
@@ -209,8 +209,8 @@ export type RouteBuilder<
     request: Request,
     ...rest: REST_ARGS
   ) => Promise<Response> | Response;
-  /** Not an actual value, just an easy way to expose the types to do `typeof router._types` */
-  _types: ROUTES;
+  /** Not an actual value, just an easy way to expose the types to do `typeof router.infer` */
+  infer: ROUTES;
 };
 
 export type PatternParams<PATTERN> =
