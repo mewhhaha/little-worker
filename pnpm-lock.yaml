@@ -57,8 +57,8 @@ importers:
         specifier: workspace:^
         version: link:../../packages/little-router-plugin-query
       arktype:
-        specifier: 1.0.18-alpha
-        version: 1.0.18-alpha
+        specifier: 1.0.19-alpha
+        version: 1.0.19-alpha
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20230801.0
@@ -161,8 +161,8 @@ importers:
         specifier: workspace:^
         version: link:../typed-response
       arktype:
-        specifier: 1.0.18-alpha
-        version: 1.0.18-alpha
+        specifier: 1.0.19-alpha
+        version: 1.0.19-alpha
       typescript:
         specifier: ^5.1.6
         version: 5.1.6
@@ -185,8 +185,8 @@ importers:
         specifier: workspace:^
         version: link:../typed-response
       arktype:
-        specifier: 1.0.18-alpha
-        version: 1.0.18-alpha
+        specifier: 1.0.19-alpha
+        version: 1.0.19-alpha
       typescript:
         specifier: ^5.1.6
         version: 5.1.6
@@ -1325,8 +1325,8 @@ packages:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
     dev: true
 
-  /arktype@1.0.18-alpha:
-    resolution: {integrity: sha512-7yUOaaeEws1GkDFGvB7IPkurVL5FFcZBbWLNVrqNXWccKbmMz9gozqXfR3pnconHeSbXLEcYUmtGAXTnhRgJrw==}
+  /arktype@1.0.19-alpha:
+    resolution: {integrity: sha512-tcmWSZupIjjG/hBYAlL9JzheY3WP3upCPlD7UCbY65AbzZegLZXrbCM4+TI03t2rKRwT2TuSioH27Bdqst757Q==}
     requiresBuild: true
 
   /array-buffer-byte-length@1.0.0:
