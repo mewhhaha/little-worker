@@ -1,5 +1,13 @@
 # @mewhhaha/little-router
 
+## 0.0.22
+
+### Patch Changes
+
+- 09ca483: change \_types to infer
+- 9e55fb1: Improve perfomance for non-plugin routes
+- f1b7765: Improve performance by avoid using proxy
+
 ## 0.0.21
 
 ### Patch Changes
