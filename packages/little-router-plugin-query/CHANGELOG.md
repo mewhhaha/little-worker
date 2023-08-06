@@ -1,5 +1,13 @@
 # @mewhhaha/little-router-plugin-query
 
+## 0.0.23
+
+### Patch Changes
+
+- 3517a71: Easier way of creating fetcher with fetch
+- Updated dependencies [3517a71]
+  - @mewhhaha/little-router@0.0.23
+
 ## 0.0.22
 
 ### Patch Changes
