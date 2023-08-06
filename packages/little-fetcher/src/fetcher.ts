@@ -9,14 +9,21 @@ type FetcherOptions = {
 type Method = Lowercase<RequestMethod>;
 
 export const fetcher = <ROUTES extends FetchDefinition>(
-  f: {
-    fetch: (
-      url: string,
-      init?: Parameters<typeof fetch>[1]
-    ) => ReturnType<typeof fetch>;
-  },
+  stub:
+    | {
+        fetch: (
+          url: string,
+          init?: Parameters<typeof fetch>[1]
+        ) => ReturnType<typeof fetch>;
+      }
+    | "fetch",
   { base = "http://from.fetcher" }: FetcherOptions = {}
 ): FetcherOf<ROUTES> => {
+  const f =
+    stub === "fetch"
+      ? { fetch: (...args: Parameters<typeof fetch>) => fetch(...args) }
+      : stub;
+
   const fetchGeneric = (path: `/${string}`, init: RequestInit) => {
     return f.fetch(`${base}${path}`, init);
   };
@@ -58,12 +65,12 @@ type FetcherFunction<T extends FetchDefinition> = <PATH extends string>(
             ...init: undefined extends INIT
               ? [
                   init?: UndefinedToOptional<NonNullable<INIT>> &
-                    Omit<RequestInit, "method" | keyof INIT>
+                    Omit<RequestInit, "method" | keyof INIT>,
                 ]
               : [
                   init: UndefinedToOptional<NonNullable<INIT>> &
-                    Omit<RequestInit, "method" | keyof INIT>
-                ]
+                    Omit<RequestInit, "method" | keyof INIT>,
+                ],
           ];
         }
       : []
@@ -79,7 +86,7 @@ type FetcherFunction<T extends FetchDefinition> = <PATH extends string>(
   : never;
 
 type NarrowMatch<
-  T extends { valid: true | false; args: [url: string, ...args: any] }
+  T extends { valid: true | false; args: [url: string, ...args: any] },
 > = Extract<T, { valid: true }> extends never
   ? T["args"]
   : Extract<T, { valid: true }>["args"];
