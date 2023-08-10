@@ -12,28 +12,39 @@ const BENCH_CONFIG = {
   warmupTime: 1000,
 };
 
-describe("cold start", () => {
-  const request = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].flatMap((r) =>
-    ["POST", "GET", "PUT"].map(
-      (method) =>
-        new Request(`https://example.com${BASE}${r}`, {
-          method,
-        })
-    )
-  );
+const request = [0, 1, 2, 3].flatMap((r) =>
+  ["POST", "GET", "PUT"].map(
+    (method) =>
+      new Request(`https://example.com${BASE}${r}/${r}`, {
+        method,
+      })
+  )
+);
 
+const randomRequest = () => request[(Math.random() * request.length) | 0];
+
+describe("cold start static routes", () => {
   bench(
     "itty",
     async () => {
       const ittyRouter = IttyRouter();
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < request.length; i++) {
         // Setup time also matters for cold starts
-        ittyRouter.get(`${BASE}${i}`, () => new Response(`Test route ${i}`));
-        ittyRouter.post(`${BASE}${i}`, () => new Response(`Test route ${i}`));
-        ittyRouter.put(`${BASE}${i}`, () => new Response(`Test route ${i}`));
+        ittyRouter.get(
+          `${BASE}${i}/${i}`,
+          () => new Response(`Test route ${i}`)
+        );
+        ittyRouter.post(
+          `${BASE}${i}/${i}`,
+          () => new Response(`Test route ${i}`)
+        );
+        ittyRouter.put(
+          `${BASE}${i}/${i}`,
+          () => new Response(`Test route ${i}`)
+        );
       }
 
-      await ittyRouter.handle(request[(Math.random() * 30) | 0]);
+      await ittyRouter.handle(randomRequest());
     },
     BENCH_CONFIG
   );
@@ -42,14 +53,23 @@ describe("cold start", () => {
     "hono",
     async () => {
       const honoRouter = new Hono();
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < request.length; i++) {
         // Setup time also matters for cold starts
-        honoRouter.get(`${BASE}${i}`, () => new Response(`Test route ${i}`));
-        honoRouter.post(`${BASE}${i}`, () => new Response(`Test route ${i}`));
-        honoRouter.put(`${BASE}${i}`, () => new Response(`Test route ${i}`));
+        honoRouter.get(
+          `${BASE}${i}/${i}`,
+          () => new Response(`Test route ${i}`)
+        );
+        honoRouter.post(
+          `${BASE}${i}/${i}`,
+          () => new Response(`Test route ${i}`)
+        );
+        honoRouter.put(
+          `${BASE}${i}/${i}`,
+          () => new Response(`Test route ${i}`)
+        );
       }
 
-      await honoRouter.fetch(request[(Math.random() * 30) | 0]);
+      await honoRouter.fetch(randomRequest());
     },
     BENCH_CONFIG
   );
@@ -58,69 +78,53 @@ describe("cold start", () => {
     "little",
     async () => {
       const littleRouter = LittleRouter();
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < request.length; i++) {
         // Setup time also matters for cold starts
         littleRouter.get(
-          `${BASE}${i}`,
+          `${BASE}${i}/${i}`,
           [],
           () => new Response(`Test route ${i}`)
         );
         littleRouter.post(
-          `${BASE}${i}`,
+          `${BASE}${i}/${i}`,
           [],
           () => new Response(`Test route ${i}`)
         );
         littleRouter.put(
-          `${BASE}${i}`,
+          `${BASE}${i}/${i}`,
           [],
           () => new Response(`Test route ${i}`)
         );
-
-        await littleRouter.handle(request[(Math.random() * 30) | 0]);
       }
+
+      await littleRouter.handle(randomRequest());
     },
     BENCH_CONFIG
   );
 });
 
-describe("hot start", async () => {
-  const request = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].flatMap((r) =>
-    ["POST", "GET", "PUT"].map(
-      (method) =>
-        new Request(`https://example.com${BASE}${r}`, {
-          method,
-        })
-    )
-  );
-
-  const ittyRouter = IttyRouter();
-  for (let i = 0; i < 10; i++) {
-    // Setup time also matters for cold starts
-    ittyRouter.get(`${BASE}${i}`, () => new Response(`Test route ${i}`));
-    ittyRouter.post(`${BASE}${i}`, () => new Response(`Test route ${i}`));
-    ittyRouter.put(`${BASE}${i}`, () => new Response(`Test route ${i}`));
-  }
-
-  const littleRouter = LittleRouter();
-  for (let i = 0; i < 10; i++) {
-    // Setup time also matters for cold starts
-    littleRouter.get(`${BASE}${i}`, [], () => new Response(`Test route ${i}`));
-    littleRouter.post(`${BASE}${i}`, [], () => new Response(`Test route ${i}`));
-    littleRouter.put(`${BASE}${i}`, [], () => new Response(`Test route ${i}`));
-  }
-
-  const honoRouter = new Hono();
-  for (let i = 0; i < 10; i++) {
-    // Setup time also matters for cold starts
-    honoRouter.get(`${BASE}${i}`, () => new Response(`Test route ${i}`));
-    honoRouter.post(`${BASE}${i}`, () => new Response(`Test route ${i}`));
-    honoRouter.put(`${BASE}${i}`, () => new Response(`Test route ${i}`));
-  }
-
+describe("cold start dynamic routes", () => {
   bench(
     "itty",
     async () => {
-      await ittyRouter.handle(request[(Math.random() * 30) | 0]);
+      const ittyRouter = IttyRouter();
+      for (let i = 0; i < request.length; i++) {
+        // Setup time also matters for cold starts
+        ittyRouter.get(
+          `${BASE}${i}/:test`,
+          () => new Response(`Test route ${i}`)
+        );
+        ittyRouter.post(
+          `${BASE}${i}/:test`,
+          () => new Response(`Test route ${i}`)
+        );
+        ittyRouter.put(
+          `${BASE}${i}/:test`,
+          () => new Response(`Test route ${i}`)
+        );
+      }
+
+      await ittyRouter.handle(randomRequest());
     },
     BENCH_CONFIG
   );
@@ -128,7 +132,24 @@ describe("hot start", async () => {
   bench(
     "hono",
     async () => {
-      await honoRouter.fetch(request[(Math.random() * 30) | 0]);
+      const honoRouter = new Hono();
+      for (let i = 0; i < request.length; i++) {
+        // Setup time also matters for cold starts
+        honoRouter.get(
+          `${BASE}${i}/:test`,
+          () => new Response(`Test route ${i}`)
+        );
+        honoRouter.post(
+          `${BASE}${i}/:test`,
+          () => new Response(`Test route ${i}`)
+        );
+        honoRouter.put(
+          `${BASE}${i}/:test`,
+          () => new Response(`Test route ${i}`)
+        );
+      }
+
+      await honoRouter.fetch(randomRequest());
     },
     BENCH_CONFIG
   );
@@ -136,7 +157,151 @@ describe("hot start", async () => {
   bench(
     "little",
     async () => {
-      await littleRouter.handle(request[(Math.random() * 30) | 0]);
+      const littleRouter = LittleRouter();
+      for (let i = 0; i < request.length; i++) {
+        // Setup time also matters for cold starts
+        littleRouter.get(
+          `${BASE}${i}/:test`,
+          [],
+          () => new Response(`Test route ${i}`)
+        );
+        littleRouter.post(
+          `${BASE}${i}/:test`,
+          [],
+          () => new Response(`Test route ${i}`)
+        );
+        littleRouter.put(
+          `${BASE}${i}/:test`,
+          [],
+          () => new Response(`Test route ${i}`)
+        );
+      }
+
+      await littleRouter.handle(randomRequest());
+    },
+    BENCH_CONFIG
+  );
+});
+
+describe("hot start static routes", async () => {
+  const ittyRouter = IttyRouter();
+  for (let i = 0; i < request.length; i++) {
+    // Setup time also matters for cold starts
+    ittyRouter.get(`${BASE}${i}/${i}`, () => new Response(`Test route ${i}`));
+    ittyRouter.post(`${BASE}${i}/${i}`, () => new Response(`Test route ${i}`));
+    ittyRouter.put(`${BASE}${i}/${i}`, () => new Response(`Test route ${i}`));
+  }
+
+  const littleRouter = LittleRouter();
+  for (let i = 0; i < request.length; i++) {
+    // Setup time also matters for cold starts
+    littleRouter.get(
+      `${BASE}${i}/${i}`,
+      [],
+      () => new Response(`Test route ${i}`)
+    );
+    littleRouter.post(
+      `${BASE}${i}/${i}`,
+      [],
+      () => new Response(`Test route ${i}`)
+    );
+    littleRouter.put(
+      `${BASE}${i}/${i}`,
+      [],
+      () => new Response(`Test route ${i}`)
+    );
+  }
+
+  const honoRouter = new Hono();
+  for (let i = 0; i < request.length; i++) {
+    // Setup time also matters for cold starts
+    honoRouter.get(`${BASE}${i}/${i}`, () => new Response(`Test route ${i}`));
+    honoRouter.post(`${BASE}${i}/${i}`, () => new Response(`Test route ${i}`));
+    honoRouter.put(`${BASE}${i}/${i}`, () => new Response(`Test route ${i}`));
+  }
+
+  bench(
+    "itty",
+    async () => {
+      await ittyRouter.handle(randomRequest());
+    },
+    BENCH_CONFIG
+  );
+
+  bench(
+    "hono",
+    async () => {
+      await honoRouter.fetch(randomRequest());
+    },
+    BENCH_CONFIG
+  );
+
+  bench(
+    "little",
+    async () => {
+      await littleRouter.handle(randomRequest());
+    },
+    BENCH_CONFIG
+  );
+});
+
+describe("hot start dynamic routes", async () => {
+  const ittyRouter = IttyRouter();
+  for (let i = 0; i < request.length; i++) {
+    // Setup time also matters for cold starts
+    ittyRouter.get(`${BASE}${i}/:test`, () => new Response(`Test route ${i}`));
+    ittyRouter.post(`${BASE}${i}/:test`, () => new Response(`Test route ${i}`));
+    ittyRouter.put(`${BASE}${i}/:test`, () => new Response(`Test route ${i}`));
+  }
+
+  const littleRouter = LittleRouter();
+  for (let i = 0; i < request.length; i++) {
+    // Setup time also matters for cold starts
+    littleRouter.get(
+      `${BASE}${i}/:test`,
+      [],
+      () => new Response(`Test route ${i}`)
+    );
+    littleRouter.post(
+      `${BASE}${i}/:test`,
+      [],
+      () => new Response(`Test route ${i}`)
+    );
+    littleRouter.put(
+      `${BASE}${i}/:test`,
+      [],
+      () => new Response(`Test route ${i}`)
+    );
+  }
+
+  const honoRouter = new Hono();
+  for (let i = 0; i < request.length; i++) {
+    // Setup time also matters for cold starts
+    honoRouter.get(`${BASE}${i}/:test`, () => new Response(`Test route ${i}`));
+    honoRouter.post(`${BASE}${i}/:test`, () => new Response(`Test route ${i}`));
+    honoRouter.put(`${BASE}${i}/:test`, () => new Response(`Test route ${i}`));
+  }
+
+  bench(
+    "itty",
+    async () => {
+      await ittyRouter.handle(randomRequest());
+    },
+    BENCH_CONFIG
+  );
+
+  bench(
+    "hono",
+    async () => {
+      await honoRouter.fetch(randomRequest());
+    },
+    BENCH_CONFIG
+  );
+
+  bench(
+    "little",
+    async () => {
+      await littleRouter.handle(randomRequest());
     },
     BENCH_CONFIG
   );
