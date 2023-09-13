@@ -13,21 +13,21 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20230801.0",
+    "@cloudflare/workers-types": "^4.20230904.0",
     "@mewhhaha/config": "workspace:^",
     "@mewhhaha/little-fetcher": "workspace:^",
     "@mewhhaha/typed-request": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^",
     "json-string": "^0.0.1",
-    "typescript": "^5.1.6",
-    "vitest": "^0.34.1",
-    "wrangler": "^3.4.0"
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.4",
+    "wrangler": "^3.7.0"
   },
   "dependencies": {
     "@mewhhaha/json-string": "workspace:^",
     "@mewhhaha/little-router": "workspace:^",
     "@mewhhaha/little-router-plugin-data": "workspace:^",
     "@mewhhaha/little-router-plugin-query": "workspace:^",
-    "arktype": "1.0.19-alpha"
+    "arktype": "1.0.21-alpha"
   }
 }

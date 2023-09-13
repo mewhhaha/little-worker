@@ -15,9 +15,9 @@
     "@mewhhaha/little-router": "workspace:^",
     "@mewhhaha/typed-request": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^",
-    "hono": "^3.3.4",
-    "itty-router": "^4.0.14",
-    "typescript": "^5.1.6",
-    "vitest": "^0.34.1"
+    "hono": "^3.6.0",
+    "itty-router": "^4.0.23",
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.4"
   }
 }

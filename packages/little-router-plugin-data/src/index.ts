@@ -32,14 +32,17 @@ export const data_ = <T extends Type<any>>(parser: T) =>
     try {
       const r = parser(await request.json());
       if (r.problems) {
-        return error(422, r.problems.summary);
+        return error(422, {
+          message: "parsing was unsuccessful",
+          summary: r.problems.summary,
+        });
       }
 
       return { data: r.data as OutOf<T> };
     } catch (err) {
       if (err instanceof Error) {
-        return error(400, err.message);
+        console.error(err);
       }
-      return error(400, null);
+      return error(400, { message: "unknown error" });
     }
   }) satisfies Plugin;
