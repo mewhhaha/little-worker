@@ -1,5 +1,13 @@
 # @mewhhaha/little-router-plugin-query
 
+## 0.0.24
+
+### Patch Changes
+
+- fa23121: Update error messages for data and query
+- Updated dependencies [fa23121]
+  - @mewhhaha/little-router@0.0.24
+
 ## 0.0.23
 
 ### Patch Changes

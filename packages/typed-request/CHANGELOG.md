@@ -1,5 +1,11 @@
 # @mewhhaha/typed-request
 
+## 0.0.24
+
+### Patch Changes
+
+- fa23121: Update error messages for data and query
+
 ## 0.0.23
 
 ### Patch Changes
