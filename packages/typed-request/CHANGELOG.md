@@ -1,5 +1,11 @@
 # @mewhhaha/typed-request
 
+## 0.0.25
+
+### Patch Changes
+
+- e761e04: Fix consecutive params in fetcher
+
 ## 0.0.24
 
 ### Patch Changes
