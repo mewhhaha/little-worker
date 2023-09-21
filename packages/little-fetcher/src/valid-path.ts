@@ -23,8 +23,10 @@ export type ValidPathname<
     ? PATH_REST extends ""
       ? false
       : true
-    : PATH extends string
-    ? true
+    : PRE extends ""
+    ? string extends PATH
+      ? true
+      : false
     : false
   : PATH extends PATTERN
   ? true
