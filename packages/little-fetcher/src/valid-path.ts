@@ -4,7 +4,7 @@ import { StringifyQuery } from "./stringify-query.js";
 export type ValidPath<
   PATH extends string,
   PATTERN extends string,
-  SEARCH extends Queries
+  SEARCH extends Queries,
 > = PATH extends `${infer P}?${infer S}`
   ? ValidPathname<P, PATTERN> extends true
     ? ValidSearch<S, SEARCH>
@@ -13,7 +13,7 @@ export type ValidPath<
 
 export type ValidPathname<
   PATH extends string,
-  PATTERN extends string
+  PATTERN extends string,
 > = PATTERN extends `${infer PRE}:${string}/${infer PATTERN_REST}`
   ? PATH extends `${PRE}${string}/${infer PATH_REST}`
     ? ValidPathname<PATH_REST, PATTERN_REST>
@@ -23,6 +23,8 @@ export type ValidPathname<
     ? PATH_REST extends ""
       ? false
       : true
+    : PATH extends string
+    ? true
     : false
   : PATH extends PATTERN
   ? true
@@ -34,7 +36,7 @@ export type ValidPathname<
 
 export type ValidSearch<
   SEARCH_STRING extends string,
-  SEARCH extends Queries
+  SEARCH extends Queries,
 > = SplitUnion<SEARCH_STRING, "&"> extends QueryParams<SEARCH>
   ? true
   : SEARCH_STRING extends ""
@@ -43,7 +45,7 @@ export type ValidSearch<
 
 type SplitUnion<
   T extends string,
-  SEP extends string
+  SEP extends string,
 > = T extends `${infer L}${SEP}${infer R}` ? L | SplitUnion<R, SEP> : T;
 
 export type QueryParams<T> = {

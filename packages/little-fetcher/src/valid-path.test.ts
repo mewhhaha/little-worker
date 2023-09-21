@@ -26,6 +26,12 @@ describe("ValidPathname", () => {
     assertType<ValidPathname<"/users/1/dogs/2", "/users/:id/dogs/:dog">>(true);
   });
 
+  it.skip("should support interpolated strings", () => {
+    assertType<ValidPathname<`/users/${string}/${string}`, "/users/:id/:dog">>(
+      true
+    );
+  });
+
   it.skip("should support exact path", () => {
     assertType<ValidPathname<"/users/1", "/users/1">>(true);
   });
