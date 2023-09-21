@@ -1,5 +1,14 @@
 # @mewhhaha/little-router-plugin-data
 
+## 0.0.25
+
+### Patch Changes
+
+- e761e04: Fix consecutive params in fetcher
+- Updated dependencies [e761e04]
+  - @mewhhaha/json-string@0.0.25
+  - @mewhhaha/little-router@0.0.25
+
 ## 0.0.24
 
 ### Patch Changes
