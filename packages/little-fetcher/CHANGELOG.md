@@ -1,5 +1,11 @@
 # @mewhhaha/little-fetcher
 
+## 0.0.26
+
+### Patch Changes
+
+- 0314028: Update error messages for plugins
+
 ## 0.0.25
 
 ### Patch Changes
