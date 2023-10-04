@@ -1,5 +1,14 @@
 # @mewhhaha/little-router-plugin-data
 
+## 0.0.26
+
+### Patch Changes
+
+- 0314028: Update error messages for plugins
+- Updated dependencies [0314028]
+  - @mewhhaha/json-string@0.0.26
+  - @mewhhaha/little-router@0.0.26
+
 ## 0.0.25
 
 ### Patch Changes
