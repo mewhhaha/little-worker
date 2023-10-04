@@ -33,7 +33,7 @@ export const data_ = <T extends Type<any>>(parser: T) =>
       const r = parser(await request.json());
       if (r.problems) {
         return error(422, {
-          message: "parsing was unsuccessful",
+          message: "parsing_failed",
           summary: r.problems.summary,
         });
       }
@@ -43,6 +43,6 @@ export const data_ = <T extends Type<any>>(parser: T) =>
       if (err instanceof Error) {
         console.error(err);
       }
-      return error(400, { message: "unknown error" });
+      return error(400, { message: "json_invalid" });
     }
   }) satisfies Plugin;

@@ -70,16 +70,13 @@ export const query_ = <T extends Type<any>>(
       const r = parser(result);
       if (r.problems) {
         return error(422, {
-          message: "parsing was unsuccessful",
+          message: "parsing_failed",
           summary: r.problems.summary,
         });
       }
 
       return { query: r.data as OutOf<T> };
     } catch (err) {
-      if (err instanceof Error) {
-        console.error(err);
-      }
-      return error(400, { message: "unknown error" });
+      throw error(500, { message: "internal_error" });
     }
   }) satisfies Plugin;
