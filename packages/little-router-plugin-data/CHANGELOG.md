@@ -1,5 +1,14 @@
 # @mewhhaha/little-router-plugin-data
 
+## 0.0.27
+
+### Patch Changes
+
+- 23567fa: Fix autocomplete for query strings with generic types
+- Updated dependencies [23567fa]
+  - @mewhhaha/little-router@0.0.27
+  - @mewhhaha/json-string@0.0.27
+
 ## 0.0.26
 
 ### Patch Changes
