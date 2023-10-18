@@ -1,5 +1,11 @@
 # @mewhhaha/config
 
+## 0.0.27
+
+### Patch Changes
+
+- 23567fa: Fix autocomplete for query strings with generic types
+
 ## 0.0.26
 
 ### Patch Changes
