@@ -1,5 +1,8 @@
 import { Queries } from "@mewhhaha/little-router";
-import { StringifyQuery } from "./stringify-query.js";
+import {
+  StringifyQuery,
+  StringifyQueryAutocomplete,
+} from "./stringify-query.js";
 
 export type ValidPath<
   PATH extends string,
@@ -45,11 +48,26 @@ export type ValidSearch<
   ? true
   : false;
 
-type SplitUnion<
+export type SplitUnion<
   T extends string,
   SEP extends string,
 > = T extends `${infer L}${SEP}${infer R}` ? L | SplitUnion<R, SEP> : T;
 
 export type QueryParams<T> = {
   [K in Extract<keyof T, string>]: StringifyQuery<K, T[K]>;
+}[Extract<keyof T, string>];
+
+export type QueryParamsAutocomplete<T> = {
+  [K in Extract<keyof T, string>]: StringifyQueryAutocomplete<
+    K,
+    T[K]
+  > extends never
+    ? never
+    : QueryParamsAutocomplete<Omit<T, K>> extends never
+    ? StringifyQueryAutocomplete<K, T[K]>
+    :
+        | StringifyQueryAutocomplete<K, T[K]>
+        | `${StringifyQueryAutocomplete<K, T[K]>}&${QueryParamsAutocomplete<
+            Omit<T, K>
+          >}`;
 }[Extract<keyof T, string>];

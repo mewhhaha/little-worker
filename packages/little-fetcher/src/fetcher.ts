@@ -1,6 +1,6 @@
 import { RequestMethod } from "@mewhhaha/typed-request";
 import { FetchDefinition, Queries } from "@mewhhaha/little-router";
-import { QueryParams, ValidPath } from "./valid-path.js";
+import { QueryParamsAutocomplete, ValidPath } from "./valid-path.js";
 
 type FetcherOptions = {
   base?: string;
@@ -59,9 +59,7 @@ type FetcherFunction<T extends FetchDefinition> = <PATH extends string>(
           valid: ValidPath<PATH, PATTERN, SEARCH>;
 
           args: [
-            url: ValidPath<PATH, PATTERN, SEARCH> extends true
-              ? PATH
-              : `${PATTERN}${`?${QueryParams<SEARCH>}` | ""}`,
+            url: FetcherUrl<PATH, PATTERN, SEARCH>,
             ...init: undefined extends INIT
               ? [
                   init?: UndefinedToOptional<NonNullable<INIT>> &
@@ -84,6 +82,14 @@ type FetcherFunction<T extends FetchDefinition> = <PATH extends string>(
     ? Promise<RESPONSE>
     : never
   : never;
+
+type FetcherUrl<
+  PATH extends string,
+  PATTERN extends string,
+  SEARCH extends Queries,
+> = ValidPath<PATH, PATTERN, SEARCH> extends true
+  ? PATH
+  : `${PATTERN}${`?${QueryParamsAutocomplete<SEARCH>}` | ""}`;
 
 type NarrowMatch<
   T extends { valid: true | false; args: [url: string, ...args: any] },
