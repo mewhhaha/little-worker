@@ -1,5 +1,14 @@
 # @mewhhaha/little-router-plugin-data
 
+## 0.0.28
+
+### Patch Changes
+
+- d841c8f: Fix collision in fetcher when validating path
+- Updated dependencies [d841c8f]
+  - @mewhhaha/json-string@0.0.28
+  - @mewhhaha/little-router@0.0.28
+
 ## 0.0.27
 
 ### Patch Changes

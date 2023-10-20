@@ -1,5 +1,11 @@
 # @mewhhaha/config
 
+## 0.0.28
+
+### Patch Changes
+
+- d841c8f: Fix collision in fetcher when validating path
+
 ## 0.0.27
 
 ### Patch Changes
