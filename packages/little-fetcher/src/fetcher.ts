@@ -57,18 +57,9 @@ type FetcherFunction<T extends FetchDefinition> = <PATH extends string>(
     }
       ? {
           valid: ValidPath<PATH, PATTERN, SEARCH>;
-
           args: [
             url: FetcherUrl<PATH, PATTERN, SEARCH>,
-            ...init: undefined extends INIT
-              ? [
-                  init?: UndefinedToOptional<NonNullable<INIT>> &
-                    Omit<RequestInit, "method" | keyof INIT>,
-                ]
-              : [
-                  init: UndefinedToOptional<NonNullable<INIT>> &
-                    Omit<RequestInit, "method" | keyof INIT>,
-                ],
+            ...init: FetcherInitArgs<INIT>,
           ];
         }
       : []
@@ -82,6 +73,17 @@ type FetcherFunction<T extends FetchDefinition> = <PATH extends string>(
     ? Promise<RESPONSE>
     : never
   : never;
+
+type FetcherInitArgs<INIT extends RequestInit | undefined> =
+  undefined extends INIT
+    ? [
+        init?: UndefinedToOptional<NonNullable<INIT>> &
+          Omit<RequestInit, "method" | keyof INIT>,
+      ]
+    : [
+        init: UndefinedToOptional<NonNullable<INIT>> &
+          Omit<RequestInit, "method" | keyof INIT>,
+      ];
 
 type FetcherUrl<
   PATH extends string,

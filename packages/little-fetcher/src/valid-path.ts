@@ -25,6 +25,8 @@ export type ValidPathname<
   ? PATH extends `${PRE}${infer PATH_REST}`
     ? PATH_REST extends ""
       ? false
+      : PATH_REST extends `${string}/${string}`
+      ? false
       : true
     : PRE extends ""
     ? string extends PATH

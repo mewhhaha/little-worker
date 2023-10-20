@@ -172,4 +172,22 @@ describe("fetcher", () => {
       body: "body",
     });
   });
+
+  it.skip("should not collide with more specific route", async () => {
+    const router = Router()
+      .get("/users/:id/dogs/:dog", [], async ({ params }) => {
+        return text(200, `User: ${params.id}, Dog: ${params.dog}`);
+      })
+      .get("/users/:id", [], async ({ params }) => {
+        return text(200, `User: ${params.id}`);
+      });
+
+    const f = fetcher<RoutesOf<typeof router>>(fromRouter(router));
+
+    assertType<`User: ${string}, Dog: ${string}`>(
+      await (await f.get("/users/:id/dogs/:dog")).text()
+    );
+
+    assertType<`User: ${string}`>(await (await f.get("/users/:id")).text());
+  });
 });
