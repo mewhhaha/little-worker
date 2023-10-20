@@ -95,7 +95,9 @@ const { message } = await response.json();
 
 ## Usage with plugins
 
-When combined with plugins you can set requirements on your routes. A common example of this would be to create an authentication plugin.
+When combined with plugins you can set requirements on your routes and give hints to the fetcher. A route may have several plugins on it, and those are run asynchronously. If you want to synchronize several plugins you can just make an async plugin that coordinates the synchronous operations.
+
+A common example of a plugin would be to create an authentication plugin.
 
 ```tsx
 // Package: my-plugin-auth
@@ -112,6 +114,7 @@ const validate = (authorization: string) => {
 
 const auth_ = ({
   request,
+  // The PluginContext allows you to specify hints to the `little-fetcher` client
 }: PluginContext<{
   init: {
     // These are just hints to the client and should always be validated
@@ -165,4 +168,51 @@ const response = await worker.get("/user/:id", {
         // This is now a required header because of the hint in the plugin
         headers: { "Authorization": "trust-me-bro" }
     });
+```
+
+## Usage with Durable Objects
+
+Here's an example of how to use the router with a Durable Object. You can either create the router outside of the class or create it internally as a static value.
+
+```tsx
+// Package: my-worker
+import { Router } from "@mewhhaha/little-router";
+import { ok } from "@mewhhaha/typed-response";
+
+export class DurableObjectTest implements DurableObject {
+  count: number;
+
+  static router = Router<DurableObjectTest>()
+    .post("/increment", [], (_, self) => {
+      self.count++;
+      return ok(200, { count: self.count });
+    })
+    .post("/decrement", [], (_, self) => {
+      self.count--;
+      return ok(200, { count: self.count });
+    });
+
+  fetch(request) {
+    return DurableObjectTest.router;
+  }
+}
+
+const routes = DurableObjectTest.router.infer;
+type Routes = typeof routes;
+
+type Env = {
+  // The namespace corresponding to the durable object
+  DO_TEST: DurableObjectNamespace;
+};
+
+export default {
+  fetch: (request: Request, env: Env) => {
+    const stub = env.DO_TEST.get(env.DO_TEST.idFromName("foobar"));
+    // Just pass the fetcher the stub with the routes
+    const test = fetcher<Routes>(stub);
+
+    await test.post("/increment");
+    await test.post("/decrement");
+  },
+};
 ```
