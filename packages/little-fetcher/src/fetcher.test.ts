@@ -190,4 +190,19 @@ describe("fetcher", () => {
 
     assertType<`User: ${string}`>(await (await f.get("/users/:id")).text());
   });
+
+  it.skip("should not show all route", async () => {
+    const router = Router()
+      .get("/test", [], async () => {
+        return text(200, "test");
+      })
+      .all("/*", [], async () => {
+        return new Response(null, { status: 404 });
+      });
+
+    const f = fetcher<RoutesOf<typeof router>>(fromRouter(router));
+
+    // @ts-expect-error Test
+    f.all("/any");
+  });
 });
