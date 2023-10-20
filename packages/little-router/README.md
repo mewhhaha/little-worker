@@ -70,6 +70,7 @@ const router = Router().get("/user/:id", [], async ({ params }) => {
   return ok(200, { message: `User: ${params.id}` });
 });
 
+// .infer is a non-value that has all the inferred route types
 // If you want to shave off the complex type from the router
 // you have to set it as an intermediate variable
 const routes = router.infer;
