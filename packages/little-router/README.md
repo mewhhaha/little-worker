@@ -193,7 +193,7 @@ export class DurableObjectTest implements DurableObject {
     });
 
   fetch(request) {
-    return DurableObjectTest.router;
+    return DurableObjectTest.router(request, this);
   }
 }
 
