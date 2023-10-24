@@ -13,7 +13,6 @@ declare global {
 }
 
 export type JSONString<T> = string & {
-  readonly __tag: unique symbol;
   readonly __value: SerializedJSON<T>;
 };
 
