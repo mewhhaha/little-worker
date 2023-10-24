@@ -1,5 +1,5 @@
 import { match } from "./match.js";
-import { HasOverlap } from "./overlap.js";
+import { GetOverlap, HasOverlap } from "./overlap.js";
 import { Plugin, PluginContext } from "./plugin.js";
 import { FetchDefinition, Queries } from "./fetch.js";
 
@@ -133,7 +133,10 @@ type RouteProxy<
         Extract<ROUTES, { method: METHOD | "all" }>["pattern"]
       > extends false
     ? StartsWithSlash<PATTERN>
-    : ValidationError<"Overlapping route pattern">,
+    : ValidationError<`${PATTERN} will never match because of preceding pattern ${GetOverlap<
+        PATTERN,
+        Extract<ROUTES, { method: METHOD | "all" }>["pattern"]
+      >}`>,
   plugins: PLUGINS,
   h: RouteHandler<
     | RouteHandlerContext<PATTERN>
@@ -232,6 +235,30 @@ export type PatternParams<PATTERN> =
     : PATTERN extends `${string}*`
     ? "*"
     : never;
+
+export type RouteArguments<REST_ARGS extends unknown[]> = <
+  const PATTERN extends string,
+  const RESPONSE extends Response,
+  PLUGINS extends Plugin<REST_ARGS>[],
+>(
+  pattern: StartsWithSlash<PATTERN>,
+  plugins: PLUGINS,
+  h: RouteHandler<
+    | RouteHandlerContext<PATTERN>
+    | Exclude<Awaited<ReturnType<PLUGINS[number]>>, Response>,
+    REST_ARGS,
+    RESPONSE
+  >
+) => [
+  StartsWithSlash<PATTERN>,
+  PLUGINS,
+  RouteHandler<
+    | RouteHandlerContext<PATTERN>
+    | Exclude<Awaited<ReturnType<PLUGINS[number]>>, Response>,
+    REST_ARGS,
+    RESPONSE
+  >,
+];
 
 type PatternParamsObject<PATTERN extends string> = {
   [K in PatternParams<PATTERN>]: string;

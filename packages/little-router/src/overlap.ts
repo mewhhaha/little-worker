@@ -12,7 +12,7 @@ type CompareLength<A, B> = A extends `/${string}${infer A_REST}`
 
 type StringifyParam<
   A,
-  REPLACEMENT extends string = ""
+  REPLACEMENT extends string = "",
 > = A extends `${infer PRE}:${string}/${infer A_REST}`
   ? `${PRE}${REPLACEMENT}${StringifyParam<`/${A_REST}`, REPLACEMENT>}`
   : A extends `${infer PRE}:${string}`
@@ -29,4 +29,14 @@ export type HasOverlap<A, B> = CompareLength<A, B> extends typeof SAME_LENGTH
   ? false
   : B extends `${string}*${string}`
   ? true
+  : false;
+
+export type GetOverlap<A, B> = CompareLength<A, B> extends typeof SAME_LENGTH
+  ? StringifyParam<A> extends StringifyParam<B, string>
+    ? B
+    : false
+  : CompareLength<A, B> extends typeof A_SHORTER_LENGTH
+  ? false
+  : B extends `${string}*${string}`
+  ? B
   : false;
