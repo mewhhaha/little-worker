@@ -1,5 +1,11 @@
 # @mewhhaha/json-string
 
+## 0.0.30
+
+### Patch Changes
+
+- 55ca387: Loose up JSONString type
+
 ## 0.0.29
 
 ### Patch Changes
