@@ -1,5 +1,11 @@
 # @mewhhaha/little-router
 
+## 0.0.29
+
+### Patch Changes
+
+- 8e01c83: Improve error messages for validation and export RouteArguments type
+
 ## 0.0.28
 
 ### Patch Changes
