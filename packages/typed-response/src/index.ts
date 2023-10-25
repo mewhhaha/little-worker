@@ -74,7 +74,7 @@ export interface TextResponse<CODE extends HttpStatusXXX, TEXT extends string>
   extends Response {
   text(): Promise<TEXT>;
   json(): Promise<unknown>;
-  json<T = unknown>(): Promise<T>;
+  json<T = never>(): Promise<T>;
   status: CODE;
   ok: Ok<CODE>;
 }
@@ -117,7 +117,7 @@ export const json = <const CODE extends HttpStatusXXX, const JSON>(
  */
 export const text = <
   const CODE extends HttpStatusXXX,
-  const TEXT extends string
+  const TEXT extends string,
 >(
   code: CODE,
   value: TEXT,
@@ -150,7 +150,7 @@ export const body = <const CODE extends HttpStatusXXX>(
  */
 export const error = <
   const CODE extends HttpStatus4XX | HttpStatus5XX,
-  const JSON = null
+  const JSON = null,
 >(
   code: CODE,
   value?: JSON,
@@ -164,7 +164,7 @@ export const error = <
  */
 export const ok = <
   const CODE extends Exclude<HttpStatus2XX, 204 | 205>,
-  const JSON = null
+  const JSON = null,
 >(
   code: CODE,
   value?: JSON,
