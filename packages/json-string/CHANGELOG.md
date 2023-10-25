@@ -1,5 +1,11 @@
 # @mewhhaha/json-string
 
+## 0.0.32
+
+### Patch Changes
+
+- 73a68f0: Update TextResponse type
+
 ## 0.0.31
 
 ### Patch Changes

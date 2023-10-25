@@ -1,5 +1,14 @@
 # @mewhhaha/little-router-plugin-data
 
+## 0.0.32
+
+### Patch Changes
+
+- 73a68f0: Update TextResponse type
+- Updated dependencies [73a68f0]
+  - @mewhhaha/json-string@0.0.32
+  - @mewhhaha/little-router@0.0.32
+
 ## 0.0.31
 
 ### Patch Changes
