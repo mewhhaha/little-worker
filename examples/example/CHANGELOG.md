@@ -1,5 +1,16 @@
 # example
 
+## 0.0.31
+
+### Patch Changes
+
+- a426e49: Expose FetcherOf type
+- Updated dependencies [a426e49]
+  - @mewhhaha/json-string@0.0.31
+  - @mewhhaha/little-router@0.0.31
+  - @mewhhaha/little-router-plugin-data@0.0.31
+  - @mewhhaha/little-router-plugin-query@0.0.31
+
 ## 0.0.30
 
 ### Patch Changes

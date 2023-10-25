@@ -1,5 +1,11 @@
 # @mewhhaha/config
 
+## 0.0.31
+
+### Patch Changes
+
+- a426e49: Expose FetcherOf type
+
 ## 0.0.30
 
 ### Patch Changes
