@@ -73,7 +73,7 @@ export type Ok<CODE extends number> = number extends CODE
 export interface TextResponse<CODE extends HttpStatusXXX, TEXT extends string>
   extends Response {
   text(): Promise<TEXT>;
-  json(): Promise<unknown>;
+  json(): Promise<never>;
   json<T = never>(): Promise<T>;
   status: CODE;
   ok: Ok<CODE>;
