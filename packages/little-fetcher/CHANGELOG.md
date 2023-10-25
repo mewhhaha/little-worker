@@ -1,5 +1,11 @@
 # @mewhhaha/little-fetcher
 
+## 0.0.33
+
+### Patch Changes
+
+- d8e5061: Update normal json type on text to be never
+
 ## 0.0.32
 
 ### Patch Changes

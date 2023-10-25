@@ -1,5 +1,13 @@
 # @mewhhaha/little-router-plugin-query
 
+## 0.0.33
+
+### Patch Changes
+
+- d8e5061: Update normal json type on text to be never
+- Updated dependencies [d8e5061]
+  - @mewhhaha/little-router@0.0.33
+
 ## 0.0.32
 
 ### Patch Changes
