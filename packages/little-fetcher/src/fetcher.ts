@@ -104,7 +104,7 @@ type FetcherFunctionAny = (
   init?: RequestInit
 ) => Promise<Response>;
 
-type FetcherOf<ROUTES extends FetchDefinition> = {
+export type FetcherOf<ROUTES extends FetchDefinition> = {
   [METHOD in Extract<Lowercase<ROUTES["method"]>, Method>]: FetcherFunction<
     Extract<ROUTES, { method: METHOD }>
   >;
