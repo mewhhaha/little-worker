@@ -85,7 +85,9 @@ const context = async <REST_ARGS extends unknown[]>(
   plugins: Plugin<REST_ARGS>[],
   rest: REST_ARGS
 ) => {
-  const results = await Promise.all(plugins.map((p) => p(pctx, ...rest)));
+  const results = await Promise.all(
+    plugins.map((p) => p(pctx, ...(rest as any)))
+  );
 
   const ctx: Record<string, any> = pctx;
 
@@ -245,24 +247,35 @@ type ValidationError<T extends string> = {
   __error: never;
 };
 
-// Used to type all the route functions with the correct arguments
-export interface RouteArguments extends Array<unknown> {
-  [key: number]: unknown;
+/**
+ * Used to to type all the `route` functions with correct arguments. There's one prop that can be defined which is "arguments".
+ *
+ * @example
+ * declare module "@mewhhaha/little-router" {
+ *  interface RouteData {
+ *    arguments: [Env, ExecutionContext];
+ *  }
+ * }
+ */
+export interface RouteData {
+  [key: string]: unknown;
 }
 
 // Helper for generating routes
 export const route = <
   const PATTERN extends string,
   const RESPONSE extends Response,
-  PLUGINS extends Plugin<ROUTE_ARGS>[],
-  ROUTE_ARGS extends unknown[] = RouteArguments,
+  PLUGINS extends Plugin<
+    ROUTE_ARGS["arguments"] extends unknown[] ? ROUTE_ARGS["arguments"] : []
+  >[],
+  ROUTE_ARGS extends RouteData = RouteData,
 >(
   pattern: StartsWithSlash<PATTERN>,
   plugins: PLUGINS,
   h: RouteHandler<
     | RouteHandlerContext<PATTERN>
     | Exclude<Awaited<ReturnType<PLUGINS[number]>>, Response>,
-    ROUTE_ARGS,
+    ROUTE_ARGS["arguments"] extends unknown[] ? ROUTE_ARGS["arguments"] : [],
     RESPONSE
   >
 ): [
@@ -271,7 +284,7 @@ export const route = <
   RouteHandler<
     | RouteHandlerContext<PATTERN>
     | Exclude<Awaited<ReturnType<PLUGINS[number]>>, Response>,
-    ROUTE_ARGS,
+    ROUTE_ARGS["arguments"] extends unknown[] ? ROUTE_ARGS["arguments"] : [],
     RESPONSE
   >,
 ] => [pattern, plugins, h];

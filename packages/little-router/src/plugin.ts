@@ -7,7 +7,7 @@ export type PluginContext<
   } = {
     init?: RequestInit;
     search?: Queries;
-  }
+  },
 > = {
   readonly request: Request;
   readonly url: URL;
