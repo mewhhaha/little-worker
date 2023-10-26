@@ -1,5 +1,16 @@
 # example
 
+## 0.0.35
+
+### Patch Changes
+
+- 1590114: Fix route function with plugins
+- Updated dependencies [1590114]
+  - @mewhhaha/little-router@0.0.35
+  - @mewhhaha/json-string@0.0.35
+  - @mewhhaha/little-router-plugin-data@0.0.35
+  - @mewhhaha/little-router-plugin-query@0.0.35
+
 ## 0.0.34
 
 ### Patch Changes
