@@ -1,5 +1,11 @@
 # @mewhhaha/json-string
 
+## 0.0.34
+
+### Patch Changes
+
+- dff371c: Update route to accept third party altered environment arguments
+
 ## 0.0.33
 
 ### Patch Changes
