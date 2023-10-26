@@ -1,5 +1,13 @@
 # @mewhhaha/little-router-plugin-query
 
+## 0.0.34
+
+### Patch Changes
+
+- dff371c: Update route to accept third party altered environment arguments
+- Updated dependencies [dff371c]
+  - @mewhhaha/little-router@0.0.34
+
 ## 0.0.33
 
 ### Patch Changes
