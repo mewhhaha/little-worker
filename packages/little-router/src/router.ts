@@ -184,7 +184,7 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
 
 type RouteHandler<
   CONTEXT extends Record<string, any>,
-  REST_ARGS extends unknown[] = [],
+  REST_ARGS extends unknown[],
   RESPONSE extends Response = Response,
 > = (
   context: UnionToIntersection<CONTEXT>,
@@ -236,30 +236,6 @@ export type PatternParams<PATTERN> =
     ? "*"
     : never;
 
-export type RouteArguments<REST_ARGS extends unknown[]> = <
-  const PATTERN extends string,
-  const RESPONSE extends Response,
-  PLUGINS extends Plugin<REST_ARGS>[],
->(
-  pattern: StartsWithSlash<PATTERN>,
-  plugins: PLUGINS,
-  h: RouteHandler<
-    | RouteHandlerContext<PATTERN>
-    | Exclude<Awaited<ReturnType<PLUGINS[number]>>, Response>,
-    REST_ARGS,
-    RESPONSE
-  >
-) => [
-  StartsWithSlash<PATTERN>,
-  PLUGINS,
-  RouteHandler<
-    | RouteHandlerContext<PATTERN>
-    | Exclude<Awaited<ReturnType<PLUGINS[number]>>, Response>,
-    REST_ARGS,
-    RESPONSE
-  >,
-];
-
 type PatternParamsObject<PATTERN extends string> = {
   [K in PatternParams<PATTERN>]: string;
 };
@@ -268,3 +244,34 @@ type ValidationError<T extends string> = {
   __message: T;
   __error: never;
 };
+
+// Used to type all the route functions with the correct arguments
+export interface RouteArguments extends Array<unknown> {
+  [key: number]: unknown;
+}
+
+// Helper for generating routes
+export const route = <
+  const PATTERN extends string,
+  const RESPONSE extends Response,
+  PLUGINS extends Plugin<ROUTE_ARGS>[],
+  ROUTE_ARGS extends unknown[] = RouteArguments,
+>(
+  pattern: StartsWithSlash<PATTERN>,
+  plugins: PLUGINS,
+  h: RouteHandler<
+    | RouteHandlerContext<PATTERN>
+    | Exclude<Awaited<ReturnType<PLUGINS[number]>>, Response>,
+    ROUTE_ARGS,
+    RESPONSE
+  >
+): [
+  StartsWithSlash<PATTERN>,
+  PLUGINS,
+  RouteHandler<
+    | RouteHandlerContext<PATTERN>
+    | Exclude<Awaited<ReturnType<PLUGINS[number]>>, Response>,
+    ROUTE_ARGS,
+    RESPONSE
+  >,
+] => [pattern, plugins, h];
