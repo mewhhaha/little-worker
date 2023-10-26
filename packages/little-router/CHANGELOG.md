@@ -1,5 +1,11 @@
 # @mewhhaha/little-router
 
+## 0.0.35
+
+### Patch Changes
+
+- 1590114: Fix route function with plugins
+
 ## 0.0.34
 
 ### Patch Changes
