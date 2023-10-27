@@ -167,7 +167,7 @@ export const ok = <
   const CODE extends HttpStatus2XX,
   const JSON extends CODE extends 204 | 205 ? null : unknown = null,
 >(
-  // We enforce single values as to avoid anyone passing 200 | 204 and expecting the wrong response
+  // We enforce single values as to avoid anyone passing 200 | 204 and expecting the wrong response
   code: IsSingleValue<CODE>,
   value?: JSON,
   init?: Omit<ResponseInit, "status">
