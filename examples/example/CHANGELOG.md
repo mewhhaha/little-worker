@@ -1,5 +1,16 @@
 # example
 
+## 0.0.37
+
+### Patch Changes
+
+- 197b177: Be more specific about ok 204 and 205 responses
+- Updated dependencies [197b177]
+  - @mewhhaha/json-string@0.0.37
+  - @mewhhaha/little-router@0.0.37
+  - @mewhhaha/little-router-plugin-data@0.0.37
+  - @mewhhaha/little-router-plugin-query@0.0.37
+
 ## 0.0.36
 
 ### Patch Changes

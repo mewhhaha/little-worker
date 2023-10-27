@@ -1,5 +1,11 @@
 # @mewhhaha/typed-response
 
+## 0.0.37
+
+### Patch Changes
+
+- 197b177: Be more specific about ok 204 and 205 responses
+
 ## 0.0.36
 
 ### Patch Changes
