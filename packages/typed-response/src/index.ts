@@ -167,20 +167,25 @@ export const ok = <
   const CODE extends HttpStatus2XX,
   const JSON extends CODE extends 204 | 205 ? null : unknown = null,
 >(
-  code: CODE,
+  // We enforce single values as to avoid anyone passing 200 | 204 and expecting the wrong response
+  code: IsSingleValue<CODE>,
   value?: JSON,
   init?: Omit<ResponseInit, "status">
-): Extract<CODE, 204 | 205> extends never
+): Extract<typeof code, 204 | 205> extends never
   ? JSONResponse<CODE, JSON>
-  : BodyResponse<CODE> => {
+  : TextResponse<CODE, ""> => {
   if (code === 204 || code === 205) {
-    return body(code, null, init);
+    // @ts-expect-error This is correct, but can't validate it with narrowed typing
+    return text(code, "", init);
   }
-
-  return json(code, value ?? null, init) as JSONResponse<CODE, JSON>;
+  // @ts-expect-error This is correct, but can't validate it with narrowed typing
+  return json(code, value ?? null, init);
 };
 
 export const empty = <const CODE extends 101 | 204 | 205 | 304>(
   code: CODE,
   init?: Omit<ResponseInit, "status">
 ): BodyResponse<CODE> => body(code, null, init);
+
+type IsUnion<T, U = T> = T extends any ? (U extends T ? false : true) : false;
+type IsSingleValue<T> = true extends IsUnion<T> ? never : T;
