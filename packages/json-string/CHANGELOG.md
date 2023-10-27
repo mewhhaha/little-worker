@@ -1,5 +1,11 @@
 # @mewhhaha/json-string
 
+## 0.0.36
+
+### Patch Changes
+
+- e7fe317: Update typed response functions
+
 ## 0.0.35
 
 ### Patch Changes

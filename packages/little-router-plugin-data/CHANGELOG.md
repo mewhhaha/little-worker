@@ -1,5 +1,14 @@
 # @mewhhaha/little-router-plugin-data
 
+## 0.0.36
+
+### Patch Changes
+
+- e7fe317: Update typed response functions
+- Updated dependencies [e7fe317]
+  - @mewhhaha/little-router@0.0.36
+  - @mewhhaha/json-string@0.0.36
+
 ## 0.0.35
 
 ### Patch Changes
