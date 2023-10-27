@@ -1,6 +1,6 @@
 import { expect, describe, it } from "vitest";
 import { Router } from "./router.js";
-import { error, ok } from "@mewhhaha/typed-response";
+import { err, ok } from "@mewhhaha/typed-response";
 import { PluginContext } from "./plugin.js";
 
 describe("Router", () => {
@@ -190,7 +190,7 @@ describe("Router with plugins", () => {
 
   it("should return responses from plugins", async () => {
     const auth_ = async (_: PluginContext) => {
-      return error(403, "Plugin: Forbidden");
+      return err(403, "Plugin: Forbidden");
     };
 
     const router = Router().get("/auth-plugin", [auth_], async () => {

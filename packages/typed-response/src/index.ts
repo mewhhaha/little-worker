@@ -129,7 +129,7 @@ export const text = <
   }) as TextResponse<CODE, TEXT>;
 
 /**
- * Helper for returning an error response with JSON body.
+ * Helper for returning a normal body response
  * @example
  * return body(101, null, { webSocket: socket })
  */
@@ -144,11 +144,11 @@ export const body = <const CODE extends HttpStatusXXX>(
   }) as BodyResponse<CODE>;
 
 /**
- * Helper for returning any typed response.
+ * Helper for returning an error response with JSON body.
  * @example
- * return error(403, { message: "You shall not pass" })
+ * return err(403, { message: "You shall not pass" })
  */
-export const error = <
+export const err = <
   const CODE extends HttpStatus4XX | HttpStatus5XX,
   const JSON = null,
 >(
@@ -159,20 +159,28 @@ export const error = <
 
 /**
  * Helper for returning a 2XX response with JSON body.
+ * Special cases for 204 and 205 which won't be JSON responses and won't return a body.
  * @example
  * return ok(200, { value: "ok"})
  */
 export const ok = <
-  const CODE extends Exclude<HttpStatus2XX, 204 | 205>,
-  const JSON = null,
+  const CODE extends HttpStatus2XX,
+  const JSON extends CODE extends 204 | 205 ? null : unknown = null,
 >(
   code: CODE,
   value?: JSON,
   init?: Omit<ResponseInit, "status">
-): JSONResponse<CODE, JSON> =>
-  json(code, value ?? null, init) as JSONResponse<CODE, JSON>;
+): Extract<CODE, 204 | 205> extends never
+  ? JSONResponse<CODE, JSON>
+  : BodyResponse<CODE> => {
+  if (code === 204 || code === 205) {
+    return body(code, null, init);
+  }
+
+  return json(code, value ?? null, init) as JSONResponse<CODE, JSON>;
+};
 
 export const empty = <const CODE extends 101 | 204 | 205 | 304>(
   code: CODE,
   init?: Omit<ResponseInit, "status">
-): TextResponse<CODE, ""> => text(code, "", init);
+): BodyResponse<CODE> => body(code, null, init);

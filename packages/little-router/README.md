@@ -104,7 +104,7 @@ A common example of a plugin would be to create an authentication plugin.
 // Package: my-plugin-auth
 
 import { PluginContext, Plugin } from "@mewhhaha/little-router";
-import { error } from "@mewhhaha/typed-response";
+import { err } from "@mewhhaha/typed-response";
 
 const validate = (authorization: string) => {
   if (authorization === "trust me bro") {
@@ -126,12 +126,12 @@ const auth_ = ({
   if (!authorization) {
     // If a response is returned,
     // those will be added to the possible responses from this route
-    return error(401, { message: "authorization_missing" });
+    return err(401, { message: "authorization_missing" });
   }
 
   const { valid, data } = validate(authorization);
   if (!valid) {
-    return error(403, { message: "forbidden" });
+    return err(403, { message: "forbidden" });
   }
 
   // Anything returned from the plugin will be merged into

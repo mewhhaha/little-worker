@@ -3,7 +3,7 @@ import {
   type PluginContext,
   type Queries,
 } from "@mewhhaha/little-router";
-import { error } from "@mewhhaha/typed-response";
+import { err } from "@mewhhaha/typed-response";
 import { type Type } from "arktype";
 
 export type InOf<T> = T extends {
@@ -69,14 +69,17 @@ export const query_ = <T extends Type<any>>(
     try {
       const r = parser(result);
       if (r.problems) {
-        return error(422, {
+        return err(422, {
           message: "parsing_failed",
           summary: r.problems.summary,
         });
       }
 
       return { query: r.data as OutOf<T> };
-    } catch (err) {
-      throw error(500, { message: "internal_error" });
+    } catch (e) {
+      if (e instanceof Error) {
+        console.error(e);
+      }
+      throw err(500, { message: "internal_error" });
     }
   }) satisfies Plugin;

@@ -2,7 +2,7 @@ import { assertType, describe, expect, it } from "vitest";
 import { fetcher } from "./fetcher.js";
 import { PluginContext, Router, RoutesOf } from "@mewhhaha/little-router";
 import { fromRouter } from "@mewhhaha/testing";
-import { text, error } from "@mewhhaha/typed-response";
+import { text, err } from "@mewhhaha/typed-response";
 
 describe("fetcher", () => {
   it("should fetch a route with one param", async () => {
@@ -85,13 +85,13 @@ describe("fetcher", () => {
       if (size === "10") {
         search["size"] = Number.parseInt(size) as 10;
       } else if (size !== null) {
-        return error(422, "Invalid sort params");
+        return err(422, "Invalid sort params");
       }
 
       if (sort === "asc" || sort === "desc") {
         search["sort"] = sort;
       } else if (sort !== null) {
-        return error(422, "Invalid sort params");
+        return err(422, "Invalid sort params");
       }
 
       return { search };

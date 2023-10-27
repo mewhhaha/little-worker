@@ -1,7 +1,7 @@
 import { type Plugin, type PluginContext } from "@mewhhaha/little-router";
 import type { Type } from "arktype";
 import type { JSONString } from "@mewhhaha/json-string";
-import { error } from "@mewhhaha/typed-response";
+import { err } from "@mewhhaha/typed-response";
 
 type InOf<T> = T extends {
   inferIn: infer I extends
@@ -32,17 +32,17 @@ export const data_ = <T extends Type<any>>(parser: T) =>
     try {
       const r = parser(await request.json());
       if (r.problems) {
-        return error(422, {
+        return err(422, {
           message: "parsing_failed",
           summary: r.problems.summary,
         });
       }
 
       return { data: r.data as OutOf<T> };
-    } catch (err) {
-      if (err instanceof Error) {
-        console.error(err);
+    } catch (e) {
+      if (e instanceof Error) {
+        console.error(e);
       }
-      return error(400, { message: "json_invalid" });
+      return err(400, { message: "json_invalid" });
     }
   }) satisfies Plugin;
