@@ -9,7 +9,7 @@
     "dev": "little-worker routes && tsc --project tsconfig.build.json && node dist/worker.js",
     "routes": "little-worker routes",
     "api": "dts-bundle-generator app/worker.ts",
-    "test": "vitest",
+    "test": "vitest --threads=false",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "keywords": [],
