@@ -1,9 +1,10 @@
-# Little router
+# Little Worker
 
-Little router is a [Cloudflare Workers](https://developers.cloudflare.com/workers/)
-router with a focus on type safety.
+Little worker is a bundle of small packages to more easily create [Cloudflare Workers](https://developers.cloudflare.com/workers/).
 
-**This is an experimental router, the API may be updated regularly. Expect
+[Documentation](./packages/little-worker/README.md)
+
+**These are all experimental packages, the API may be updated regularly. Expect
 breaking changes.**
 
 ## Packages
@@ -12,7 +13,8 @@ breaking changes.**
 
 [Documentation](./packages/little-router/README.md)
 
-This is the main little router package, for simple use cases this will be all
+Little router is a [Cloudflare Workers](https://developers.cloudflare.com/workers/)
+router with a focus on type safety. For simple use cases this will be all
 you need. Allows you to create routing structures with a builder pattern.
 
 This also includes the ability to create your own plugin.
