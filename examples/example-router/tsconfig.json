@@ -1,6 +1,7 @@
 {
   "extends": "@mewhhaha/config/tsconfig.json",
   "compilerOptions": {
-    "types": ["@mewhhaha/json-string", "@cloudflare/workers-types"]
+    "types": ["@cloudflare/workers-types"],
+    "noEmit": true
   }
 }

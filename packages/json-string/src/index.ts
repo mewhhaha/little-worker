@@ -1,5 +1,5 @@
 declare global {
-  interface JSON {
+  export interface JSON {
     stringify<T>(
       value: T,
       replacer?:
@@ -18,9 +18,9 @@ export type JSONString<T> = string & {
 
 export type JSONOf<T> = T extends JSONString<infer JSON> ? JSON : never;
 
-type Primitive = string | number | boolean | null | undefined;
+export type Primitive = string | number | boolean | null | undefined;
 
-type SerializedJSON<T> = T extends Primitive
+export type SerializedJSON<T> = T extends Primitive
   ? T
   : T extends Array<infer U>
   ? SerializedArray<U>
@@ -32,8 +32,8 @@ type SerializedJSON<T> = T extends Primitive
   ? SerializedObject<T>
   : undefined;
 
-type SerializedArray<T> = Array<SerializedJSON<T>>;
+export type SerializedArray<T> = Array<SerializedJSON<T>>;
 
-type SerializedObject<T> = {
+export type SerializedObject<T> = {
   [P in keyof T]: T[P] extends Primitive ? T[P] : SerializedJSON<T[P]>;
 };

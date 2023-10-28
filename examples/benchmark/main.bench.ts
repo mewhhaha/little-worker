@@ -1,5 +1,5 @@
 import { describe, bench } from "vitest";
-import { Router as LittleRouter } from "@mewhhaha/little-router";
+import { Router as LittleRouter, route } from "@mewhhaha/little-router";
 import { Router as IttyRouter } from "itty-router";
 import { Hono } from "hono";
 
@@ -101,6 +101,39 @@ describe("cold start static routes", () => {
     },
     BENCH_CONFIG
   );
+
+  bench(
+    "little with routes",
+    async () => {
+      const littleRouter = LittleRouter();
+      for (let i = 0; i < request.length; i++) {
+        // Setup time also matters for cold starts
+        const r0 = route(
+          `${BASE}${i}/${i}`,
+          [],
+          () => new Response(`Test route ${i}`)
+        );
+        littleRouter.get(...r0);
+
+        const r1 = route(
+          `${BASE}${i}/${i}`,
+          [],
+          () => new Response(`Test route ${i}`)
+        );
+        littleRouter.post(...r1);
+
+        const r2 = route(
+          `${BASE}${i}/${i}`,
+          [],
+          () => new Response(`Test route ${i}`)
+        );
+        littleRouter.put(...r2);
+      }
+
+      await littleRouter.handle(randomRequest());
+    },
+    BENCH_CONFIG
+  );
 });
 
 describe("cold start dynamic routes", () => {
@@ -181,6 +214,39 @@ describe("cold start dynamic routes", () => {
     },
     BENCH_CONFIG
   );
+
+  bench(
+    "little with routes",
+    async () => {
+      const littleRouter = LittleRouter();
+      for (let i = 0; i < request.length; i++) {
+        // Setup time also matters for cold starts
+        const r0 = route(
+          `${BASE}${i}/:test`,
+          [],
+          () => new Response(`Test route ${i}`)
+        );
+        littleRouter.get(...r0);
+
+        const r1 = route(
+          `${BASE}${i}/:test`,
+          [],
+          () => new Response(`Test route ${i}`)
+        );
+        littleRouter.post(...r1);
+
+        const r2 = route(
+          `${BASE}${i}/:test`,
+          [],
+          () => new Response(`Test route ${i}`)
+        );
+        littleRouter.put(...r2);
+      }
+
+      await littleRouter.handle(randomRequest());
+    },
+    BENCH_CONFIG
+  );
 });
 
 describe("hot start static routes", async () => {
@@ -220,6 +286,31 @@ describe("hot start static routes", async () => {
     honoRouter.put(`${BASE}${i}/${i}`, () => new Response(`Test route ${i}`));
   }
 
+  const littleRouterRoutes = LittleRouter();
+  for (let i = 0; i < request.length; i++) {
+    // Setup time also matters for cold starts
+    const r0 = route(
+      `${BASE}${i}/${i}`,
+      [],
+      () => new Response(`Test route ${i}`)
+    );
+    littleRouterRoutes.get(...r0);
+
+    const r1 = route(
+      `${BASE}${i}/${i}`,
+      [],
+      () => new Response(`Test route ${i}`)
+    );
+    littleRouterRoutes.post(...r1);
+
+    const r2 = route(
+      `${BASE}${i}/${i}`,
+      [],
+      () => new Response(`Test route ${i}`)
+    );
+    littleRouterRoutes.put(...r2);
+  }
+
   bench(
     "itty",
     async () => {
@@ -240,6 +331,14 @@ describe("hot start static routes", async () => {
     "little",
     async () => {
       await littleRouter.handle(randomRequest());
+    },
+    BENCH_CONFIG
+  );
+
+  bench(
+    "little with routes",
+    async () => {
+      await littleRouterRoutes.handle(randomRequest());
     },
     BENCH_CONFIG
   );
@@ -282,6 +381,31 @@ describe("hot start dynamic routes", async () => {
     honoRouter.put(`${BASE}${i}/:test`, () => new Response(`Test route ${i}`));
   }
 
+  const littleRouterRoutes = LittleRouter();
+  for (let i = 0; i < request.length; i++) {
+    // Setup time also matters for cold starts
+    const r0 = route(
+      `${BASE}${i}/:test`,
+      [],
+      () => new Response(`Test route ${i}`)
+    );
+    littleRouterRoutes.get(...r0);
+
+    const r1 = route(
+      `${BASE}${i}/:test`,
+      [],
+      () => new Response(`Test route ${i}`)
+    );
+    littleRouterRoutes.post(...r1);
+
+    const r2 = route(
+      `${BASE}${i}/:test`,
+      [],
+      () => new Response(`Test route ${i}`)
+    );
+    littleRouterRoutes.put(...r2);
+  }
+
   bench(
     "itty",
     async () => {
@@ -302,6 +426,14 @@ describe("hot start dynamic routes", async () => {
     "little",
     async () => {
       await littleRouter.handle(randomRequest());
+    },
+    BENCH_CONFIG
+  );
+
+  bench(
+    "little with routes",
+    async () => {
+      await littleRouterRoutes.handle(randomRequest());
     },
     BENCH_CONFIG
   );

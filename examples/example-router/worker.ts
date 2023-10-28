@@ -1,21 +1,21 @@
-import { Router, RoutesOf } from "@mewhhaha/little-router";
+import { Router } from "@mewhhaha/little-router";
 import { data_ } from "@mewhhaha/little-router-plugin-data";
 import { query_ } from "@mewhhaha/little-router-plugin-query";
 import { type } from "arktype";
-import { text, json } from "@mewhhaha/typed-response";
+import { text, ok } from "@mewhhaha/typed-response";
 
 const router = Router()
   .get("/example-get", [], () => {
     return text(200, "Hello fetch!");
   })
   .post("/example-post/:id", [], async ({ params }) => {
-    return json(200, { hello: params.id });
+    return ok(200, { hello: params.id });
   })
   .post(
     "/example-post",
     [data_(type({ value: "'cow'" }))],
     async ({ data }) => {
-      return json(200, { hello: data.value });
+      return ok(200, { hello: data.value });
     }
   )
   .post(
@@ -25,7 +25,7 @@ const router = Router()
       if (data.value === "apple") {
         return text(406, "allergic to apples");
       }
-      return json(200, { eating: true, fruit: data.value });
+      return ok(200, { eating: true, fruit: data.value });
     }
   )
   .get(
@@ -36,9 +36,10 @@ const router = Router()
     }
   );
 
-export type Routes = RoutesOf<typeof router>;
+const routes = router.infer;
+export type Routes = typeof routes;
 
-const handler = {
+const handler: ExportedHandler = {
   fetch: router.handle,
 };
 

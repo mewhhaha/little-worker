@@ -7,15 +7,15 @@ import {
   test,
 } from "vitest";
 import { UnstableDevWorker, unstable_dev } from "wrangler";
-import { fetcher } from "@mewhhaha/little-fetcher";
-import { Routes } from "./main.js";
+import { fetcher } from "@mewhhaha/little-worker";
+import { Routes } from "./worker.js";
 
 describe("example", () => {
   let worker: UnstableDevWorker;
   let f: ReturnType<typeof fetcher<Routes>>;
 
   beforeAll(async () => {
-    worker = await unstable_dev("./main.ts");
+    worker = await unstable_dev("./app/worker.ts", { bundle: true });
     f = fetcher<Routes>(worker as unknown as { fetch: typeof fetch });
   });
 

@@ -1,0 +1,38 @@
+{
+  "name": "@mewhhaha/little-worker",
+  "version": "0.0.36",
+  "type": "module",
+  "description": "Bundle of useful packages when working with a cloudflare worker",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "little-worker": "dist/cli/index.js"
+  },
+  "scripts": {
+    "prepublish": "pnpm -w build",
+    "lint": "eslint --ext .ts src/**",
+    "build": "tsc --project tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@mewhhaha/json-string": "workspace:^",
+    "@mewhhaha/little-fetcher": "workspace:^",
+    "@mewhhaha/little-router": "workspace:^",
+    "@mewhhaha/typed-request": "workspace:^",
+    "@mewhhaha/typed-response": "workspace:^"
+  },
+  "devDependencies": {
+    "@mewhhaha/config": "workspace:^",
+    "@types/node": "^20.8.9",
+    "commander": "^11.1.0",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
+  },
+  "peerDependencies": {
+    "prettier": "^3.0.3"
+  },
+  "sideEffects": false
+}

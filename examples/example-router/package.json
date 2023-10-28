@@ -1,11 +1,12 @@
 {
-  "name": "example",
+  "name": "example-router",
   "private": true,
   "version": "0.0.37",
   "type": "module",
   "description": "",
   "scripts": {
-    "dev": "tsc --project tsconfig.build.json && node dist/main.js",
+    "build": "wrangler deploy --dry-run --outdir=dist",
+    "dev": "tsc --project tsconfig.build.json && node dist/worker.js",
     "test": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
@@ -13,21 +14,20 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20231016.0",
+    "@cloudflare/workers-types": "^4.20231025.0",
     "@mewhhaha/config": "workspace:^",
     "@mewhhaha/little-fetcher": "workspace:^",
     "@mewhhaha/typed-request": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^",
-    "json-string": "^0.0.1",
     "typescript": "^5.2.2",
     "vitest": "^0.34.6",
-    "wrangler": "^3.13.2"
+    "wrangler": "^3.15.0"
   },
   "dependencies": {
     "@mewhhaha/json-string": "workspace:^",
     "@mewhhaha/little-router": "workspace:^",
     "@mewhhaha/little-router-plugin-data": "workspace:^",
     "@mewhhaha/little-router-plugin-query": "workspace:^",
-    "arktype": "1.0.24-alpha"
+    "arktype": "1.0.25-alpha"
   }
 }
