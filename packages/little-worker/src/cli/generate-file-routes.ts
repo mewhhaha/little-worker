@@ -15,12 +15,16 @@ const isRouteFile = (f: string) => f.match(methodRegex);
 
 const createPattern = (files: string[]) => {
   const global = `
+    declare const self: any;
+    declare const global: any;
+    declare const window: any;
+
     if (typeof self !== "undefined") {
-      (self as any).PATTERN = "";
+      self.PATTERN = "";
     } else if (typeof global !== "undefined") {
-      (global as any).PATTERN = "";
+      global.PATTERN = "";
     } else if (typeof window !== "undefined") {
-      (window as any).PATTERN = "";
+      window.PATTERN = "";
     }
   `;
 

@@ -8,6 +8,7 @@
     "build": "wrangler deploy --dry-run --outdir=dist",
     "dev": "little-worker routes && tsc --project tsconfig.build.json && node dist/worker.js",
     "routes": "little-worker routes",
+    "api": "dts-bundle-generator app/worker.ts",
     "test": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
@@ -17,6 +18,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20231025.0",
     "@mewhhaha/config": "workspace:^",
+    "dts-bundle-generator": "^8.1.2",
     "typescript": "^5.2.2",
     "vitest": "^0.34.6",
     "wrangler": "^3.15.0"

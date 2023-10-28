@@ -1,9 +1,13 @@
+declare const self: any;
+declare const global: any;
+declare const window: any;
+
 if (typeof self !== "undefined") {
-  (self as any).PATTERN = "";
+  self.PATTERN = "";
 } else if (typeof global !== "undefined") {
-  (global as any).PATTERN = "";
+  global.PATTERN = "";
 } else if (typeof window !== "undefined") {
-  (window as any).PATTERN = "";
+  window.PATTERN = "";
 }
 declare module "./get.example-get.js" {
   /** This is an ephemeral value and can only be used as a type */

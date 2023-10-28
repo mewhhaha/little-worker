@@ -20,12 +20,4 @@ program
     await generateRoutes(options.target);
   });
 
-program
-  .command("api")
-  .description("Create a bundle of exported types")
-  .argument("<string>", "target entry point to base exports off of")
-  .action(() => {
-    console.log("api");
-  });
-
 program.parse();
