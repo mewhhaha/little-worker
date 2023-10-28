@@ -1,5 +1,15 @@
 # example
 
+## 0.0.37
+
+### Patch Changes
+
+- 7529f49: Add little-worker package
+- Updated dependencies [7529f49]
+  - @mewhhaha/little-worker@0.0.37
+  - @mewhhaha/little-router-plugin-data@0.0.38
+  - @mewhhaha/little-router-plugin-query@0.0.38
+
 ## 0.0.36
 
 ### Patch Changes

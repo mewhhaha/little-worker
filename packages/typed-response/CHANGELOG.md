@@ -1,5 +1,11 @@
 # @mewhhaha/typed-response
 
+## 0.0.38
+
+### Patch Changes
+
+- 7529f49: Add little-worker package
+
 ## 0.0.37
 
 ### Patch Changes
