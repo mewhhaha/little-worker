@@ -3,7 +3,7 @@
  * This will block you from accidentally passing a `string` where a `DateISOString` is expected.
  * However if the function takes a the general type, it's completely valid to pass in the tagged type.
  * @example
- * type DateISOString = TaggedType<string, "date_string">;
+ * type DateISOString = TaggedType<string, "DateISOString">;
  * const dateString = new Date().toISOString() as DateISOString
  *
  * const f = (value: DateISOString) => value
