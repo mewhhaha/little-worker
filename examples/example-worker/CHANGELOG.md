@@ -1,5 +1,12 @@
 # example
 
+## 0.0.38
+
+### Patch Changes
+
+- Updated dependencies [9f95f60]
+  - @mewhhaha/little-worker@0.0.38
+
 ## 0.0.37
 
 ### Patch Changes

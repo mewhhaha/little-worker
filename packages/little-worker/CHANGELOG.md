@@ -1,5 +1,11 @@
 # @mewhhaha/little-worker
 
+## 0.0.38
+
+### Patch Changes
+
+- 9f95f60: Add some other nice utilities
+
 ## 0.0.37
 
 ### Patch Changes
