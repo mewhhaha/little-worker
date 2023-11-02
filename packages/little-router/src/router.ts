@@ -1,7 +1,7 @@
 import { match } from "./match.js";
-import { GetOverlap, HasOverlap } from "./overlap.js";
 import { Plugin, PluginContext } from "./plugin.js";
 import { FetchDefinition, Queries } from "./fetch.js";
+import { is_overlapping } from "./overlap.js";
 
 export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
   REST_ARGS,
@@ -117,32 +117,26 @@ export type RoutesOf<T> = T extends RouteBuilder<
   ? ROUTES
   : never;
 
-type StartsWithSlash<T extends string> = T extends `/${string}` ? T : never;
-
 type RouteProxy<
   METHOD extends Method,
   ROUTES extends FetchDefinition,
   REST_ARGS extends unknown[],
 > = <
-  const PATTERN extends string,
+  const PATTERN extends `/${string}`,
   const RESPONSE extends Response,
   PLUGINS extends Plugin<REST_ARGS>[],
 >(
-  pattern: Extract<ROUTES, { method: METHOD | "all" }> extends never
-    ? StartsWithSlash<PATTERN>
-    : HasOverlap<
-        PATTERN,
-        Extract<ROUTES, { method: METHOD | "all" }>["pattern"]
-      > extends false
-    ? StartsWithSlash<PATTERN>
-    : ValidationError<`${PATTERN} will never match because of preceding pattern ${GetOverlap<
-        PATTERN,
-        Extract<ROUTES, { method: METHOD | "all" }>["pattern"]
-      >}`>,
+  pattern: patterns<ROUTES, METHOD> extends never
+    ? PATTERN
+    : is_overlapping<
+        patterns<ROUTES, METHOD>,
+        PATTERN
+      > extends infer error extends string
+    ? error
+    : PATTERN,
   plugins: PLUGINS,
   h: RouteHandler<
-    | RouteHandlerContext<PATTERN>
-    | Exclude<Awaited<ReturnType<PLUGINS[number]>>, Response>,
+    RouteHandlerContext<PATTERN> | plugin_value<PLUGINS>,
     REST_ARGS,
     RESPONSE
   >
@@ -152,13 +146,28 @@ type RouteProxy<
   | FetchDefinition<
       METHOD,
       PATTERN,
-      SearchOf<PLUGINS>,
-      InitOf<PLUGINS>,
-      RESPONSE | Extract<Awaited<ReturnType<PLUGINS[number]>>, Response>
+      search_of<PLUGINS>,
+      init_of<PLUGINS>,
+      RESPONSE | plugin_response<PLUGINS>
     >
 >;
 
-type SearchOf<PLUGINS extends Plugin<any>[]> = PLUGINS extends ((
+type plugin_response<PLUGINS extends Plugin<any>[]> = Extract<
+  Awaited<ReturnType<PLUGINS[number]>>,
+  Response
+>;
+
+type plugin_value<PLUGINS extends Plugin<any>[]> = Exclude<
+  Awaited<ReturnType<PLUGINS[number]>>,
+  Response
+>;
+
+type patterns<ROUTES extends FetchDefinition, METHOD extends Method> = Extract<
+  ROUTES,
+  { method: METHOD | "all" }
+>["pattern"];
+
+type search_of<PLUGINS extends Plugin<any>[]> = PLUGINS extends ((
   context: PluginContext<{
     init: any;
     search: infer I extends Queries | undefined;
@@ -168,7 +177,7 @@ type SearchOf<PLUGINS extends Plugin<any>[]> = PLUGINS extends ((
   ? NonNullable<I>
   : never;
 
-type InitOf<PLUGINS extends Plugin<any>[]> = PLUGINS extends ((
+type init_of<PLUGINS extends Plugin<any>[]> = PLUGINS extends ((
   context: PluginContext<{
     init: infer I extends RequestInit | undefined;
     search: any;
@@ -178,9 +187,9 @@ type InitOf<PLUGINS extends Plugin<any>[]> = PLUGINS extends ((
   ? I
   : never;
 
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
-  k: infer I
-) => void
+type union_to_intersection<U> = (
+  U extends any ? (k: U) => void : never
+) extends (k: infer I) => void
   ? I
   : never;
 
@@ -189,12 +198,12 @@ type RouteHandler<
   REST_ARGS extends unknown[],
   RESPONSE extends Response = Response,
 > = (
-  context: UnionToIntersection<CONTEXT>,
+  context: union_to_intersection<CONTEXT>,
   ...rest: REST_ARGS
 ) => Promise<RESPONSE> | RESPONSE;
 
 type RouteHandlerContext<PATTERN extends string> = {
-  params: PatternParamsObject<PATTERN>;
+  params: pattern_to_params_object<PATTERN>;
   url: URL;
   request: Request;
 };
@@ -238,53 +247,64 @@ export type PatternParams<PATTERN> =
     ? "*"
     : never;
 
-type PatternParamsObject<PATTERN extends string> = {
-  [K in PatternParams<PATTERN>]: string;
-};
-
-type ValidationError<T extends string> = {
-  __message: T;
-  __error: never;
+type pattern_to_params_object<pattern extends string> = {
+  [K in PatternParams<pattern>]: string;
 };
 
 /**
- * Used to to type all the `route` functions with correct arguments. There's one prop that can be defined which is "arguments".
+ * Used to to type all the `route` functions with correct arguments. There's one prop that can be defined which is "extra".
  *
  * @example
  * declare module "@mewhhaha/little-router" {
  *  interface RouteData {
- *    arguments: [Env, ExecutionContext];
+ *    extra: [Env, ExecutionContext];
  *  }
  * }
  */
+
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export interface RouteData {
-  [key: string]: unknown;
+  extra: any;
 }
+
+export type args_or_none<args extends RouteData> =
+  args["extra"] extends unknown[] ? args["extra"] : [];
 
 // Helper for generating routes
 export const route = <
-  const PATTERN extends string,
+  const PATTERN extends `/${string}`,
   const RESPONSE extends Response,
-  PLUGINS extends Plugin<
-    ROUTE_ARGS["arguments"] extends unknown[] ? ROUTE_ARGS["arguments"] : []
-  >[],
+  PLUGINS extends Plugin<args_or_none<ROUTE_ARGS>>[],
   ROUTE_ARGS extends RouteData = RouteData,
 >(
-  pattern: StartsWithSlash<PATTERN>,
+  pattern: PATTERN,
   plugins: PLUGINS,
   h: RouteHandler<
     | RouteHandlerContext<PATTERN>
     | Exclude<Awaited<ReturnType<PLUGINS[number]>>, Response>,
-    ROUTE_ARGS["arguments"] extends unknown[] ? ROUTE_ARGS["arguments"] : [],
+    args_or_none<ROUTE_ARGS>,
     RESPONSE
   >
 ): [
-  StartsWithSlash<PATTERN>,
+  PATTERN,
   PLUGINS,
   RouteHandler<
     | RouteHandlerContext<PATTERN>
     | Exclude<Awaited<ReturnType<PLUGINS[number]>>, Response>,
-    ROUTE_ARGS["arguments"] extends unknown[] ? ROUTE_ARGS["arguments"] : [],
+    args_or_none<ROUTE_ARGS>,
     RESPONSE
   >,
 ] => [pattern, plugins, h];
+
+declare const self: any;
+declare const global: any;
+declare const window: any;
+
+/** Creates the global "PATTERN" variable for little-worker generated routes */
+if (typeof self !== "undefined") {
+  self.PATTERN = undefined;
+} else if (typeof global !== "undefined") {
+  global.PATTERN = undefined;
+} else if (typeof window !== "undefined") {
+  window.PATTERN = undefined;
+}

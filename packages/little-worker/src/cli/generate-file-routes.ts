@@ -13,38 +13,21 @@ const methodRegex = /^(post)|(get)|(delete)|(put)|(options)|(all)|(patch)/;
 
 const isRouteFile = (f: string) => f.match(methodRegex);
 
-const createPattern = (files: string[]) => {
-  const global = `
-    declare const self: any;
-    declare const global: any;
-    declare const window: any;
-
-    if (typeof self !== "undefined") {
-      self.PATTERN = "";
-    } else if (typeof global !== "undefined") {
-      global.PATTERN = "";
-    } else if (typeof window !== "undefined") {
-      window.PATTERN = "";
-    }
-  `;
-
-  const declarations = files
-    .map((f) => {
-      return `declare module "./${fileToModule(f)}" { 
-        /** This is an ephemeral value and can only be used as a type */
-        const PATTERN = "${fileToPath(f)}" 
-      }`;
-    })
-    .join("");
-
-  return global + declarations + "export {};";
-};
-
 const createRouter = (files: string[]) => {
   const vars: Record<string, string> = {};
   for (let i = 0; i < files.length; i++) {
     vars[files[i]] = `route_${i}`;
   }
+
+  const declarations = files
+    .map((f) => {
+      return `declare module "./${fileToModule(f)}" { 
+      /** This is an ephemeral value and can only be used as a type */
+      const PATTERN = "${fileToPath(f)}" 
+    }`;
+    })
+    .join("");
+
   const imports =
     "import { Router, type RouteData } from '@mewhhaha/little-worker';" +
     "import * as PATTERN from './_pattern.js';" +
@@ -58,10 +41,6 @@ const createRouter = (files: string[]) => {
     })
     .join("\n");
 
-  const pattern = `if (typeof PATTERN === "undefined") {
-      throw new Error("missing PATTERN import");
-    }`;
-
   const type = `
     const routes = router.infer;
     export type Routes = typeof routes;
@@ -69,9 +48,9 @@ const createRouter = (files: string[]) => {
 
   const router =
     imports +
-    pattern +
-    `export const router = Router<RouteData["arguments"] extends unknown[] ? RouteData["arguments"] : []>()\n${routes};` +
-    type;
+    `export const router = Router<RouteData["extra"] extends unknown[] ? RouteData["extra"] : []>()\n${routes};` +
+    type +
+    declarations;
 
   return router;
 };
@@ -92,18 +71,10 @@ export const main = async (target: string) => {
     .readdir(target)
     .then((files) => files.filter(isRouteFile).sort());
 
-  const pattern = createPattern(files);
   const router = createRouter(files);
 
-  const writePattern = fs.writeFile(
-    `${target}/_pattern.ts`,
-    await format(pattern, { parser: "typescript" })
-  );
-
-  const writeRouter = await fs.writeFile(
+  await fs.writeFile(
     `${target}/_router.ts`,
     await format(router, { parser: "typescript" })
   );
-
-  await Promise.all([writePattern, writeRouter]);
 };

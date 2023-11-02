@@ -1,18 +1,22 @@
 import { describe, it, assertType } from "vitest";
-import { HasOverlap } from "./overlap.js";
+import { is_overlapping } from "./overlap.js";
 
 describe("HasOverlap", () => {
-  it("should overlap", () => {
-    assertType<HasOverlap<"/a", "/:id">>(true);
-    assertType<HasOverlap<"/a", "/*">>(true);
-    assertType<HasOverlap<"/a/b", "/*">>(true);
-    assertType<HasOverlap<"/a/b", "*">>(true);
+  it("shouldn't  overlap", () => {
+    assertType<is_overlapping<"/a", "/:id">>(false);
+    assertType<is_overlapping<"/a", "/*">>(false);
+    assertType<is_overlapping<"/a/b", "/*">>(false);
+    assertType<is_overlapping<"/a/b", "*">>(false);
+    assertType<is_overlapping<"/a/b", "/:id">>(false);
+    assertType<is_overlapping<"/a/:id/b", "/a/:id/c">>(false);
+    assertType<is_overlapping<"/a-a", "/b-b">>(false);
+    assertType<is_overlapping<"/b-b", "/a-a">>(false);
   });
-  it("shouldn't overlap", () => {
-    assertType<HasOverlap<"/:id", "/a">>(false);
-    assertType<HasOverlap<"/a/b", "/:id">>(false);
-    assertType<HasOverlap<"/a/:id/b", "/a/:id/c">>(false);
-    assertType<HasOverlap<"/a-a", "/b-b">>(false);
-    assertType<HasOverlap<"/b-b", "/a-a">>(false);
+  it("should overlap", () => {
+    assertType<is_overlapping<"/:id", "/a">>("/:id overlaps with /a");
+    assertType<is_overlapping<"/:id/:bid", "/a/b">>(
+      "/:id/:bid overlaps with /a/b"
+    );
+    assertType<is_overlapping<"/*", "/a/b">>("/* overlaps with /a/b");
   });
 });
