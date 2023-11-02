@@ -8,6 +8,24 @@
   "license": "ISC",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./crypto": {
+      "import": "./dist/crypto.js",
+      "types": "./dist/crypto.d.ts"
+    },
+    "./invariant": {
+      "import": "./dist/invariant.js",
+      "types": "./dist/invariant.d.ts"
+    },
+    "./tagged": {
+      "import": "./dist/tagged.js",
+      "types": "./dist/tagged.d.ts"
+    }
+  },
   "bin": {
     "little-worker": "dist/cli/index.js"
   },
