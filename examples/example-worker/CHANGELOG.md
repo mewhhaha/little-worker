@@ -1,5 +1,15 @@
 # example
 
+## 0.0.39
+
+### Patch Changes
+
+- 41a89cf: Make route generation only be one file and simplify types in little-router
+- Updated dependencies [41a89cf]
+  - @mewhhaha/little-worker@0.0.39
+  - @mewhhaha/little-router-plugin-data@0.0.39
+  - @mewhhaha/little-router-plugin-query@0.0.39
+
 ## 0.0.38
 
 ### Patch Changes
