@@ -1,5 +1,14 @@
 # @mewhhaha/little-router-plugin-data
 
+## 0.0.40
+
+### Patch Changes
+
+- ad9d1c5: Move extra packages to submodules
+- Updated dependencies [ad9d1c5]
+  - @mewhhaha/json-string@0.0.40
+  - @mewhhaha/little-router@0.0.40
+
 ## 0.0.39
 
 ### Patch Changes
