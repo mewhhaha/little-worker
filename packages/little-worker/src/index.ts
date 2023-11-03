@@ -10,9 +10,9 @@ declare const window: any;
 
 /** Creates the global "PATTERN" variable for little-worker generated routes */
 if (typeof self !== "undefined") {
-  self.PATTERN = undefined;
+  self.PATTERN = "";
 } else if (typeof global !== "undefined") {
-  global.PATTERN = undefined;
+  global.PATTERN = "";
 } else if (typeof window !== "undefined") {
-  window.PATTERN = undefined;
+  window.PATTERN = "";
 }

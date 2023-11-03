@@ -14,20 +14,20 @@
       "types": "./dist/index.d.ts"
     },
     "./crypto": {
-      "import": "./dist/crypto.js",
-      "types": "./dist/crypto.d.ts"
+      "import": "./dist/helpers/crypto.js",
+      "types": "./dist/helpers/crypto.d.ts"
     },
     "./invariant": {
-      "import": "./dist/invariant.js",
-      "types": "./dist/invariant.d.ts"
+      "import": "./dist/helpers/invariant.js",
+      "types": "./dist/helpers/invariant.d.ts"
     },
     "./tagged": {
-      "import": "./dist/tagged.js",
-      "types": "./dist/tagged.d.ts"
+      "import": "./dist/helpers/tagged.js",
+      "types": "./dist/helpers/tagged.d.ts"
     },
     "./init": {
-      "import": "./dist/init.js",
-      "types": "./dist/init.d.ts"
+      "import": "./dist/helpers/init.js",
+      "types": "./dist/helpers/init.d.ts"
     }
   },
   "bin": {
@@ -56,5 +56,7 @@
   "peerDependencies": {
     "prettier": "^3.0.3"
   },
-  "sideEffects": false
+  "sideEffects": [
+    "./dist/index.js"
+  ]
 }
