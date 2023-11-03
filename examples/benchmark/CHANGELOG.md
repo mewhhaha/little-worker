@@ -1,5 +1,12 @@
 # benchmark
 
+## 0.0.42
+
+### Patch Changes
+
+- cb3193b: Add pure marker to route export
+- 98b0c93: Change commander to use esm
+
 ## 0.0.41
 
 ### Patch Changes
