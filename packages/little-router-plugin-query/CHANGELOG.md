@@ -1,5 +1,13 @@
 # @mewhhaha/little-router-plugin-query
 
+## 0.0.45
+
+### Patch Changes
+
+- 505c8f6: Consider json-string sideeffects
+- Updated dependencies [505c8f6]
+  - @mewhhaha/little-router@0.0.45
+
 ## 0.0.44
 
 ### Patch Changes
