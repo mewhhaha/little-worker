@@ -14,20 +14,20 @@
       "types": "./dist/index.d.ts"
     },
     "./crypto": {
-      "import": "./dist/helpers/crypto.js",
-      "types": "./dist/helpers/crypto.d.ts"
+      "import": "./dist/batteries/crypto.js",
+      "types": "./dist/batteries/crypto.d.ts"
     },
     "./invariant": {
-      "import": "./dist/helpers/invariant.js",
-      "types": "./dist/helpers/invariant.d.ts"
+      "import": "./dist/batteries/invariant.js",
+      "types": "./dist/batteries/invariant.d.ts"
     },
     "./tagged": {
-      "import": "./dist/helpers/tagged.js",
-      "types": "./dist/helpers/tagged.d.ts"
+      "import": "./dist/batteries/tagged.js",
+      "types": "./dist/batteries/tagged.d.ts"
     },
     "./init": {
-      "import": "./dist/helpers/init.js",
-      "types": "./dist/helpers/init.d.ts"
+      "import": "./dist/batteries/init.js",
+      "types": "./dist/batteries/init.d.ts"
     }
   },
   "bin": {
