@@ -1,6 +1,6 @@
 {
   "name": "@mewhhaha/typed-request",
-  "version": "0.0.40",
+  "version": "0.0.41",
   "description": "Types for typing a request to a certain method and init",
   "type": "module",
   "types": "dist/index.d.ts",
