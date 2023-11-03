@@ -1,5 +1,11 @@
 # @mewhhaha/little-router
 
+## 0.0.45
+
+### Patch Changes
+
+- 505c8f6: Consider json-string sideeffects
+
 ## 0.0.44
 
 ### Patch Changes
