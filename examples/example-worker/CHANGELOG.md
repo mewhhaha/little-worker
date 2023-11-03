@@ -1,5 +1,15 @@
 # example
 
+## 0.0.41
+
+### Patch Changes
+
+- f637da7: Add init package and move PATTERN code to little-worker
+- Updated dependencies [f637da7]
+  - @mewhhaha/little-worker@0.0.41
+  - @mewhhaha/little-router-plugin-data@0.0.41
+  - @mewhhaha/little-router-plugin-query@0.0.41
+
 ## 0.0.40
 
 ### Patch Changes

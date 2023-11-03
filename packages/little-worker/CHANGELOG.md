@@ -1,5 +1,17 @@
 # @mewhhaha/little-worker
 
+## 0.0.41
+
+### Patch Changes
+
+- f637da7: Add init package and move PATTERN code to little-worker
+- Updated dependencies [f637da7]
+  - @mewhhaha/little-router@0.0.41
+  - @mewhhaha/json-string@0.0.41
+  - @mewhhaha/little-fetcher@0.0.41
+  - @mewhhaha/typed-request@0.0.41
+  - @mewhhaha/typed-response@0.0.41
+
 ## 0.0.40
 
 ### Patch Changes

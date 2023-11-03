@@ -1,5 +1,11 @@
 # @mewhhaha/json-string
 
+## 0.0.41
+
+### Patch Changes
+
+- f637da7: Add init package and move PATTERN code to little-worker
+
 ## 0.0.40
 
 ### Patch Changes
