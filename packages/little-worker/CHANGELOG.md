@@ -1,5 +1,18 @@
 # @mewhhaha/little-worker
 
+## 0.0.43
+
+### Patch Changes
+
+- 8d7ec77: Fix generation and change to using yargs
+- Updated dependencies [8d7ec77]
+  - @mewhhaha/little-worker-cli@0.0.43
+  - @mewhhaha/json-string@0.0.43
+  - @mewhhaha/little-fetcher@0.0.43
+  - @mewhhaha/little-router@0.0.43
+  - @mewhhaha/typed-request@0.0.43
+  - @mewhhaha/typed-response@0.0.43
+
 ## 0.0.42
 
 ### Patch Changes
