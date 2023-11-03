@@ -24,5 +24,5 @@
     "@mewhhaha/config": "workspace:^",
     "typescript": "^5.2.2"
   },
-  "sideEffects": false
+  "sideEffects": true
 }
