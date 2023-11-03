@@ -1,5 +1,11 @@
 # @mewhhaha/little-fetcher
 
+## 0.0.44
+
+### Patch Changes
+
+- 5539a13: Open up RouteData file
+
 ## 0.0.43
 
 ### Patch Changes
