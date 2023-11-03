@@ -271,7 +271,7 @@ export type args_or_none<args extends RouteData> =
   args["extra"] extends unknown[] ? args["extra"] : [];
 
 // Helper for generating routes
-export const route = <
+export const route = /*#__PURE__*/ <
   const PATTERN extends `/${string}`,
   const RESPONSE extends Response,
   PLUGINS extends Plugin<args_or_none<ROUTE_ARGS>>[],
