@@ -261,10 +261,8 @@ type pattern_to_params_object<pattern extends string> = {
  *  }
  * }
  */
-
-// eslint-disable-next-line @typescript-eslint/no-namespace
 export interface RouteData {
-  extra: any;
+  [key: string]: unknown;
 }
 
 export type args_or_none<args extends RouteData> =
