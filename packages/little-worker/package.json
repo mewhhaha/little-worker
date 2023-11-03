@@ -24,6 +24,10 @@
     "./tagged": {
       "import": "./dist/tagged.js",
       "types": "./dist/tagged.d.ts"
+    },
+    "./init": {
+      "import": "./dist/init.js",
+      "types": "./dist/init.d.ts"
     }
   },
   "bin": {
