@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { program } from "commander";
+import { program } from "commander/esm.mjs";
 import { main as generateRoutes } from "./generate-file-routes.js";
 
 program
