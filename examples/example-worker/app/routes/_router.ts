@@ -4,7 +4,6 @@ import route_1 from "./get.example-query-params.js";
 import route_2 from "./post.example-advanced.js";
 import route_3 from "./post.example-post.$id.js";
 import route_4 from "./post.example-post.js";
-
 export const router = Router<
   RouteData["extra"] extends unknown[] ? RouteData["extra"] : []
 >()
@@ -15,7 +14,6 @@ export const router = Router<
   .post("/example-post", route_4[1], route_4[2]);
 const routes = router.infer;
 export type Routes = typeof routes;
-
 declare module "./get.example-get.js" {
   /** This is an ephemeral value and can only be used as a type */
   const PATTERN = "/example-get";

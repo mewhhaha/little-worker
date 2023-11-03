@@ -30,7 +30,6 @@ const createRouter = (files: string[]) => {
 
   const imports =
     "import { Router, type RouteData } from '@mewhhaha/little-worker';" +
-    "import * as PATTERN from './_pattern.js';" +
     files.map((f) => `import ${vars[f]} from "./${fileToModule(f)}";`).join("");
 
   const routes = files

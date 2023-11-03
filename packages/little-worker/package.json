@@ -43,6 +43,7 @@
     "@mewhhaha/json-string": "workspace:^",
     "@mewhhaha/little-fetcher": "workspace:^",
     "@mewhhaha/little-router": "workspace:^",
+    "@mewhhaha/little-worker-cli": "workspace:^",
     "@mewhhaha/typed-request": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^"
   },

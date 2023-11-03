@@ -1,0 +1,31 @@
+{
+  "name": "@mewhhaha/little-worker-cli",
+  "version": "0.0.42",
+  "type": "module",
+  "description": "CLI for little-worker",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepublish": "pnpm -w build",
+    "lint": "eslint --ext .ts src/**",
+    "build": "esbuild src/index.ts --bundle --platform=node --external:prettier --format=esm --outdir=dist --allow-overwrite && tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@mewhhaha/config": "workspace:^",
+    "@types/node": "^20.8.9",
+    "@types/yargs": "^17.0.29",
+    "commander": "^11.1.0",
+    "esbuild": "^0.19.5",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2",
+    "yargs": "^17.7.2"
+  },
+  "peerDependencies": {
+    "prettier": "^3.0.3"
+  },
+  "sideEffects": true
+}
