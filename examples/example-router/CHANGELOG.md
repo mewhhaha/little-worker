@@ -1,5 +1,18 @@
 # example
 
+## 0.0.42
+
+### Patch Changes
+
+- cb3193b: Add pure marker to route export
+- 98b0c93: Change commander to use esm
+- Updated dependencies [cb3193b]
+- Updated dependencies [98b0c93]
+  - @mewhhaha/little-router@0.0.42
+  - @mewhhaha/json-string@0.0.42
+  - @mewhhaha/little-router-plugin-data@0.0.42
+  - @mewhhaha/little-router-plugin-query@0.0.42
+
 ## 0.0.41
 
 ### Patch Changes
