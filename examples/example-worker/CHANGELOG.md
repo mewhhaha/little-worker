@@ -1,5 +1,15 @@
 # example
 
+## 0.0.44
+
+### Patch Changes
+
+- 5539a13: Open up RouteData file
+- Updated dependencies [5539a13]
+  - @mewhhaha/little-router-plugin-data@0.0.44
+  - @mewhhaha/little-router-plugin-query@0.0.44
+  - @mewhhaha/little-worker@0.0.44
+
 ## 0.0.43
 
 ### Patch Changes
