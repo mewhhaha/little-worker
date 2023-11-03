@@ -1,5 +1,15 @@
 # example
 
+## 0.0.43
+
+### Patch Changes
+
+- 8d7ec77: Fix generation and change to using yargs
+- Updated dependencies [8d7ec77]
+  - @mewhhaha/little-worker@0.0.43
+  - @mewhhaha/little-router-plugin-data@0.0.43
+  - @mewhhaha/little-router-plugin-query@0.0.43
+
 ## 0.0.42
 
 ### Patch Changes

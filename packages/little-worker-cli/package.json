@@ -1,6 +1,6 @@
 {
   "name": "@mewhhaha/little-worker-cli",
-  "version": "0.0.42",
+  "version": "0.0.43",
   "type": "module",
   "description": "CLI for little-worker",
   "keywords": [],
