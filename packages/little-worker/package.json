@@ -1,6 +1,6 @@
 {
   "name": "@mewhhaha/little-worker",
-  "version": "0.0.45",
+  "version": "0.0.46",
   "type": "module",
   "description": "Bundle of useful packages when working with a cloudflare worker",
   "keywords": [],

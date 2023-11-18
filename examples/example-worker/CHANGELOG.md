@@ -1,5 +1,15 @@
 # example
 
+## 0.0.46
+
+### Patch Changes
+
+- 007e155: Add html response and make text response header strict
+- Updated dependencies [007e155]
+  - @mewhhaha/little-router-plugin-data@0.0.46
+  - @mewhhaha/little-router-plugin-query@0.0.46
+  - @mewhhaha/little-worker@0.0.46
+
 ## 0.0.45
 
 ### Patch Changes
