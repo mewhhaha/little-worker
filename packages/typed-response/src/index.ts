@@ -126,6 +126,26 @@ export const text = <
   new Response(value, {
     ...init,
     status: code,
+    headers: { ...init?.headers, "Content-Type": "text/plain" },
+  }) as TextResponse<CODE, TEXT>;
+
+/**
+ * Helper for returning an html response.
+ * @example
+ * return html(200, "<html></html>")
+ */
+export const html = <
+  const CODE extends HttpStatusXXX,
+  const TEXT extends string,
+>(
+  code: CODE,
+  value: TEXT,
+  init?: Omit<ResponseInit, "status">
+) =>
+  new Response(value, {
+    ...init,
+    status: code,
+    headers: { ...init?.headers, "Content-Type": "text/html" },
   }) as TextResponse<CODE, TEXT>;
 
 /**
