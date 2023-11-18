@@ -1,5 +1,18 @@
 # @mewhhaha/little-worker
 
+## 0.0.46
+
+### Patch Changes
+
+- 007e155: Add html response and make text response header strict
+- Updated dependencies [007e155]
+  - @mewhhaha/typed-response@0.0.46
+  - @mewhhaha/json-string@0.0.46
+  - @mewhhaha/little-fetcher@0.0.46
+  - @mewhhaha/little-router@0.0.46
+  - @mewhhaha/little-worker-cli@0.0.46
+  - @mewhhaha/typed-request@0.0.46
+
 ## 0.0.45
 
 ### Patch Changes
