@@ -96,7 +96,10 @@ export type TypedHeaders<DEFINED_HEADERS extends Record<string, string>> = Omit<
 export interface TextResponse<
   CODE extends HttpStatusXXX,
   TEXT extends string,
-  HEADERS extends { "Content-Type": `text/${string}` } & Record<string, string>,
+  HEADERS extends { "Content-Type": `text/${string}` } & Record<
+    string,
+    string
+  > = { "Content-Type": `text/${string}` } & Record<string, string>,
 > extends Response {
   text(): Promise<TEXT>;
   json(): Promise<never>;
@@ -112,7 +115,7 @@ export interface JSONResponse<
   HEADERS extends { "Content-Type": "application/json" } & Record<
     string,
     string
-  >,
+  > = { "Content-Type": "application/json" } & Record<string, string>,
 > extends Response {
   json(): Promise<JSON>;
   json<T = JSON>(): Promise<T>;
@@ -123,7 +126,7 @@ export interface JSONResponse<
 
 export interface BodyResponse<
   CODE extends HttpStatusXXX,
-  HEADERS extends Record<string, string>,
+  HEADERS extends Record<string, string> = Record<string, string>,
 > extends Response {
   json(): Promise<unknown>;
   json<T = unknown>(): Promise<T>;
@@ -140,7 +143,7 @@ export interface BodyResponse<
 export const json = <
   const CODE extends HttpStatusXXX,
   const JSON,
-  const HEADERS extends HeadersInit,
+  const HEADERS extends HeadersInit = HeadersInit,
 >(
   code: CODE,
   value: JSON,
@@ -166,7 +169,7 @@ export const json = <
 export const text = <
   const CODE extends HttpStatusXXX,
   const TEXT extends string,
-  const HEADERS extends HeadersInit,
+  const HEADERS extends HeadersInit = HeadersInit,
 >(
   code: CODE,
   value: TEXT,
@@ -190,7 +193,7 @@ export const text = <
 export const html = <
   const CODE extends HttpStatusXXX,
   const TEXT extends string,
-  const HEADERS extends HeadersInit,
+  const HEADERS extends HeadersInit = HeadersInit,
 >(
   code: CODE,
   value: TEXT,
@@ -213,7 +216,7 @@ export const html = <
  */
 export const body = <
   const CODE extends HttpStatusXXX,
-  HEADERS extends HeadersInit,
+  HEADERS extends HeadersInit = HeadersInit,
 >(
   code: CODE,
   value?: BodyInit | null,
@@ -253,7 +256,7 @@ export const err = <
 export const ok = <
   const CODE extends HttpStatus2XX,
   const JSON extends CODE extends 204 | 205 ? null : unknown = null,
-  const HEADERS extends HeadersInit = never,
+  const HEADERS extends HeadersInit = HeadersInit,
 >(
   // We enforce single values as to avoid anyone passing 200 | 204 and expecting the wrong response
   code: IsSingleValue<CODE>,
@@ -280,7 +283,7 @@ export const ok = <
 
 export const empty = <
   const CODE extends 101 | 204 | 205 | 304,
-  HEADERS extends HeadersInit,
+  HEADERS extends HeadersInit = HeadersInit,
 >(
   code: CODE,
   init?: Omit<ResponseInit, "status" | "headers"> & { headers?: HEADERS }
