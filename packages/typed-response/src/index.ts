@@ -74,12 +74,16 @@ export type MergedHeaders<
   ORIGINAL,
   INCOMING extends Record<string, string>,
 > = ORIGINAL extends Headers
-  ? INCOMING & Record<string, string>
+  ? INCOMING
   : ORIGINAL extends TypedHeaders<infer HEADERS>
     ? INCOMING & HEADERS
     : ORIGINAL extends [string, string][]
-      ? FromEntries<ORIGINAL> & INCOMING
-      : ORIGINAL & INCOMING;
+      ? Record<string, string> extends FromEntries<ORIGINAL>
+        ? INCOMING
+        : FromEntries<ORIGINAL> & INCOMING
+      : Record<string, string> extends ORIGINAL
+        ? INCOMING
+        : ORIGINAL;
 
 export type FromEntries<T extends [string, string][]> = {
   [P in T[number][0]]: Extract<T[number], [P, string]>[1];
@@ -96,10 +100,9 @@ export type TypedHeaders<DEFINED_HEADERS extends Record<string, string>> = Omit<
 export interface TextResponse<
   CODE extends HttpStatusXXX,
   TEXT extends string,
-  HEADERS extends { "Content-Type": `text/${string}` } & Record<
-    string,
-    string
-  > = { "Content-Type": `text/${string}` } & Record<string, string>,
+  HEADERS extends { "Content-Type": `text/${string}` } = {
+    "Content-Type": `text/${string}`;
+  },
 > extends Response {
   text(): Promise<TEXT>;
   json(): Promise<never>;
@@ -112,10 +115,9 @@ export interface TextResponse<
 export interface JSONResponse<
   CODE extends HttpStatusXXX,
   JSON,
-  HEADERS extends { "Content-Type": "application/json" } & Record<
-    string,
-    string
-  > = { "Content-Type": "application/json" } & Record<string, string>,
+  HEADERS extends { "Content-Type": "application/json" } = {
+    "Content-Type": "application/json";
+  },
 > extends Response {
   json(): Promise<JSON>;
   json<T = JSON>(): Promise<T>;
@@ -126,7 +128,7 @@ export interface JSONResponse<
 
 export interface BodyResponse<
   CODE extends HttpStatusXXX,
-  HEADERS extends Record<string, string> = Record<string, string>,
+  HEADERS extends Record<string, string> = Record<never, never>,
 > extends Response {
   json(): Promise<unknown>;
   json<T = unknown>(): Promise<T>;
@@ -143,7 +145,7 @@ export interface BodyResponse<
 export const json = <
   const CODE extends HttpStatusXXX,
   const JSON,
-  const HEADERS extends HeadersInit = HeadersInit,
+  const HEADERS extends TypedHeadersInit = TypedHeadersInit,
 >(
   code: CODE,
   value: JSON,
@@ -169,7 +171,7 @@ export const json = <
 export const text = <
   const CODE extends HttpStatusXXX,
   const TEXT extends string,
-  const HEADERS extends HeadersInit = HeadersInit,
+  const HEADERS extends TypedHeadersInit = TypedHeadersInit,
 >(
   code: CODE,
   value: TEXT,
@@ -193,7 +195,7 @@ export const text = <
 export const html = <
   const CODE extends HttpStatusXXX,
   const TEXT extends string,
-  const HEADERS extends HeadersInit = HeadersInit,
+  const HEADERS extends TypedHeadersInit = TypedHeadersInit,
 >(
   code: CODE,
   value: TEXT,
@@ -216,7 +218,7 @@ export const html = <
  */
 export const body = <
   const CODE extends HttpStatusXXX,
-  HEADERS extends HeadersInit = HeadersInit,
+  HEADERS extends TypedHeadersInit = TypedHeadersInit,
 >(
   code: CODE,
   value?: BodyInit | null,
@@ -235,7 +237,7 @@ export const body = <
 export const err = <
   const CODE extends HttpStatus4XX | HttpStatus5XX,
   const JSON = null,
-  const HEADERS extends HeadersInit = HeadersInit,
+  const HEADERS extends TypedHeadersInit = TypedHeadersInit,
 >(
   code: CODE,
   value?: JSON,
@@ -256,7 +258,7 @@ export const err = <
 export const ok = <
   const CODE extends HttpStatus2XX,
   const JSON extends CODE extends 204 | 205 ? null : unknown = null,
-  const HEADERS extends HeadersInit = HeadersInit,
+  const HEADERS extends TypedHeadersInit = TypedHeadersInit,
 >(
   // We enforce single values as to avoid anyone passing 200 | 204 and expecting the wrong response
   code: IsSingleValue<CODE>,
@@ -283,7 +285,7 @@ export const ok = <
 
 export const empty = <
   const CODE extends 101 | 204 | 205 | 304,
-  HEADERS extends HeadersInit = HeadersInit,
+  HEADERS extends TypedHeadersInit = TypedHeadersInit,
 >(
   code: CODE,
   init?: Omit<ResponseInit, "status" | "headers"> & { headers?: HEADERS }
@@ -294,7 +296,7 @@ type IsUnion<T, U = T> = T extends any ? (U extends T ? false : true) : false;
 type IsSingleValue<T> = true extends IsUnion<T> ? never : T;
 
 export const mergeHeaders = (
-  init: HeadersInit | undefined,
+  init: TypedHeadersInit | undefined,
   incoming: Record<string, string>
 ) => {
   const merged = new Headers(init);
@@ -306,7 +308,7 @@ export const mergeHeaders = (
   return merged;
 };
 
-type HeadersInit =
+type TypedHeadersInit =
   | Headers
   | [string, string][]
   | TypedHeaders<Record<string, string>>
