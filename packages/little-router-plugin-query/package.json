@@ -26,8 +26,8 @@
     "@mewhhaha/little-fetcher": "workspace:^",
     "@mewhhaha/little-router": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^",
-    "arktype": "1.0.25-alpha",
-    "typescript": "^5.2.2",
+    "arktype": "1.0.28-alpha",
+    "typescript": "^5.3.2",
     "vitest": "^0.34.6"
   },
   "sideEffects": false,

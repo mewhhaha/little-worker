@@ -67,31 +67,69 @@ export type HttpStatusXXX =
 export type Ok<CODE extends number> = number extends CODE
   ? boolean
   : Exclude<CODE, HttpStatus2XX> extends never
-  ? true
-  : false;
+    ? true
+    : false;
 
-export interface TextResponse<CODE extends HttpStatusXXX, TEXT extends string>
-  extends Response {
+export type MergedHeaders<
+  ORIGINAL,
+  INCOMING extends Record<string, string>,
+> = ORIGINAL extends Headers
+  ? INCOMING & Record<string, string>
+  : ORIGINAL extends TypedHeaders<infer HEADERS>
+    ? INCOMING & HEADERS
+    : ORIGINAL extends [string, string][]
+      ? FromEntries<ORIGINAL> & INCOMING
+      : ORIGINAL & INCOMING;
+
+export type FromEntries<T extends [string, string][]> = {
+  [P in T[number][0]]: Extract<T[number], [P, string]>[1];
+};
+
+export type TypedHeaders<DEFINED_HEADERS extends Record<string, string>> = Omit<
+  Headers,
+  "get"
+> & {
+  get<T extends keyof DEFINED_HEADERS>(key: T): DEFINED_HEADERS[T];
+  get(key: string): string | null;
+};
+
+export interface TextResponse<
+  CODE extends HttpStatusXXX,
+  TEXT extends string,
+  HEADERS extends { "Content-Type": `text/${string}` } & Record<string, string>,
+> extends Response {
   text(): Promise<TEXT>;
   json(): Promise<never>;
   json<T = never>(): Promise<T>;
   status: CODE;
   ok: Ok<CODE>;
+  headers: TypedHeaders<HEADERS>;
 }
 
-export interface JSONResponse<CODE extends HttpStatusXXX, JSON>
-  extends Response {
+export interface JSONResponse<
+  CODE extends HttpStatusXXX,
+  JSON,
+  HEADERS extends { "Content-Type": "application/json" } & Record<
+    string,
+    string
+  >,
+> extends Response {
   json(): Promise<JSON>;
   json<T = JSON>(): Promise<T>;
   status: CODE;
   ok: Ok<CODE>;
+  headers: TypedHeaders<HEADERS>;
 }
 
-export interface BodyResponse<CODE extends HttpStatusXXX> extends Response {
+export interface BodyResponse<
+  CODE extends HttpStatusXXX,
+  HEADERS extends Record<string, string>,
+> extends Response {
   json(): Promise<unknown>;
   json<T = unknown>(): Promise<T>;
   status: CODE;
   ok: Ok<CODE>;
+  headers: TypedHeaders<HEADERS>;
 }
 
 /**
@@ -99,16 +137,26 @@ export interface BodyResponse<CODE extends HttpStatusXXX> extends Response {
  * @example
  * return json(200, null)
  */
-export const json = <const CODE extends HttpStatusXXX, const JSON>(
+export const json = <
+  const CODE extends HttpStatusXXX,
+  const JSON,
+  const HEADERS extends HeadersInit,
+>(
   code: CODE,
   value: JSON,
-  init?: Omit<ResponseInit, "status">
+  init?: Omit<ResponseInit, "status" | "headers"> & { headers?: HEADERS }
 ) =>
   new Response(JSON.stringify(value), {
     ...init,
     status: code,
-    headers: { ...init?.headers, "Content-Type": "application/json" },
-  }) as JSONResponse<CODE, JSON>;
+    headers: mergeHeaders(init?.headers, {
+      "Content-Type": "application/json",
+    }),
+  }) as JSONResponse<
+    CODE,
+    JSON,
+    MergedHeaders<HEADERS, { "Content-Type": "application/json" }>
+  >;
 
 /**
  * Helper for returning a text response.
@@ -118,16 +166,21 @@ export const json = <const CODE extends HttpStatusXXX, const JSON>(
 export const text = <
   const CODE extends HttpStatusXXX,
   const TEXT extends string,
+  const HEADERS extends HeadersInit,
 >(
   code: CODE,
   value: TEXT,
-  init?: Omit<ResponseInit, "status">
+  init?: Omit<ResponseInit, "status" | "header"> & { headers?: HEADERS }
 ) =>
   new Response(value, {
     ...init,
     status: code,
-    headers: { ...init?.headers, "Content-Type": "text/plain" },
-  }) as TextResponse<CODE, TEXT>;
+    headers: mergeHeaders(init?.headers, { "Content-Type": "text/plain" }),
+  }) as TextResponse<
+    CODE,
+    TEXT,
+    MergedHeaders<HEADERS, { "Content-Type": "text/plain" }>
+  >;
 
 /**
  * Helper for returning an html response.
@@ -137,6 +190,7 @@ export const text = <
 export const html = <
   const CODE extends HttpStatusXXX,
   const TEXT extends string,
+  const HEADERS extends HeadersInit,
 >(
   code: CODE,
   value: TEXT,
@@ -145,23 +199,30 @@ export const html = <
   new Response(value, {
     ...init,
     status: code,
-    headers: { ...init?.headers, "Content-Type": "text/html" },
-  }) as TextResponse<CODE, TEXT>;
+    headers: mergeHeaders(init?.headers, { "Content-Type": "text/html" }),
+  }) as TextResponse<
+    CODE,
+    TEXT,
+    MergedHeaders<HEADERS, { "Content-Type": "text/html" }>
+  >;
 
 /**
  * Helper for returning a normal body response
  * @example
  * return body(101, null, { webSocket: socket })
  */
-export const body = <const CODE extends HttpStatusXXX>(
+export const body = <
+  const CODE extends HttpStatusXXX,
+  HEADERS extends HeadersInit,
+>(
   code: CODE,
   value?: BodyInit | null,
-  init?: Omit<ResponseInit, "status">
+  init?: Omit<ResponseInit, "status" | "headers"> & { headers?: HEADERS }
 ) =>
   new Response(value, {
     ...init,
     status: code,
-  }) as BodyResponse<CODE>;
+  }) as BodyResponse<CODE, MergedHeaders<HEADERS, {}>>;
 
 /**
  * Helper for returning an error response with JSON body.
@@ -171,11 +232,17 @@ export const body = <const CODE extends HttpStatusXXX>(
 export const err = <
   const CODE extends HttpStatus4XX | HttpStatus5XX,
   const JSON = null,
+  const HEADERS extends HeadersInit = HeadersInit,
 >(
   code: CODE,
   value?: JSON,
-  init?: Omit<ResponseInit, "status">
-) => json(code, value ?? null, init) as JSONResponse<CODE, JSON>;
+  init?: Omit<ResponseInit, "status" | "headers"> & { headers?: HEADERS }
+) =>
+  json(code, value ?? null, init) as JSONResponse<
+    CODE,
+    JSON,
+    MergedHeaders<HEADERS, { "Content-Type": "application/json" }>
+  >;
 
 /**
  * Helper for returning a 2XX response with JSON body.
@@ -186,14 +253,23 @@ export const err = <
 export const ok = <
   const CODE extends HttpStatus2XX,
   const JSON extends CODE extends 204 | 205 ? null : unknown = null,
+  const HEADERS extends HeadersInit = never,
 >(
   // We enforce single values as to avoid anyone passing 200 | 204 and expecting the wrong response
   code: IsSingleValue<CODE>,
   value?: JSON,
-  init?: Omit<ResponseInit, "status">
+  init?: Omit<ResponseInit, "status" | "headers"> & { headers?: HEADERS }
 ): Extract<typeof code, 204 | 205> extends never
-  ? JSONResponse<CODE, JSON>
-  : TextResponse<CODE, ""> => {
+  ? JSONResponse<
+      CODE,
+      JSON,
+      MergedHeaders<HEADERS, { "Content-Type": "application/json" }>
+    >
+  : TextResponse<
+      CODE,
+      "",
+      MergedHeaders<HEADERS, { "Content-Type": "text/plain" }>
+    > => {
   if (code === 204 || code === 205) {
     // @ts-expect-error This is correct, but can't validate it with narrowed typing
     return text(code, "", init);
@@ -202,10 +278,32 @@ export const ok = <
   return json(code, value ?? null, init);
 };
 
-export const empty = <const CODE extends 101 | 204 | 205 | 304>(
+export const empty = <
+  const CODE extends 101 | 204 | 205 | 304,
+  HEADERS extends HeadersInit,
+>(
   code: CODE,
-  init?: Omit<ResponseInit, "status">
-): BodyResponse<CODE> => body(code, null, init);
+  init?: Omit<ResponseInit, "status" | "headers"> & { headers?: HEADERS }
+): BodyResponse<CODE, MergedHeaders<HEADERS, {}>> => body(code, null, init);
 
 type IsUnion<T, U = T> = T extends any ? (U extends T ? false : true) : false;
 type IsSingleValue<T> = true extends IsUnion<T> ? never : T;
+
+export const mergeHeaders = (
+  init: HeadersInit | undefined,
+  incoming: Record<string, string>
+) => {
+  const merged = new Headers(init);
+
+  for (const key in incoming) {
+    const value = incoming[key];
+    merged.append(key, value);
+  }
+  return merged;
+};
+
+type HeadersInit =
+  | Headers
+  | [string, string][]
+  | TypedHeaders<Record<string, string>>
+  | Record<string, string>;
