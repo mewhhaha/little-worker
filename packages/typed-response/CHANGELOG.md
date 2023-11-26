@@ -1,5 +1,11 @@
 # @mewhhaha/typed-response
 
+## 0.0.49
+
+### Patch Changes
+
+- d25cad0: Fix typing of ok function
+
 ## 0.0.48
 
 ### Patch Changes
