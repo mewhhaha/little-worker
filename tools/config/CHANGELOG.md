@@ -1,5 +1,11 @@
 # @mewhhaha/config
 
+## 0.0.47
+
+### Patch Changes
+
+- be373a1: Improve responses to include typed headers
+
 ## 0.0.46
 
 ### Patch Changes
