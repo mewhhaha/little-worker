@@ -73,17 +73,17 @@ export type Ok<CODE extends number> = number extends CODE
 export type MergedHeaders<
   ORIGINAL,
   INCOMING extends Record<string, string>,
-> = ORIGINAL extends Headers
+> = Record<string, string> extends FromHeaders<ORIGINAL>
   ? INCOMING
+  : FromHeaders<ORIGINAL> & INCOMING;
+
+export type FromHeaders<ORIGINAL> = ORIGINAL extends Headers
+  ? Record<string, string>
   : ORIGINAL extends TypedHeaders<infer HEADERS>
-    ? INCOMING & HEADERS
+    ? HEADERS
     : ORIGINAL extends [string, string][]
-      ? Record<string, string> extends FromEntries<ORIGINAL>
-        ? INCOMING
-        : FromEntries<ORIGINAL> & INCOMING
-      : Record<string, string> extends ORIGINAL
-        ? INCOMING
-        : ORIGINAL;
+      ? FromEntries<ORIGINAL>
+      : ORIGINAL;
 
 export type FromEntries<T extends [string, string][]> = {
   [P in T[number][0]]: Extract<T[number], [P, string]>[1];
