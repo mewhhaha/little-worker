@@ -1,5 +1,16 @@
 # example
 
+## 0.0.47
+
+### Patch Changes
+
+- be373a1: Improve responses to include typed headers
+- Updated dependencies [be373a1]
+  - @mewhhaha/little-router-plugin-query@0.0.47
+  - @mewhhaha/little-router-plugin-data@0.0.47
+  - @mewhhaha/little-router@0.0.47
+  - @mewhhaha/json-string@0.0.47
+
 ## 0.0.46
 
 ### Patch Changes
