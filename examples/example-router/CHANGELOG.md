@@ -1,5 +1,16 @@
 # example
 
+## 0.0.49
+
+### Patch Changes
+
+- d25cad0: Fix typing of ok function
+- Updated dependencies [d25cad0]
+  - @mewhhaha/json-string@0.0.49
+  - @mewhhaha/little-router@0.0.49
+  - @mewhhaha/little-router-plugin-data@0.0.49
+  - @mewhhaha/little-router-plugin-query@0.0.49
+
 ## 0.0.48
 
 ### Patch Changes
