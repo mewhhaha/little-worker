@@ -1,5 +1,12 @@
 # @mewhhaha/typed-request
 
+## 0.0.48
+
+### Patch Changes
+
+- 4edf501: Fix typed headers returning string instead of string | null
+- b74dbe2: Add defaults to types
+
 ## 0.0.47
 
 ### Patch Changes

@@ -1,5 +1,15 @@
 # @mewhhaha/little-router-plugin-query
 
+## 0.0.48
+
+### Patch Changes
+
+- 4edf501: Fix typed headers returning string instead of string | null
+- b74dbe2: Add defaults to types
+- Updated dependencies [4edf501]
+- Updated dependencies [b74dbe2]
+  - @mewhhaha/little-router@0.0.48
+
 ## 0.0.47
 
 ### Patch Changes
