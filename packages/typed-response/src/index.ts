@@ -222,7 +222,7 @@ export const body = <
   new Response(value, {
     ...init,
     status: code,
-  }) as BodyResponse<CODE, MergedHeaders<HEADERS, {}>>;
+  }) as BodyResponse<CODE, MergedHeaders<HEADERS, Record<never, never>>>;
 
 /**
  * Helper for returning an error response with JSON body.
@@ -284,7 +284,8 @@ export const empty = <
 >(
   code: CODE,
   init?: Omit<ResponseInit, "status" | "headers"> & { headers?: HEADERS }
-): BodyResponse<CODE, MergedHeaders<HEADERS, {}>> => body(code, null, init);
+): BodyResponse<CODE, MergedHeaders<HEADERS, Record<never, never>>> =>
+  body(code, null, init);
 
 type IsUnion<T, U = T> = T extends any ? (U extends T ? false : true) : false;
 type IsSingleValue<T> = true extends IsUnion<T> ? never : T;
