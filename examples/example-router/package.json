@@ -7,7 +7,7 @@
   "scripts": {
     "build": "wrangler deploy --dry-run --outdir=dist",
     "dev": "tsc --project tsconfig.build.json && node dist/worker.js",
-    "test": "vitest --threads=false",
+    "test": "vitest --no-file-parallelism",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "keywords": [],
