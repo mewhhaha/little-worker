@@ -9,18 +9,19 @@
     "dev": "little-worker routes && tsc --project tsconfig.build.json && node dist/worker.js",
     "routes": "little-worker routes",
     "api": "dts-bundle-generator app/worker.ts",
-    "test": "vitest --no-file-parallelism",
+    "test": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.1.9",
     "@cloudflare/workers-types": "^4.20240329.0",
     "@mewhhaha/config": "workspace:^",
     "dts-bundle-generator": "^9.3.1",
     "typescript": "^5.4.3",
-    "vitest": "^1.4.0",
+    "vitest": "1.3.0",
     "wrangler": "^3.41.0"
   },
   "dependencies": {

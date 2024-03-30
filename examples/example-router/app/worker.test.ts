@@ -1,28 +1,10 @@
-import {
-  afterAll,
-  assertType,
-  beforeAll,
-  describe,
-  expect,
-  test,
-} from "vitest";
-import { UnstableDevWorker, unstable_dev } from "wrangler";
+import { assertType, describe, expect, test } from "vitest";
+import { SELF } from "cloudflare:test";
 import { fetcher } from "@mewhhaha/little-fetcher";
 import { Routes } from "./worker.js";
 
 describe("example", () => {
-  let worker: UnstableDevWorker;
-  let f: ReturnType<typeof fetcher<Routes>>;
-
-  beforeAll(async () => {
-    worker = await unstable_dev("./app/worker.ts");
-    f = fetcher<Routes>(worker as unknown as { fetch: typeof fetch });
-  });
-
-  afterAll(async () => {
-    await worker.waitUntilExit();
-    await worker.stop();
-  });
+  const f = fetcher<Routes>(SELF);
 
   test("example-get", async () => {
     const response = await f.get("/example-get");
@@ -62,7 +44,7 @@ describe("example", () => {
         assertType<"allergic to apples">(value);
         expect(value).toBe("allergic to apples");
       }
-    }
+    },
   );
 
   test("example-query-params", async () => {
@@ -71,7 +53,7 @@ describe("example", () => {
     if (response.ok) {
       const value = await response.text();
       assertType<`Sort: ${"asc" | "desc" | "undefined"}, Size: ${string}`>(
-        value
+        value,
       );
       expect(response.status).toBe(200);
       expect(value).toStrictEqual(`Sort: undefined, Size: 10`);

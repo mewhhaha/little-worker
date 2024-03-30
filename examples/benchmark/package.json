@@ -11,6 +11,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.1.9",
     "@mewhhaha/config": "workspace:^",
     "@mewhhaha/little-router": "workspace:^",
     "@mewhhaha/typed-request": "workspace:^",
@@ -18,7 +19,7 @@
     "hono": "^4.1.5",
     "itty-router": "^5.0.4",
     "typescript": "^5.4.3",
-    "vitest": "^1.4.0",
+    "vitest": "1.3.0",
     "wrangler": "^3.41.0"
   }
 }
