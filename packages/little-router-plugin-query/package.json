@@ -4,11 +4,16 @@
   "description": "",
   "type": "module",
   "main": "dist/index.js",
-  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "keywords": [],
   "author": "Jacob Torrång",
   "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "files": [
     "dist",
     "README.md",
@@ -16,7 +21,7 @@
   ],
   "scripts": {
     "prepublish": "pnpm -w build",
-    "build": "tsc --project tsconfig.build.json",
+    "build": "tsc --project tsconfig.build.json && publint --strict",
     "lint": "eslint --ext .ts src/**",
     "test": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit"
@@ -26,9 +31,10 @@
     "@mewhhaha/little-fetcher": "workspace:^",
     "@mewhhaha/little-router": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^",
-    "arktype": "1.0.28-alpha",
-    "typescript": "^5.3.2",
-    "vitest": "^0.34.6"
+    "arktype": "1.0.29-alpha",
+    "publint": "^0.2.7",
+    "typescript": "^5.4.3",
+    "vitest": "^1.4.0"
   },
   "sideEffects": false,
   "peerDependencies": {
