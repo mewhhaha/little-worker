@@ -1,5 +1,13 @@
 # @mewhhaha/little-router-plugin-query
 
+## 0.0.50
+
+### Patch Changes
+
+- 5b70f81: update dependencies
+- Updated dependencies [5b70f81]
+  - @mewhhaha/little-router@0.0.50
+
 ## 0.0.49
 
 ### Patch Changes

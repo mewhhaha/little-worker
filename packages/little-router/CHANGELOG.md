@@ -1,5 +1,11 @@
 # @mewhhaha/little-router
 
+## 0.0.50
+
+### Patch Changes
+
+- 5b70f81: update dependencies
+
 ## 0.0.49
 
 ### Patch Changes
