@@ -1,5 +1,18 @@
 # @mewhhaha/little-worker
 
+## 0.0.50
+
+### Patch Changes
+
+- 5b70f81: update dependencies
+- Updated dependencies [5b70f81]
+  - @mewhhaha/little-worker-cli@0.0.50
+  - @mewhhaha/little-fetcher@0.0.50
+  - @mewhhaha/typed-response@0.0.50
+  - @mewhhaha/little-router@0.0.50
+  - @mewhhaha/typed-request@0.0.50
+  - @mewhhaha/json-string@0.0.50
+
 ## 0.0.49
 
 ### Patch Changes
