@@ -1,5 +1,17 @@
 # @mewhhaha/little-router-plugin-data
 
+## 1.0.0
+
+### Minor Changes
+
+- 0b9064f: Use lint to ensure route correctness and remove PATTERN
+
+### Patch Changes
+
+- Updated dependencies [0b9064f]
+  - @mewhhaha/little-router@0.1.0
+  - @mewhhaha/json-string@0.1.0
+
 ## 0.0.50
 
 ### Patch Changes
