@@ -293,6 +293,10 @@ importers:
         version: 5.4.5
 
   packages/little-worker-cli:
+    dependencies:
+      yargs:
+        specifier: ^17.7.2
+        version: 17.7.2
     devDependencies:
       '@mewhhaha/config':
         specifier: workspace:^
@@ -321,9 +325,6 @@ importers:
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
-      yargs:
-        specifier: ^17.7.2
-        version: 17.7.2
 
   packages/typed-request:
     devDependencies:
