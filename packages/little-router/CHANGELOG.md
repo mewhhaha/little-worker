@@ -1,5 +1,11 @@
 # @mewhhaha/little-router
 
+## 0.1.1
+
+### Patch Changes
+
+- 03a2be3: fix dependencies for CLI
+
 ## 0.1.0
 
 ### Minor Changes

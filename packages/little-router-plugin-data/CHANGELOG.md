@@ -1,5 +1,14 @@
 # @mewhhaha/little-router-plugin-data
 
+## 1.0.1
+
+### Patch Changes
+
+- 03a2be3: fix dependencies for CLI
+- Updated dependencies [03a2be3]
+  - @mewhhaha/json-string@0.1.1
+  - @mewhhaha/little-router@0.1.1
+
 ## 1.0.0
 
 ### Minor Changes
