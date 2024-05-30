@@ -16,7 +16,7 @@ export const main = async (target: string) => {
   );
 };
 
-const unescapedDotRegex = /(?<!\[)\.(?![^\[]*\])/g;
+const unescapedDotRegex = /(?<!\[)\.(?![^[]*\])/g;
 
 const tsRegex = /\.ts(x)?$/;
 

@@ -13,7 +13,7 @@ describe("check", () => {
         new Request("http://from.fetcher", {
           body: "undefined",
           method: "POST",
-        }) as any
+        }) as any,
       );
     } catch (e) {
       expect(e).toBeInstanceOf(Response);
@@ -29,7 +29,7 @@ describe("check", () => {
         new Request("http://from.fetcher", {
           body: JSON.stringify(2),
           method: "POST",
-        }) as any
+        }) as any,
       );
     } catch (e) {
       expect(e).toBeInstanceOf(Response);
@@ -61,7 +61,7 @@ describe("check", () => {
       new Request("http://from.fetcher/a", {
         body: JSON.stringify("hello"),
         method: "POST",
-      })
+      }),
     );
 
     const t = await response.text();
@@ -96,12 +96,12 @@ describe("check", () => {
     const f = fetcher<RoutesOf<typeof router>>(fromRouter(router));
 
     // @ts-expect-error Test
-    f.post("/a", { data: "hello" });
+    void f.post("/a", { data: "hello" });
     const response = await router.handle(
       new Request("http://from.fetcher/a", {
         body: JSON.stringify("hello"),
         method: "POST",
-      })
+      }),
     );
 
     const t = await response.text();

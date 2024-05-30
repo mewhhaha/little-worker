@@ -4,7 +4,7 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { main as generateRoutes } from "./generate-file-routes.js";
 
-yargs(hideBin(process.argv))
+await yargs(hideBin(process.argv))
   .command(
     "routes",
     "CLI to generate routes and API in a little-worker project",
@@ -18,6 +18,6 @@ yargs(hideBin(process.argv))
     },
     async (argv) => {
       await generateRoutes(argv.target);
-    }
+    },
   )
   .parse();

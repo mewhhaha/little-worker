@@ -1,8 +1,8 @@
 {
-  "name": "@mewhhaha/little-worker-cli",
+  "name": "@mewhhaha/little-worker",
   "version": "0.0.50",
   "type": "module",
-  "description": "CLI for little-worker",
+  "description": "Bundle of useful packages when working with a cloudflare worker",
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -13,31 +13,56 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./api": {
-      "types": "./dist/generate-file-routes.d.ts",
-      "import": "./dist/generate-file-routes.js"
+    "./crypto": {
+      "types": "./dist/batteries/crypto.d.ts",
+      "import": "./dist/batteries/crypto.js"
+    },
+    "./invariant": {
+      "types": "./dist/batteries/invariant.d.ts",
+      "import": "./dist/batteries/invariant.js"
+    },
+    "./tagged": {
+      "types": "./dist/batteries/tagged.d.ts",
+      "import": "./dist/batteries/tagged.js"
+    },
+    "./init": {
+      "types": "./dist/batteries/init.d.ts",
+      "import": "./dist/batteries/init.js"
+    },
+    "./eslint-plugin": {
+      "types": "./dist/eslint/plugin.d.ts",
+      "import": "./dist/eslint/plugin.js"
     }
+  },
+  "bin": {
+    "little-worker": "dist/cli/index.js"
   },
   "scripts": {
     "prepublish": "pnpm -w build",
-    "lint": "eslint",
-    "build": "tsc -p tsconfig.build.json && publint --strict",
+    "lint": "eslint -c .ts src/**",
+    "build": "tsc --project tsconfig.build.json && publint --strict",
     "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@mewhhaha/json-string": "workspace:^",
+    "@mewhhaha/little-fetcher": "workspace:^",
+    "@mewhhaha/little-router": "workspace:^",
+    "@mewhhaha/little-worker-cli": "workspace:^",
+    "@mewhhaha/typed-request": "workspace:^",
+    "@mewhhaha/typed-response": "workspace:^"
   },
   "devDependencies": {
     "@mewhhaha/config": "workspace:^",
     "@types/node": "^20.12.13",
-    "@types/yargs": "^17.0.32",
     "commander": "^12.1.0",
-    "esbuild": "^0.21.4",
-    "eslint": "^9.3.0",
     "prettier": "^3.2.5",
     "publint": "^0.2.8",
-    "typescript": "^5.4.5",
-    "yargs": "^17.7.2"
+    "typescript": "^5.4.5"
   },
   "peerDependencies": {
     "prettier": "^3.0.3"
   },
-  "sideEffects": true
+  "sideEffects": [
+    "./dist/index.js"
+  ]
 }
