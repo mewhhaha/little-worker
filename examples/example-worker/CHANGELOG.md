@@ -1,5 +1,15 @@
 # example
 
+## 0.1.1
+
+### Patch Changes
+
+- 03a2be3: fix dependencies for CLI
+- Updated dependencies [03a2be3]
+  - @mewhhaha/little-router-plugin-data@1.0.1
+  - @mewhhaha/little-router-plugin-query@1.0.1
+  - @mewhhaha/little-worker@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes
