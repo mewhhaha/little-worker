@@ -11,15 +11,15 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.1.9",
+    "@cloudflare/vitest-pool-workers": "^0.3.0",
     "@mewhhaha/config": "workspace:^",
     "@mewhhaha/little-router": "workspace:^",
     "@mewhhaha/typed-request": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^",
-    "hono": "^4.1.5",
-    "itty-router": "^5.0.4",
-    "typescript": "^5.4.3",
-    "vitest": "1.3.0",
-    "wrangler": "^3.41.0"
+    "hono": "^4.4.0",
+    "itty-router": "^5.0.17",
+    "typescript": "^5.4.5",
+    "vitest": "1.5.0",
+    "wrangler": "^3.57.2"
   }
 }

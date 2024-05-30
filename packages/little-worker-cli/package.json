@@ -22,14 +22,14 @@
   },
   "devDependencies": {
     "@mewhhaha/config": "workspace:^",
-    "@types/node": "^20.12.2",
+    "@types/node": "^20.12.13",
     "@types/yargs": "^17.0.32",
-    "commander": "^12.0.0",
-    "esbuild": "^0.20.2",
-    "eslint": "^8.57.0",
+    "commander": "^12.1.0",
+    "esbuild": "^0.21.4",
+    "eslint": "^9.3.0",
     "prettier": "^3.2.5",
-    "publint": "^0.2.7",
-    "typescript": "^5.4.3",
+    "publint": "^0.2.8",
+    "typescript": "^5.4.5",
     "yargs": "^17.7.2"
   },
   "peerDependencies": {

@@ -15,7 +15,7 @@
   "license": "ISC",
   "devDependencies": {
     "@mewhhaha/config": "workspace:^",
-    "publint": "^0.2.7",
-    "typescript": "^5.4.3"
+    "publint": "^0.2.8",
+    "typescript": "^5.4.5"
   }
 }
