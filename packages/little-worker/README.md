@@ -55,7 +55,7 @@ In each of the files you created it is expected that you export a route definiti
 // In file get.users.$userId.ts
 import { route, ok } from "@mewhhaha/little-worker";
 
-export default route(PATTERN, [], ({ params }) => {
+export default route("/get/users/:userId", [], ({ params }) => {
   // Notice how we can access userId typed in this context
   return ok(200, { id: params.userId });
 });
