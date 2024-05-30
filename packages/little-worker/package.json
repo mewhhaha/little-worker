@@ -1,5 +1,5 @@
 {
-  "name": "@mewhhaha/little-worker",
+  "name": "@mewhhaha/little-worker-cli",
   "version": "0.0.50",
   "type": "module",
   "description": "CLI for little-worker",
@@ -20,7 +20,7 @@
   },
   "scripts": {
     "prepublish": "pnpm -w build",
-    "lint": "eslint -c .ts src/**",
+    "lint": "eslint",
     "build": "tsc -p tsconfig.build.json && publint --strict",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },

@@ -20,7 +20,7 @@
   },
   "scripts": {
     "prepublish": "pnpm -w build",
-    "lint": "eslint -c .ts src/**",
+    "lint": "eslint",
     "build": "tsc -p tsconfig.build.json && publint --strict",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
