@@ -1,5 +1,11 @@
 # @mewhhaha/testing
 
+## 0.1.0
+
+### Minor Changes
+
+- 0b9064f: Use lint to ensure route correctness and remove PATTERN
+
 ## 0.0.50
 
 ### Patch Changes
