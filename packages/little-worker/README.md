@@ -60,3 +60,12 @@ export default route("/get/users/:userId", [], ({ params }) => {
   return ok(200, { id: params.userId });
 });
 ```
+
+### Ensure correctness with lint
+
+```js
+// eslint.config.mjs
+import worker from "@mewhhaha/little-worker/eslint-plugin";
+
+export default [worker]
+```
