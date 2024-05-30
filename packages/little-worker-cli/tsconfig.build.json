@@ -3,7 +3,7 @@
   "include": ["src"],
   "exclude": ["**/*.test.ts"],
   "compilerOptions": {
-    "emitDeclarationOnly": true,
+    "noEmit": false,
     "outDir": "dist"
   }
 }

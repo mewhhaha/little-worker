@@ -3,6 +3,21 @@
 import fs from "fs/promises";
 import { format } from "prettier";
 
+export const main = async (target: string) => {
+  const files = await fs
+    .readdir(target)
+    .then((files) => files.filter(isRouteFile).toSorted(orderRoutes));
+
+  const router = createRouter(files);
+
+  await fs.writeFile(
+    `${target}/_router.ts`,
+    await format(router, { parser: "typescript" }),
+  );
+};
+
+const unescapedDotRegex = /(?<!\[)\.(?![^\[]*\])/g;
+
 const tsRegex = /\.ts(x)?$/;
 
 const dotRegex = /\./g;
@@ -19,22 +34,21 @@ const createRouter = (files: string[]) => {
     vars[files[i]] = `route_${i}`;
   }
 
-  const declarations = files
-    .map((f) => {
-      return `declare module "./${fileToModule(f)}" { 
-      /** This is an ephemeral value and can only be used as a type */
-      const PATTERN = "${fileToPath(f)}" 
-    }`;
-    })
-    .join("");
-
   const imports =
     "import { Router, type RouteData } from '@mewhhaha/little-worker';" +
     files.map((f) => `import ${vars[f]} from "./${fileToModule(f)}";`).join("");
 
+  const declarations = `
+    declare module "@mewhhaha/little-worker" {
+      interface RouteData {
+        "paths": ${files.map((f) => `"${fileToPath(f)}"`).join("|")};
+      }
+    }
+  `;
+
   const routes = files
     .map((f) => {
-      return `\t.${fileToMethod(f)}("${fileToPath(f)}", ${vars[f]}[1], ${
+      return `\t.${fileToMethod(f)}(${vars[f]}[0], ${vars[f]}[1], ${
         vars[f]
       }[2])`;
     })
@@ -58,22 +72,21 @@ const fileToModule = (file: string) => file.replace(tsRegex, ".js");
 
 const fileToMethod = (file: string) => file.match(methodRegex)?.[0] ?? "error";
 
-const fileToPath = (file: string) =>
+export const fileToPath = (file: string) =>
   file
     .replace(tsRegex, "")
     .replace(methodRegex, "")
     .replace(dotRegex, "/")
     .replace(dollarRegex, ":");
 
-export const main = async (target: string) => {
-  const files = await fs
-    .readdir(target)
-    .then((files) => files.filter(isRouteFile).sort());
+const orderRoutes = (a: string, b: string): number => {
+  // Each dot signifies another level of nesting
+  const hierarchy =
+    a.split(unescapedDotRegex).length - b.split(unescapedDotRegex).length;
+  if (hierarchy === 0) {
+    if (b.startsWith("$")) -1;
+    return a < b ? -1 : 1;
+  }
 
-  const router = createRouter(files);
-
-  await fs.writeFile(
-    `${target}/_router.ts`,
-    await format(router, { parser: "typescript" })
-  );
+  return hierarchy;
 };

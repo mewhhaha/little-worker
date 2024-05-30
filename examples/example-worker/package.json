@@ -10,6 +10,7 @@
     "routes": "little-worker routes",
     "api": "dts-bundle-generator app/worker.ts",
     "test": "vitest",
+    "lint": "eslint",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "keywords": [],

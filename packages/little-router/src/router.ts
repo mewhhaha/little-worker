@@ -53,7 +53,7 @@ export const Router = <REST_ARGS extends unknown[] = []>(): RouteBuilder<
     return (
       stringPattern: string,
       plugins: Plugin[],
-      h: RouteHandler<RouteHandlerContext<any>, REST_ARGS>
+      h: RouteHandler<RouteHandlerContext<any>, REST_ARGS>,
     ) => {
       const pattern = stringPattern.split("/");
       routes.push([method.toUpperCase(), pattern, plugins, h]);
@@ -83,10 +83,10 @@ const context = async <REST_ARGS extends unknown[]>(
     request: Request;
   },
   plugins: Plugin<REST_ARGS>[],
-  rest: REST_ARGS
+  rest: REST_ARGS,
 ) => {
   const results = await Promise.all(
-    plugins.map((p) => p(pctx, ...(rest as any)))
+    plugins.map((p) => p(pctx, ...(rest as any))),
   );
 
   const ctx: Record<string, any> = pctx;
@@ -100,7 +100,7 @@ const context = async <REST_ARGS extends unknown[]>(
       const value = result[key as keyof typeof result];
       if (key in ctx) {
         throw new Error(
-          `Plugin tried to overwrite context property ${key} with ${value}`
+          `Plugin tried to overwrite context property ${key} with ${value}`,
         );
       }
       ctx[key] = value;
@@ -110,12 +110,10 @@ const context = async <REST_ARGS extends unknown[]>(
   return ctx;
 };
 
-export type RoutesOf<T> = T extends RouteBuilder<
-  any,
-  infer ROUTES extends FetchDefinition
->
-  ? ROUTES
-  : never;
+export type RoutesOf<T> =
+  T extends RouteBuilder<any, infer ROUTES extends FetchDefinition>
+    ? ROUTES
+    : never;
 
 type RouteProxy<
   METHOD extends Method,
@@ -129,17 +127,17 @@ type RouteProxy<
   pattern: patterns<ROUTES, METHOD> extends never
     ? PATTERN
     : is_overlapping<
-        patterns<ROUTES, METHOD>,
-        PATTERN
-      > extends infer error extends string
-    ? error
-    : PATTERN,
+          patterns<ROUTES, METHOD>,
+          PATTERN
+        > extends infer error extends string
+      ? error
+      : PATTERN,
   plugins: PLUGINS,
   h: RouteHandler<
     RouteHandlerContext<PATTERN> | plugin_value<PLUGINS>,
     REST_ARGS,
     RESPONSE
-  >
+  >,
 ) => RouteBuilder<
   REST_ARGS,
   | ROUTES
@@ -242,10 +240,10 @@ export type PatternParams<PATTERN> =
   PATTERN extends `${string}:${infer PARAM}/${infer REST}`
     ? PARAM | PatternParams<REST>
     : PATTERN extends `${string}:${infer PARAM}`
-    ? PARAM
-    : PATTERN extends `${string}*`
-    ? "*"
-    : never;
+      ? PARAM
+      : PATTERN extends `${string}*`
+        ? "*"
+        : never;
 
 type pattern_to_params_object<pattern extends string> = {
   [K in PatternParams<pattern>]: string;
@@ -268,28 +266,31 @@ export interface RouteData {
 export type args_or_none<args extends RouteData> =
   args["extra"] extends unknown[] ? args["extra"] : [];
 
+export type paths_or_string<paths extends RouteData> =
+  paths["paths"] extends string ? paths["paths"] : `/${string}`;
+
 // Helper for generating routes
 export const route = /*#__PURE__*/ <
-  const PATTERN extends `/${string}`,
+  const PATTERN extends paths_or_string<ROUTE_DATA>,
   const RESPONSE extends Response,
-  PLUGINS extends Plugin<args_or_none<ROUTE_ARGS>>[],
-  ROUTE_ARGS extends RouteData = RouteData,
+  PLUGINS extends Plugin<args_or_none<ROUTE_DATA>>[],
+  ROUTE_DATA extends RouteData = RouteData,
 >(
   pattern: PATTERN,
   plugins: PLUGINS,
   h: RouteHandler<
     | RouteHandlerContext<PATTERN>
     | Exclude<Awaited<ReturnType<PLUGINS[number]>>, Response>,
-    args_or_none<ROUTE_ARGS>,
+    args_or_none<ROUTE_DATA>,
     RESPONSE
-  >
+  >,
 ): [
   PATTERN,
   PLUGINS,
   RouteHandler<
     | RouteHandlerContext<PATTERN>
     | Exclude<Awaited<ReturnType<PLUGINS[number]>>, Response>,
-    args_or_none<ROUTE_ARGS>,
+    args_or_none<ROUTE_DATA>,
     RESPONSE
   >,
 ] => [pattern, plugins, h];

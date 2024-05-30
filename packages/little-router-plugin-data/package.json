@@ -22,7 +22,7 @@
   "scripts": {
     "prepublish": "pnpm -w build",
     "build": "tsc --project tsconfig.build.json && publint --strict",
-    "lint": "eslint --ext .ts src/**",
+    "lint": "eslint -c .ts src/**",
     "test": "vitest",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },

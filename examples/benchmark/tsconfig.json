@@ -1,5 +1,5 @@
 {
-  "extends": "@mewhhaha/config/tsconfig.json",
+  "extends": "@mewhhaha/config/tsconfig",
   "compilerOptions": {
     "types": [
       "@cloudflare/workers-types/experimental",

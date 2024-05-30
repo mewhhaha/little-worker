@@ -25,7 +25,7 @@ describe("fetcher", () => {
       [],
       async ({ params }) => {
         return text(200, `User: ${params.id}, Cat: ${params.cat}`);
-      }
+      },
     );
 
     const f = fetcher<RoutesOf<typeof router>>(fromRouter(router));
@@ -126,7 +126,7 @@ describe("fetcher", () => {
 
   it.skip("should give error on missing headers", async () => {
     const plugin = async (
-      _: PluginContext<{ init: { headers: { "X-Header": "value" } } }>
+      _: PluginContext<{ init: { headers: { "X-Header": "value" } } }>,
     ) => {
       return {};
     };
@@ -136,18 +136,18 @@ describe("fetcher", () => {
       [plugin],
       async ({ params }) => {
         return text(200, `User: ${params.id}, Dog: ${params.dog}`);
-      }
+      },
     );
 
     const f = fetcher<RoutesOf<typeof router>>(fromRouter(router));
 
     // @ts-expect-error Test
-    f.post("/users/:id/dogs/:dog");
+    void f.post("/users/:id/dogs/:dog");
 
     // @ts-expect-error Test
-    f.post("/users/:id/dogs/:dog", { headers: {} });
+    void f.post("/users/:id/dogs/:dog", { headers: {} });
 
-    f.post("/users/:id/dogs/:dog", { headers: { "X-Header": "value" } });
+    void f.post("/users/:id/dogs/:dog", { headers: { "X-Header": "value" } });
   });
 
   it.skip("should give error on missing body", async () => {
@@ -160,15 +160,15 @@ describe("fetcher", () => {
       [plugin],
       async ({ params }) => {
         return text(200, `User: ${params.id}, Dog: ${params.dog}`);
-      }
+      },
     );
 
     const f = fetcher<RoutesOf<typeof router>>(fromRouter(router));
 
     // @ts-expect-error Test
-    f.post("/users/:id/dogs/:dog");
+    void f.post("/users/:id/dogs/:dog");
 
-    f.post("/users/:id/dogs/:dog", {
+    void f.post("/users/:id/dogs/:dog", {
       body: "body",
     });
   });
@@ -185,7 +185,7 @@ describe("fetcher", () => {
     const f = fetcher<RoutesOf<typeof router>>(fromRouter(router));
 
     assertType<`User: ${string}, Dog: ${string}`>(
-      await (await f.get("/users/:id/dogs/:dog")).text()
+      await (await f.get("/users/:id/dogs/:dog")).text(),
     );
 
     assertType<`User: ${string}`>(await (await f.get("/users/:id")).text());
