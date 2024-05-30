@@ -2,6 +2,7 @@
 "@mewhhaha/little-router-plugin-query": minor
 "@mewhhaha/little-router-plugin-data": minor
 "@mewhhaha/little-worker-cli": minor
+"@mewhhaha/little-worker": minor
 "example-router": minor
 "example-worker": minor
 "@mewhhaha/little-fetcher": minor

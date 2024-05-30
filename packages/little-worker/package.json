@@ -39,7 +39,7 @@
   },
   "scripts": {
     "prepublish": "pnpm -w build",
-    "lint": "eslint -c .ts src/**",
+    "lint": "eslint",
     "build": "tsc --project tsconfig.build.json && publint --strict",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },

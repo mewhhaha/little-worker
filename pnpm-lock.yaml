@@ -253,6 +253,25 @@ importers:
         version: 1.5.0(@types/node@20.12.13)
 
   packages/little-worker:
+    dependencies:
+      '@mewhhaha/json-string':
+        specifier: workspace:^
+        version: link:../json-string
+      '@mewhhaha/little-fetcher':
+        specifier: workspace:^
+        version: link:../little-fetcher
+      '@mewhhaha/little-router':
+        specifier: workspace:^
+        version: link:../little-router
+      '@mewhhaha/little-worker-cli':
+        specifier: workspace:^
+        version: link:../little-worker-cli
+      '@mewhhaha/typed-request':
+        specifier: workspace:^
+        version: link:../typed-request
+      '@mewhhaha/typed-response':
+        specifier: workspace:^
+        version: link:../typed-response
     devDependencies:
       '@mewhhaha/config':
         specifier: workspace:^
@@ -260,18 +279,9 @@ importers:
       '@types/node':
         specifier: ^20.12.13
         version: 20.12.13
-      '@types/yargs':
-        specifier: ^17.0.32
-        version: 17.0.32
       commander:
         specifier: ^12.1.0
         version: 12.1.0
-      esbuild:
-        specifier: ^0.21.4
-        version: 0.21.4
-      eslint:
-        specifier: ^9.3.0
-        version: 9.3.0
       prettier:
         specifier: ^3.2.5
         version: 3.2.5
@@ -281,9 +291,6 @@ importers:
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
-      yargs:
-        specifier: ^17.7.2
-        version: 17.7.2
 
   packages/little-worker-cli:
     devDependencies:
