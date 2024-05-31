@@ -1,5 +1,18 @@
 # @mewhhaha/little-worker
 
+## 0.1.2
+
+### Patch Changes
+
+- 518c564: Fix types and route generation
+- Updated dependencies [518c564]
+  - @mewhhaha/little-worker-cli@0.1.2
+  - @mewhhaha/little-fetcher@0.1.2
+  - @mewhhaha/little-router@0.1.2
+  - @mewhhaha/json-string@0.1.2
+  - @mewhhaha/typed-request@0.1.2
+  - @mewhhaha/typed-response@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes
