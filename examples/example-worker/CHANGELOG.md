@@ -1,5 +1,15 @@
 # example
 
+## 0.1.3
+
+### Patch Changes
+
+- a28bec1: Fix invalid var names being generated
+- Updated dependencies [a28bec1]
+  - @mewhhaha/little-router-plugin-data@1.0.3
+  - @mewhhaha/little-router-plugin-query@1.0.3
+  - @mewhhaha/little-worker@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # benchmark
 
+## 0.1.3
+
+### Patch Changes
+
+- a28bec1: Fix invalid var names being generated
+
 ## 0.1.2
 
 ### Patch Changes
