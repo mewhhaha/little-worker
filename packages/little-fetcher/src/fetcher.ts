@@ -13,11 +13,11 @@ export const fetcher = <ROUTES extends FetchDefinition>(
     | {
         fetch: (
           url: string,
-          init?: Parameters<typeof fetch>[1]
+          init?: Parameters<typeof fetch>[1],
         ) => ReturnType<typeof fetch>;
       }
     | "fetch",
-  { base = "http://from.fetcher" }: FetcherOptions = {}
+  { base = "http://from.fetcher" }: FetcherOptions = {},
 ): FetcherOf<ROUTES> => {
   const f =
     stub === "fetch"
@@ -89,19 +89,21 @@ type FetcherUrl<
   PATH extends string,
   PATTERN extends string,
   SEARCH extends Queries,
-> = ValidPath<PATH, PATTERN, SEARCH> extends true
-  ? PATH
-  : `${PATTERN}${`?${QueryParamsAutocomplete<SEARCH>}` | ""}`;
+> =
+  ValidPath<PATH, PATTERN, SEARCH> extends true
+    ? PATH
+    : `${PATTERN}${`?${QueryParamsAutocomplete<SEARCH>}` | ""}`;
 
 type NarrowMatch<
   T extends { valid: true | false; args: [url: string, ...args: any] },
-> = Extract<T, { valid: true }> extends never
-  ? T["args"]
-  : Extract<T, { valid: true }>["args"];
+> =
+  Extract<T, { valid: true }> extends never
+    ? T["args"]
+    : Extract<T, { valid: true }>["args"];
 
 type FetcherFunctionAny = (
   url: `/${string}`,
-  init?: RequestInit
+  init?: RequestInit,
 ) => Promise<Response>;
 
 export type FetcherOf<ROUTES extends FetchDefinition> = {

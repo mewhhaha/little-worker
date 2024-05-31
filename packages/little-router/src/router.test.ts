@@ -8,7 +8,7 @@ describe("Router", () => {
     const router = Router().get(
       "/test",
       [],
-      async () => new Response("Test route")
+      async () => new Response("Test route"),
     );
 
     const request = new Request("https://example.com/test", { method: "GET" });
@@ -58,7 +58,7 @@ describe("Router", () => {
     const router = Router().get(
       "/test",
       [],
-      async () => new Response("Test route")
+      async () => new Response("Test route"),
     );
 
     const request = new Request("https://example.com/unmatched", {
@@ -131,12 +131,27 @@ describe("Router with route chaining and overlapping", () => {
     expect(text1).toBe("ID: a");
   });
 
+  it.skip("should not match several overlapping routes with path parameters", async () => {
+    const router = Router()
+      .get("/first", [], async () => new Response("Fixed route"))
+      .get("/:id", [], async ({ params }) => new Response(`ID: ${params.id}`))
+      // @ts-expect-error Test
+      .get("/a", [], async () => new Response("Fixed route"));
+
+    const request1 = new Request("https://example.com/a", { method: "GET" });
+    const response1 = await router.handle(request1);
+    const text1 = await response1.text();
+
+    expect(response1.status).toBe(200);
+    expect(text1).toBe("ID: a");
+  });
+
   it("should not match overlapping routes with wildcards", async () => {
     const router = Router()
       .get(
         "/*",
         [],
-        async ({ params }) => new Response(`Wildcard: ${params["*"]}`)
+        async ({ params }) => new Response(`Wildcard: ${params["*"]}`),
       )
       // @ts-expect-error Test
       .get("/a/b/c", [], async () => new Response("Fixed route"));
@@ -170,7 +185,7 @@ describe("Router with plugins", () => {
     const router = Router().post(
       "/json-plugin",
       [json_],
-      async ({ body }) => new Response(`Plugin: ${body}`)
+      async ({ body }) => new Response(`Plugin: ${body}`),
     );
 
     const request1 = new Request("https://example.com/json-plugin", {
@@ -217,7 +232,7 @@ describe("Router with plugins", () => {
       [extra_],
       async ({ value }) => {
         return ok(200, `Plugin: ${value}`);
-      }
+      },
     );
 
     const request1 = new Request("https://example.com/extra-plugin");

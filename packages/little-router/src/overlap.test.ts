@@ -13,9 +13,11 @@ describe("HasOverlap", () => {
     assertType<is_overlapping<"/b-b", "/a-a">>(false);
   });
   it("should overlap", () => {
+    assertType<is_overlapping<"/:id" | "/abc", "/a">>("/:id overlaps with /a");
     assertType<is_overlapping<"/:id", "/a">>("/:id overlaps with /a");
+    assertType<is_overlapping<"/:id", "/abc">>("/:id overlaps with /abc");
     assertType<is_overlapping<"/:id/:bid", "/a/b">>(
-      "/:id/:bid overlaps with /a/b"
+      "/:id/:bid overlaps with /a/b",
     );
     assertType<is_overlapping<"/*", "/a/b">>("/* overlaps with /a/b");
   });

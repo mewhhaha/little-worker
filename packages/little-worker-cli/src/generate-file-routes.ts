@@ -28,10 +28,13 @@ const methodRegex = /^(post)|(get)|(delete)|(put)|(options)|(all)|(patch)/;
 
 const isRouteFile = (f: string) => f.match(methodRegex);
 
+const generateVar = (name: string) =>
+  `route_${Buffer.from(name).toString("base64").replace("=", "")}`;
+
 const createRouter = (files: string[]) => {
   const vars: Record<string, string> = {};
   for (let i = 0; i < files.length; i++) {
-    vars[files[i]] = `route_${i}`;
+    vars[files[i]] = generateVar(files[i]);
   }
 
   const imports =
@@ -48,9 +51,7 @@ const createRouter = (files: string[]) => {
 
   const routes = files
     .map((f) => {
-      return `\t.${fileToMethod(f)}(${vars[f]}[0], ${vars[f]}[1], ${
-        vars[f]
-      }[2])`;
+      return `\t.${fileToMethod(f)}(...${vars[f]})`;
     })
     .join("\n");
 
@@ -79,13 +80,12 @@ export const fileToPath = (file: string) =>
     .replace(dotRegex, "/")
     .replace(dollarRegex, ":");
 
-const orderRoutes = (a: string, b: string): number => {
+export const orderRoutes = (a: string, b: string): number => {
   // Each dot signifies another level of nesting
   const hierarchy =
-    a.split(unescapedDotRegex).length - b.split(unescapedDotRegex).length;
+    b.split(unescapedDotRegex).length - a.split(unescapedDotRegex).length;
   if (hierarchy === 0) {
-    if (b.startsWith("$")) -1;
-    return a < b ? -1 : 1;
+    return b < a ? -1 : 1;
   }
 
   return hierarchy;

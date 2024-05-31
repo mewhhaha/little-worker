@@ -126,11 +126,10 @@ type RouteProxy<
 >(
   pattern: patterns<ROUTES, METHOD> extends never
     ? PATTERN
-    : is_overlapping<
-          patterns<ROUTES, METHOD>,
-          PATTERN
-        > extends infer error extends string
-      ? error
+    : is_overlapping<patterns<ROUTES, METHOD>, PATTERN> extends infer error
+      ? Extract<error, string> extends never
+        ? PATTERN
+        : Extract<error, string>
       : PATTERN,
   plugins: PLUGINS,
   h: RouteHandler<
