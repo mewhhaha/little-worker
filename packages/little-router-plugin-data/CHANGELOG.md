@@ -1,5 +1,14 @@
 # @mewhhaha/little-router-plugin-data
 
+## 1.0.3
+
+### Patch Changes
+
+- a28bec1: Fix invalid var names being generated
+- Updated dependencies [a28bec1]
+  - @mewhhaha/json-string@0.1.3
+  - @mewhhaha/little-router@0.1.3
+
 ## 1.0.2
 
 ### Patch Changes

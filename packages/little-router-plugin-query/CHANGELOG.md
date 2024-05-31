@@ -1,5 +1,13 @@
 # @mewhhaha/little-router-plugin-query
 
+## 1.0.3
+
+### Patch Changes
+
+- a28bec1: Fix invalid var names being generated
+- Updated dependencies [a28bec1]
+  - @mewhhaha/little-router@0.1.3
+
 ## 1.0.2
 
 ### Patch Changes

@@ -1,5 +1,18 @@
 # @mewhhaha/little-worker
 
+## 0.1.3
+
+### Patch Changes
+
+- a28bec1: Fix invalid var names being generated
+- Updated dependencies [a28bec1]
+  - @mewhhaha/little-worker-cli@0.1.3
+  - @mewhhaha/json-string@0.1.3
+  - @mewhhaha/little-fetcher@0.1.3
+  - @mewhhaha/little-router@0.1.3
+  - @mewhhaha/typed-request@0.1.3
+  - @mewhhaha/typed-response@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes
