@@ -29,7 +29,7 @@ const methodRegex = /^(post)|(get)|(delete)|(put)|(options)|(all)|(patch)/;
 const isRouteFile = (f: string) => f.match(methodRegex);
 
 const generateVar = (name: string) =>
-  `route_${Buffer.from(name).toString("base64").replace("=", "")}`;
+  `route_${Buffer.from(name).toString("base64").replaceAll("=", "")}`;
 
 const createRouter = (files: string[]) => {
   const vars: Record<string, string> = {};
