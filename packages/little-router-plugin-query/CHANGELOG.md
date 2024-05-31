@@ -1,5 +1,13 @@
 # @mewhhaha/little-router-plugin-query
 
+## 1.0.2
+
+### Patch Changes
+
+- 518c564: Fix types and route generation
+- Updated dependencies [518c564]
+  - @mewhhaha/little-router@0.1.2
+
 ## 1.0.1
 
 ### Patch Changes

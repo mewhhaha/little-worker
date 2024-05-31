@@ -1,5 +1,11 @@
 # @mewhhaha/testing
 
+## 0.1.2
+
+### Patch Changes
+
+- 518c564: Fix types and route generation
+
 ## 0.1.1
 
 ### Patch Changes
