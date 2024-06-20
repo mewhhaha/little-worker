@@ -17,18 +17,18 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.3.0",
-    "@cloudflare/workers-types": "^4.20240529.0",
+    "@cloudflare/vitest-pool-workers": "^0.4.6",
+    "@cloudflare/workers-types": "^4.20240620.0",
     "@mewhhaha/config": "workspace:^",
     "dts-bundle-generator": "^9.5.1",
-    "typescript": "^5.4.5",
-    "vitest": "1.5.0",
-    "wrangler": "^3.57.2"
+    "typescript": "^5.5.2",
+    "vitest": "1.6.0",
+    "wrangler": "^3.61.0"
   },
   "dependencies": {
     "@mewhhaha/little-router-plugin-data": "workspace:^",
     "@mewhhaha/little-router-plugin-query": "workspace:^",
     "@mewhhaha/little-worker": "workspace:^",
-    "arktype": "1.0.29-alpha"
+    "arktype": "2.0.0-dev.24"
   }
 }

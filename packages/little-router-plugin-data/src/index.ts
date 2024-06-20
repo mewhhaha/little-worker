@@ -1,5 +1,5 @@
 import { type Plugin, type PluginContext } from "@mewhhaha/little-router";
-import type { Type } from "arktype";
+import { ArkErrors, type Type } from "arktype";
 import type { JSONString } from "@mewhhaha/json-string";
 import { err } from "@mewhhaha/typed-response";
 
@@ -31,14 +31,14 @@ export const data_ = <T extends Type<any>>(parser: T) =>
   }>) => {
     try {
       const r = parser(await request.json());
-      if (r.problems) {
+      if (r instanceof ArkErrors) {
         return err(422, {
           message: "parsing_failed",
-          summary: r.problems.summary,
+          summary: r.summary,
         });
       }
 
-      return { data: r.data as OutOf<T> };
+      return { data: r as OutOf<T> };
     } catch (e) {
       if (e instanceof Error) {
         console.error(e);

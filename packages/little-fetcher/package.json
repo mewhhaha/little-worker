@@ -34,8 +34,8 @@
     "@mewhhaha/typed-request": "workspace:^",
     "@mewhhaha/typed-response": "workspace:^",
     "publint": "^0.2.8",
-    "typescript": "^5.4.5",
-    "vitest": "1.5.0"
+    "typescript": "^5.5.2",
+    "vitest": "1.6.0"
   },
   "sideEffects": false
 }

@@ -4,7 +4,7 @@ import {
   type Queries,
 } from "@mewhhaha/little-router";
 import { err } from "@mewhhaha/typed-response";
-import { type Type } from "arktype";
+import { ArkErrors, type Type } from "arktype";
 
 export type InOf<T> = T extends {
   inferIn: infer I extends Queries;
@@ -47,7 +47,7 @@ type SearchOptions = {
  */
 export const query_ = <T extends Type<any>>(
   parser: T,
-  { arrayDelimiter = "," }: SearchOptions = {}
+  { arrayDelimiter = "," }: SearchOptions = {},
 ) =>
   (async ({
     url,
@@ -68,14 +68,14 @@ export const query_ = <T extends Type<any>>(
 
     try {
       const r = parser(result);
-      if (r.problems) {
+      if (r instanceof ArkErrors) {
         return err(422, {
           message: "parsing_failed",
-          summary: r.problems.summary,
+          summary: r.summary,
         });
       }
 
-      return { query: r.data as OutOf<T> };
+      return { query: r as OutOf<T> };
     } catch (e) {
       if (e instanceof Error) {
         console.error(e);
