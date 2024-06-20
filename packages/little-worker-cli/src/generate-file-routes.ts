@@ -24,6 +24,8 @@ const dotRegex = /\./g;
 
 const dollarRegex = /\$/g;
 
+const splatRegex = /\$$/g;
+
 const methodRegex = /^(post)|(get)|(delete)|(put)|(options)|(all)|(patch)/;
 
 const isRouteFile = (f: string) => f.match(methodRegex);
@@ -78,6 +80,7 @@ export const fileToPath = (file: string) =>
     .replace(tsRegex, "")
     .replace(methodRegex, "")
     .replace(dotRegex, "/")
+    .replace(splatRegex, "*")
     .replace(dollarRegex, ":");
 
 export const orderRoutes = (a: string, b: string): number => {

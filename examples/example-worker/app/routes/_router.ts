@@ -5,6 +5,7 @@ import route_cG9zdC5leGFtcGxlLXBvc3QudHM from "./post.example-post.js";
 import route_cG9zdC5leGFtcGxlLWFkdmFuY2VkLnRz from "./post.example-advanced.js";
 import route_Z2V0LmV4YW1wbGUtcXVlcnktcGFyYW1zLnRz from "./get.example-query-params.js";
 import route_Z2V0LmV4YW1wbGUtZ2V0LnRz from "./get.example-get.js";
+import route_Z2V0LiQudHM from "./get.$.js";
 export const router = Router<
   RouteData["extra"] extends unknown[] ? RouteData["extra"] : []
 >()
@@ -13,7 +14,8 @@ export const router = Router<
   .post(...route_cG9zdC5leGFtcGxlLXBvc3QudHM)
   .post(...route_cG9zdC5leGFtcGxlLWFkdmFuY2VkLnRz)
   .get(...route_Z2V0LmV4YW1wbGUtcXVlcnktcGFyYW1zLnRz)
-  .get(...route_Z2V0LmV4YW1wbGUtZ2V0LnRz);
+  .get(...route_Z2V0LmV4YW1wbGUtZ2V0LnRz)
+  .get(...route_Z2V0LiQudHM);
 const routes = router.infer;
 export type Routes = typeof routes;
 
@@ -25,6 +27,7 @@ declare module "@mewhhaha/little-worker" {
       | "/example-post"
       | "/example-advanced"
       | "/example-query-params"
-      | "/example-get";
+      | "/example-get"
+      | "/*";
   }
 }
