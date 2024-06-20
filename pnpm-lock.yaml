@@ -19,7 +19,7 @@ importers:
     devDependencies:
       '@cloudflare/vitest-pool-workers':
         specifier: ^0.4.6
-        version: 0.4.6(@cloudflare/workers-types@4.20240620.0)(@vitest/runner@1.6.0)(@vitest/snapshot@1.6.0)(vitest@1.6.0(@types/node@20.14.6))
+        version: 0.4.6(@cloudflare/workers-types@4.20240620.0)(@vitest/runner@1.6.0)(@vitest/snapshot@1.6.0)(vitest@1.5.3(@types/node@20.14.6))
       '@mewhhaha/config':
         specifier: workspace:^
         version: link:../../tools/config
@@ -42,8 +42,8 @@ importers:
         specifier: ^5.5.2
         version: 5.5.2
       vitest:
-        specifier: 1.6.0
-        version: 1.6.0(@types/node@20.14.6)
+        specifier: 1.5.3
+        version: 1.5.3(@types/node@20.14.6)
       wrangler:
         specifier: ^3.61.0
         version: 3.61.0(@cloudflare/workers-types@4.20240620.0)
@@ -111,7 +111,7 @@ importers:
     devDependencies:
       '@cloudflare/vitest-pool-workers':
         specifier: ^0.4.6
-        version: 0.4.6(@cloudflare/workers-types@4.20240620.0)(@vitest/runner@1.6.0)(@vitest/snapshot@1.6.0)(vitest@1.6.0(@types/node@20.14.6))
+        version: 0.4.6(@cloudflare/workers-types@4.20240620.0)(@vitest/runner@1.6.0)(@vitest/snapshot@1.6.0)(vitest@1.5.3(@types/node@20.14.6))
       '@cloudflare/workers-types':
         specifier: ^4.20240620.0
         version: 4.20240620.0
@@ -125,8 +125,8 @@ importers:
         specifier: ^5.5.2
         version: 5.5.2
       vitest:
-        specifier: 1.6.0
-        version: 1.6.0(@types/node@20.14.6)
+        specifier: 1.5.3
+        version: 1.5.3(@types/node@20.14.6)
       wrangler:
         specifier: ^3.61.0
         version: 3.61.0(@cloudflare/workers-types@4.20240620.0)
@@ -2978,25 +2978,6 @@ snapshots:
       miniflare: 3.20240610.1
       semver: 7.6.2
       vitest: 1.5.3(@types/node@20.14.6)
-      wrangler: 3.61.0(@cloudflare/workers-types@4.20240620.0)
-      zod: 3.23.8
-    transitivePeerDependencies:
-      - '@cloudflare/workers-types'
-      - bufferutil
-      - supports-color
-      - utf-8-validate
-
-  '@cloudflare/vitest-pool-workers@0.4.6(@cloudflare/workers-types@4.20240620.0)(@vitest/runner@1.6.0)(@vitest/snapshot@1.6.0)(vitest@1.6.0(@types/node@20.14.6))':
-    dependencies:
-      '@vitest/runner': 1.6.0
-      '@vitest/snapshot': 1.6.0
-      birpc: 0.2.14
-      cjs-module-lexer: 1.3.1
-      devalue: 4.3.3
-      esbuild: 0.17.19
-      miniflare: 3.20240610.1
-      semver: 7.6.2
-      vitest: 1.6.0(@types/node@20.14.6)
       wrangler: 3.61.0(@cloudflare/workers-types@4.20240620.0)
       zod: 3.23.8
     transitivePeerDependencies:
