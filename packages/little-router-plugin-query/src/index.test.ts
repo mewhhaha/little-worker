@@ -22,11 +22,11 @@ describe("check", () => {
       ({ query: { hello } }) => {
         assertType<"world" | undefined>(hello);
         return json(200, hello);
-      }
+      },
     );
 
     const response = await router.handle(
-      new Request("http://from.fetcher/a?hello=world")
+      new Request("http://from.fetcher/a?hello=world"),
     );
 
     const t = await response.json();
@@ -35,8 +35,8 @@ describe("check", () => {
   });
 
   it.skip("should work for morphs", async () => {
-    query_(type({ hello: "parsedInteger" }));
-    query_(type({ hello: "parsedDate" }));
-    query_(type({ hello: ["string", "|>", (str: string) => new Date(str)] }));
+    query_(type({ hello: ["parse.integer"] }));
+    query_(type({ hello: ["parse.date"] }));
+    query_(type({ hello: ["string", "=>", (str: string) => new Date(str)] }));
   });
 });
