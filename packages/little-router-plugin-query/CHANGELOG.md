@@ -1,5 +1,15 @@
 # @mewhhaha/little-router-plugin-query
 
+## 1.0.4
+
+### Patch Changes
+
+- 5690a7b: update arktype version for plugins
+- 68d90ac: add splat routes for cli
+- Updated dependencies [5690a7b]
+- Updated dependencies [68d90ac]
+  - @mewhhaha/little-router@0.1.4
+
 ## 1.0.3
 
 ### Patch Changes
