@@ -1,5 +1,20 @@
 # @mewhhaha/little-worker
 
+## 0.1.4
+
+### Patch Changes
+
+- 5690a7b: update arktype version for plugins
+- 68d90ac: add splat routes for cli
+- Updated dependencies [5690a7b]
+- Updated dependencies [68d90ac]
+  - @mewhhaha/little-worker-cli@0.1.4
+  - @mewhhaha/little-fetcher@0.1.4
+  - @mewhhaha/typed-response@0.1.4
+  - @mewhhaha/little-router@0.1.4
+  - @mewhhaha/typed-request@0.1.4
+  - @mewhhaha/json-string@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes

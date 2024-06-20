@@ -1,5 +1,12 @@
 # @mewhhaha/config
 
+## 0.1.4
+
+### Patch Changes
+
+- 5690a7b: update arktype version for plugins
+- 68d90ac: add splat routes for cli
+
 ## 0.1.3
 
 ### Patch Changes
