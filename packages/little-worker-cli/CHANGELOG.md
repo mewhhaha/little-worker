@@ -1,5 +1,11 @@
 # @mewhhaha/little-worker-cli
 
+## 0.1.6
+
+### Patch Changes
+
+- d4ac9e8: add escape bracket characters
+
 ## 0.1.5
 
 ### Patch Changes
