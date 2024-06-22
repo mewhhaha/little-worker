@@ -1,5 +1,13 @@
 # example
 
+## 0.1.5
+
+### Patch Changes
+
+- a6e4400: add support for folders
+- Updated dependencies [a6e4400]
+  - @mewhhaha/little-worker@0.1.5
+
 ## 0.1.4
 
 ### Patch Changes

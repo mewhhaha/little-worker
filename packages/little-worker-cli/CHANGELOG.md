@@ -1,5 +1,11 @@
 # @mewhhaha/little-worker-cli
 
+## 0.1.5
+
+### Patch Changes
+
+- a6e4400: add support for folders
+
 ## 0.1.4
 
 ### Patch Changes
