@@ -272,6 +272,9 @@ importers:
       '@mewhhaha/typed-response':
         specifier: workspace:^
         version: link:../typed-response
+      arktype:
+        specifier: 2.0.0-dev.24
+        version: 2.0.0-dev.24
     devDependencies:
       '@mewhhaha/config':
         specifier: workspace:^

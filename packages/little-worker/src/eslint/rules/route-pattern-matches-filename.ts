@@ -2,12 +2,9 @@ import { RuleModule } from "@typescript-eslint/utils/ts-eslint";
 import type { TSESTree } from "@typescript-eslint/utils";
 import path, { basename, dirname } from "path";
 import { fileToPath } from "@mewhhaha/little-worker-cli/api";
+import { type } from "arktype";
 
-type Options = {
-  target?: string;
-};
-
-const rule: RuleModule<"mismatchPath", [Options?]> = {
+const rule: RuleModule<"mismatchPath", []> = {
   meta: {
     fixable: "code",
     messages: {
@@ -30,12 +27,16 @@ const rule: RuleModule<"mismatchPath", [Options?]> = {
         "Rule for ensuring that the generic passed to the `useParams` function matches the filename if the file is a route file.",
     },
   },
-  defaultOptions: [{ target: path.join("app", "routes") }],
+  defaultOptions: [],
   create(context) {
-    const { target = path.join("app", "routes") } = context.options[0] ?? {};
+    const settings = parseSettings(context.settings?.littleWorker);
+    const target =
+      settings instanceof type.errors
+        ? path.join("app", "routes") // Default target
+        : settings.target;
 
     const filename = context.filename;
-    const id = getId(filename);
+    const id = getId(filename, target);
     const correctPattern = fileToPath(id);
 
     const mismatchPatternError = (
@@ -60,7 +61,7 @@ const rule: RuleModule<"mismatchPath", [Options?]> = {
       ) {
         const firstArgument = callExpression.arguments[0];
 
-        if (isNotInRoutesFolder(filename, target)) return;
+        if (isNotRouteFile(filename, target)) return;
         if (isNotRouteFunction(callExpression)) return;
 
         if (firstArgument === undefined) return;
@@ -79,19 +80,25 @@ const rule: RuleModule<"mismatchPath", [Options?]> = {
 
 export default rule;
 
-const getId = (filename: string) => {
-  if (filename.endsWith("route.tsx")) {
-    filename = dirname(filename);
+const getId = (filename: string, folder: string) => {
+  const trimmed = path.relative(folder, filename);
+
+  if (path.dirname(trimmed) === ".") {
+    return basename(trimmed).replace(/\.ts(x)?$/, "");
   }
 
-  return basename(filename, ".tsx");
+  return dirname(trimmed);
 };
 
-const isNotInRoutesFolder = (filename: string, folder: string) => {
-  if (filename.endsWith("route.tsx")) {
-    filename = dirname(filename);
-  }
-  return !dirname(filename).endsWith(folder);
+const isNotRouteFile = (filename: string, folder: string) => {
+  if (basename(filename).startsWith("_")) return true;
+  const trimmed = path.relative(folder, filename);
+  if (trimmed.startsWith("..")) return true;
+
+  if (path.dirname(trimmed) === ".") return false;
+  if (path.basename(trimmed).startsWith("route.")) return false;
+
+  return false;
 };
 
 const isNotRouteFunction = (callExpression: TSESTree.CallExpression) => {
@@ -100,3 +107,7 @@ const isNotRouteFunction = (callExpression: TSESTree.CallExpression) => {
 
   return false;
 };
+
+const parseSettings = type({
+  target: "string",
+});

@@ -49,7 +49,8 @@
     "@mewhhaha/little-router": "workspace:^",
     "@mewhhaha/little-worker-cli": "workspace:^",
     "@mewhhaha/typed-request": "workspace:^",
-    "@mewhhaha/typed-response": "workspace:^"
+    "@mewhhaha/typed-response": "workspace:^",
+    "arktype": "2.0.0-dev.24"
   },
   "devDependencies": {
     "@mewhhaha/config": "workspace:^",

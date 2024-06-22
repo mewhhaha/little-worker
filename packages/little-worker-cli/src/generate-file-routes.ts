@@ -71,7 +71,14 @@ const createRouter = (files: string[]) => {
   return router;
 };
 
-const fileToModule = (file: string) => file.replace(tsRegex, ".js");
+const fileToModule = (file: string) => {
+  if (file.match(tsRegex)) {
+    return file.replace(tsRegex, ".js");
+  }
+
+  // Assume it's a folder if it doesn't have an extension
+  return `${file}/route.js`;
+};
 
 const fileToMethod = (file: string) => file.match(methodRegex)?.[0] ?? "error";
 
@@ -84,12 +91,42 @@ export const fileToPath = (file: string) =>
     .replace(dollarRegex, ":");
 
 export const orderRoutes = (a: string, b: string): number => {
+  if (a.match(tsRegex)) {
+    a = a.replace(tsRegex, "");
+  }
+
+  if (b.match(tsRegex)) {
+    b = b.replace(tsRegex, "");
+  }
+
+  const aSegments = a.split(unescapedDotRegex);
+  const bSegments = b.split(unescapedDotRegex);
+
+  const aMethod = aSegments[0];
+  const bMethod = bSegments[0];
+
+  if (aMethod !== bMethod) {
+    return methodOrder[aMethod] - methodOrder[bMethod];
+  }
+
   // Each dot signifies another level of nesting
-  const hierarchy =
-    b.split(unescapedDotRegex).length - a.split(unescapedDotRegex).length;
+  const hierarchy = bSegments.length - aSegments.length;
   if (hierarchy === 0) {
     return b < a ? -1 : 1;
   }
 
   return hierarchy;
+};
+
+// Rank options and get higher so they're more accessible
+// this assumes that reads happen more often than other methods
+// but I guess the difference isn't gonna be that huge either way
+const methodOrder: Record<string, number> = {
+  options: 0,
+  get: 1,
+  post: 2,
+  put: 3,
+  delete: 4,
+  patch: 5,
+  all: 6,
 };

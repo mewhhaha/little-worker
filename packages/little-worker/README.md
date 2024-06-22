@@ -49,7 +49,7 @@ These will be automatically sorted when the router is generated to make sure tha
 
 In each of the files you created it is expected that you export a route definition as the default export. You can import the function `route` from `@mewhhaha/little-worker` (or `@mewhhaha/little-router`) that you can use to properly type your export.
 
-> When generating the routes we also create an ephemereal constant in each route called PATTERN. This should be used as the first paramater of the route to ensure that your route definition matches the file name.
+> Use the eslint plugin from `@mewhhaha/little-worker/eslint-plugin` to ensure that the route is always correct.
 
 ```tsx
 // In file get.users.$userId.ts
@@ -67,5 +67,5 @@ export default route("/get/users/:userId", [], ({ params }) => {
 // eslint.config.mjs
 import worker from "@mewhhaha/little-worker/eslint-plugin";
 
-export default [worker]
+export default [worker];
 ```
