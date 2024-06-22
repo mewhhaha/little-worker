@@ -20,13 +20,14 @@ const unescapedDotRegex = /(?<!\[)\.(?![^[]*\])/g;
 
 const tsRegex = /\.ts(x)?$/;
 
-const dotRegex = /\./g;
-
-const dollarRegex = /\$/g;
+const paramRegex = /^\$/g;
 
 const splatRegex = /\$$/g;
 
 const methodRegex = /^(post)|(get)|(delete)|(put)|(options)|(all)|(patch)/;
+
+// Creates three groups, prefix, inside and suffix
+const escapeBracketsRegex = /^([^[]*)\[(.*)\]([^\]]*)$/g;
 
 const isRouteFile = (f: string) => f.match(methodRegex);
 
@@ -82,13 +83,19 @@ const fileToModule = (file: string) => {
 
 const fileToMethod = (file: string) => file.match(methodRegex)?.[0] ?? "error";
 
-export const fileToPath = (file: string) =>
-  file
+export const fileToPath = (file: string) => {
+  const segments = file
     .replace(tsRegex, "")
     .replace(methodRegex, "")
-    .replace(dotRegex, "/")
     .replace(splatRegex, "*")
-    .replace(dollarRegex, ":");
+    .split(unescapedDotRegex);
+
+  return segments
+    .map((s) =>
+      s.replace(paramRegex, ":").replace(escapeBracketsRegex, "$1$2$3"),
+    )
+    .join("/");
+};
 
 export const orderRoutes = (a: string, b: string): number => {
   if (a.match(tsRegex)) {

@@ -1,8 +1,8 @@
-import { describe, expect, test } from "vitest";
-import { orderRoutes } from "./generate-file-routes";
+import { describe, expect, it } from "vitest";
+import { fileToPath, orderRoutes } from "./generate-file-routes";
 
 describe("orderRoutes", () => {
-  test("should sort dot-delimited routes first", () => {
+  it("should sort dot-delimited routes first", () => {
     const arr = ["get.abc", "get.a.b", "get.a.b.c"];
 
     expect(arr.toSorted(orderRoutes)).toEqual([
@@ -12,15 +12,49 @@ describe("orderRoutes", () => {
     ]);
   });
 
-  test("should sort more specific urls first", () => {
+  it("should sort more specific urls first", () => {
     const arr = ["get.a.$id", "get.a.b"];
 
     expect(arr.toSorted(orderRoutes)).toEqual(["get.a.b", "get.a.$id"]);
   });
 
-  test("should sort get first", () => {
+  it("should sort get first", () => {
     const arr = ["post.a", "get.a"];
 
     expect(arr.toSorted(orderRoutes)).toEqual(["get.a", "post.a"]);
+  });
+});
+
+describe("fileToPath", () => {
+  it("should remove .ts or .tsx extensions", () => {
+    expect(fileToPath("example.ts")).toBe("example");
+    expect(fileToPath("example.tsx")).toBe("example");
+  });
+
+  it("should replace method prefixes", () => {
+    expect(fileToPath("post.example")).toBe("/example");
+    expect(fileToPath("get.example")).toBe("/example");
+    expect(fileToPath("delete.example")).toBe("/example");
+    expect(fileToPath("put.example")).toBe("/example");
+    expect(fileToPath("options.example")).toBe("/example");
+    expect(fileToPath("all.example")).toBe("/example");
+    expect(fileToPath("patch.example")).toBe("/example");
+  });
+
+  it("should replace unescaped dots with slashes", () => {
+    expect(fileToPath("example.file")).toBe("example/file");
+    expect(fileToPath("example.[file.tsx]")).toBe("example/file.tsx");
+  });
+
+  it("should replace $ at the end with *", () => {
+    expect(fileToPath("$")).toBe("*");
+  });
+
+  it("should replace all $ with :", () => {
+    expect(fileToPath("$test")).toBe(":test");
+  });
+
+  it("should escape brackets correctly", () => {
+    expect(fileToPath("[test.jsx]")).toBe("test.jsx");
   });
 });

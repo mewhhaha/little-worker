@@ -84,7 +84,7 @@ const getId = (filename: string, folder: string) => {
   const trimmed = path.relative(folder, filename);
 
   if (path.dirname(trimmed) === ".") {
-    return basename(trimmed).replace(/\.ts(x)?$/, "");
+    return basename(trimmed);
   }
 
   return dirname(trimmed);
