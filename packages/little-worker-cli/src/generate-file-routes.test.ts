@@ -57,4 +57,8 @@ describe("fileToPath", () => {
   it("should escape brackets correctly", () => {
     expect(fileToPath("[test.jsx]")).toBe("test.jsx");
   });
+
+  it("should handle root path correctly", () => {
+    expect(fileToPath("get._index.tsx")).toBe("/");
+  });
 });

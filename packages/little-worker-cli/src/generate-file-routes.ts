@@ -26,6 +26,8 @@ const splatRegex = /\$$/g;
 
 const methodRegex = /^(post)|(get)|(delete)|(put)|(options)|(all)|(patch)/;
 
+const indexRegex = /^_index$/;
+
 // Creates three groups, prefix, inside and suffix
 const escapeBracketsRegex = /^([^[]*)\[(.*)\]([^\]]*)$/g;
 
@@ -92,7 +94,10 @@ export const fileToPath = (file: string) => {
 
   return segments
     .map((s) =>
-      s.replace(paramRegex, ":").replace(escapeBracketsRegex, "$1$2$3"),
+      s
+        .replace(paramRegex, ":")
+        .replace(escapeBracketsRegex, "$1$2$3")
+        .replace(indexRegex, ""),
     )
     .join("/");
 };
