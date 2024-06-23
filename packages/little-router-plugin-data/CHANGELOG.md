@@ -1,5 +1,14 @@
 # @mewhhaha/little-router-plugin-data
 
+## 1.0.5
+
+### Patch Changes
+
+- 3acf618: add special case for index route with \_index
+- Updated dependencies [3acf618]
+  - @mewhhaha/json-string@0.1.5
+  - @mewhhaha/little-router@0.1.5
+
 ## 1.0.4
 
 ### Patch Changes

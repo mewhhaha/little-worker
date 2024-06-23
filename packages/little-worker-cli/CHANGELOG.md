@@ -1,5 +1,11 @@
 # @mewhhaha/little-worker-cli
 
+## 0.1.7
+
+### Patch Changes
+
+- 3acf618: add special case for index route with \_index
+
 ## 0.1.6
 
 ### Patch Changes
