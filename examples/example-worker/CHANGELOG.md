@@ -1,5 +1,15 @@
 # example
 
+## 0.1.7
+
+### Patch Changes
+
+- 3acf618: add special case for index route with \_index
+- Updated dependencies [3acf618]
+  - @mewhhaha/little-router-plugin-data@1.0.5
+  - @mewhhaha/little-router-plugin-query@1.0.5
+  - @mewhhaha/little-worker@0.1.7
+
 ## 0.1.6
 
 ### Patch Changes

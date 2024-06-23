@@ -1,5 +1,11 @@
 # @mewhhaha/typed-response
 
+## 0.1.5
+
+### Patch Changes
+
+- 3acf618: add special case for index route with \_index
+
 ## 0.1.4
 
 ### Patch Changes
